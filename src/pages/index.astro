@@ -208,6 +208,7 @@ import { GAMES, MINUTE_CAP } from '../lib/games';
   import { GAMES } from '../lib/games';
   import { getPlayer, createPlayer, nameKey, cleanName, watchSettings, type Player, type Settings } from '../lib/db';
   import { getSession, setSession, requirePlayer } from '../lib/session';
+  import { isBadName } from '../lib/badnames';
   import { fillNav } from '../lib/nav';
   import { $, esc, fmt, bodu, setRing } from '../lib/ui';
 
@@ -275,6 +276,7 @@ import { GAMES, MINUTE_CAP } from '../lib/games';
       e.preventDefault();
       const name = cleanName(input.value);
       if (nameKey(name).length < 2) return hint('Napiš aspoň dvě písmena nebo číslice.', true);
+      if (isBadName(name)) return hint('Tohle jméno tu použít nejde. Vyber si prosím jiné.', true);
       const go = $<HTMLButtonElement>('nameGo');
       go.disabled = true;
       try {
