@@ -1,0 +1,215 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Admin · DOD hry">
+  <main class="gate wrap" id="gate">
+    <form class="card" id="pinForm">
+      <p class="eyebrow">Pro organizátory</p>
+      <h1 class="h2">Admin</h1>
+      <div class="field">
+        <label for="pin">PIN</label>
+        <input class="input" id="pin" type="password" inputmode="numeric" autocomplete="off" />
+        <p class="hint" id="pinHint" aria-live="polite"></p>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Odemknout</button>
+    </form>
+  </main>
+
+  <div id="app" hidden>
+    <header class="top">
+      <div class="wrap top-inner">
+        <span class="wordmark">DOD hry · admin</span>
+        <div class="actions">
+          <a class="btn btn-primary btn-sm" href="/tv/" target="_blank" rel="noopener">Otevřít projektor</a>
+          <a class="btn btn-outline btn-sm" href="/">Portál</a>
+          <button class="btn btn-outline btn-sm" id="lock" type="button">Zamknout</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap admin">
+      <section class="stats" aria-label="Přehled">
+        <div><span class="stat num" id="sPlayers">0</span><span class="caption">hráčů</span></div>
+        <div><span class="stat num" id="sDone">0</span><span class="caption">splnilo cíl</span></div>
+        <div><span class="stat num" id="sActive">0</span><span class="caption">hraje (posledních 10 min)</span></div>
+        <div><span class="stat num" id="sPts">0</span><span class="caption">bodů celkem</span></div>
+      </section>
+
+      <section class="panel" aria-labelledby="setH">
+        <h2 class="h3" id="setH">Nastavení</h2>
+        <form class="settings" id="settingsForm">
+          <div class="field"><label for="fTitle">Název</label><input class="input light" id="fTitle" maxlength="40" /></div>
+          <div class="field"><label for="fTarget">Cíl (bodů)</label><input class="input light" id="fTarget" type="number" min="1" /></div>
+          <div class="field"><label for="fIdle">Odhlásit po nečinnosti (min, 0 = nikdy)</label><input class="input light" id="fIdle" type="number" min="0" /></div>
+          <div class="field"><label for="fPin">PIN adminu</label><input class="input light" id="fPin" maxlength="20" /></div>
+          <button class="btn btn-secondary" type="submit">Uložit nastavení</button>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="plH">
+        <div class="panel-head">
+          <h2 class="h3" id="plH">Hráči</h2>
+          <input class="input light search" id="q" type="search" placeholder="Hledat jméno" aria-label="Hledat hráče" />
+        </div>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>#</th><th>Hráč</th><th class="r">Body</th><th>Podle her</th><th>Upravit</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel danger" aria-labelledby="dzH">
+        <h2 class="h3" id="dzH">Začít od nuly</h2>
+        <p class="caption">Smaže všechny hráče i body. Hodí se ráno před začátkem.</p>
+        <div class="confirm">
+          <label for="resetWord" class="caption">Pro potvrzení napiš <b>SMAZAT</b></label>
+          <input class="input light" id="resetWord" autocomplete="off" />
+          <button class="btn btn-outline" id="reset" type="button" disabled>Smazat všechno</button>
+        </div>
+      </section>
+    </main>
+  </div>
+</Base>
+
+<style>
+  .gate { min-height: 100vh; display: grid; place-items: center; }
+  .card { width: min(420px, 100%); background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 32px 28px; display: grid; gap: 18px; }
+  .top { border-bottom: 1px solid var(--hairline); }
+  .top-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; min-height: 72px; padding-block: 12px; }
+  .wordmark { font: 400 1.375rem/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--stone); }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .admin { display: grid; gap: 24px; padding-block: 40px 80px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .stats > div { display: grid; gap: 4px; padding: 20px 24px; border-radius: var(--r-lg); background: var(--surface); border: 1px solid var(--hairline); }
+  .stat { font: 300 3rem/1 var(--serif); font-variation-settings: 'opsz' 144; }
+  .panel { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 28px; display: grid; gap: 20px; }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .input.light { background: var(--canvas); color: var(--ink); border-color: var(--hairline); min-height: 48px; font-size: 1rem; }
+  .input.light:focus { border-color: var(--stone); background: var(--surface); }
+  .search { max-width: 280px; }
+  .settings { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: end; }
+  .settings .btn { grid-column: 1 / -1; justify-self: start; }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+  th { text-align: left; font: 700 0.75rem/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); padding: 0 12px 12px; }
+  .table-cell, :global(#rows td) { padding: 12px; border-top: 1px solid var(--hairline); vertical-align: middle; }
+  :global(#rows .pts) { font: 300 1.75rem/1 var(--serif); font-variation-settings: 'opsz' 144; text-align: right; }
+  :global(#rows .games) { color: var(--muted); font-size: 0.875rem; }
+  :global(#rows .edit) { display: flex; gap: 6px; align-items: center; }
+  :global(#rows .edit input) { width: 72px; min-height: 40px; padding: 0 10px; border-radius: var(--r-sm); border: 1px solid var(--hairline); background: var(--canvas); }
+  :global(#rows .ok) { color: var(--forest); font-size: 0.8125rem; font-weight: 600; margin-left: 6px; }
+  :global(#rows .del[data-armed]) { background: var(--error); color: #fff; border-color: var(--error); }
+  .r { text-align: right; }
+  .confirm { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .confirm .input { max-width: 200px; }
+  @media (max-width: 860px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .settings { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import { watchSettings, watchPlayers, saveSettings, adjust, removePlayer, resetAll, type Player, type Settings } from '../lib/db';
+  import { GAMES } from '../lib/games';
+  import { $, esc, fmt, toast } from '../lib/ui';
+
+  let settings: Settings | null = null, players: Player[] = [], watching = false;
+  const KEY = 'dodhry:admin';
+  const unlocked = () => { try { return sessionStorage.getItem(KEY) === '1'; } catch { return false; } };
+
+  watchSettings((s) => {
+    const first = !settings;
+    settings = s;
+    if (first || !document.activeElement?.closest('#settingsForm')) {
+      $<HTMLInputElement>('fTitle').value = s.title;
+      $<HTMLInputElement>('fTarget').value = String(s.target);
+      $<HTMLInputElement>('fIdle').value = String(s.idleLogoutMin);
+      $<HTMLInputElement>('fPin').value = s.adminPin;
+    }
+    if (unlocked()) open();
+    render();
+  });
+
+  $('pin').focus();
+  $('pinForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!settings) return;
+    if ($<HTMLInputElement>('pin').value === String(settings.adminPin)) {
+      try { sessionStorage.setItem(KEY, '1'); } catch {}
+      open();
+    } else {
+      $('pinHint').textContent = 'Tenhle PIN nesedí.';
+      $('pinHint').classList.add('is-error');
+      $<HTMLInputElement>('pin').select();
+    }
+  });
+  $('lock').addEventListener('click', () => { try { sessionStorage.removeItem(KEY); } catch {} location.reload(); });
+
+  function open() {
+    $('gate').hidden = true;
+    $('app').hidden = false;
+    if (!watching) { watching = true; watchPlayers((p) => { players = p; render(); }, 2000); }
+  }
+
+  $('settingsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await saveSettings({
+      title: $<HTMLInputElement>('fTitle').value.trim() || 'DOD hry',
+      target: Math.max(1, parseInt($<HTMLInputElement>('fTarget').value, 10) || 100),
+      idleLogoutMin: Math.max(0, parseInt($<HTMLInputElement>('fIdle').value, 10) || 0),
+      adminPin: $<HTMLInputElement>('fPin').value.trim() || '2026',
+    });
+    toast('Nastavení uloženo');
+  });
+
+  $('q').addEventListener('input', render);
+
+  function render() {
+    if (!settings || $('app').hidden) return;
+    const t = Number(settings.target) || 100;
+    $('sPlayers').textContent = fmt(players.length);
+    $('sDone').textContent = fmt(players.filter((p) => p.points >= t).length);
+    $('sActive').textContent = fmt(players.filter((p) => Date.now() - (p.lastSeen || 0) < 600000).length);
+    $('sPts').textContent = fmt(players.reduce((a, p) => a + (p.points || 0), 0));
+    const q = $<HTMLInputElement>('q').value.trim().toLowerCase();
+    const rows = players.map((p, i) => [p, i] as const).filter(([p]) => !q || p.name.toLowerCase().includes(q));
+    $('rows').innerHTML = rows.map(([p, i]) => `
+      <tr data-k="${esc(p.key)}">
+        <td class="num">${i + 1}</td>
+        <td><b>${esc(p.name)}</b>${p.points >= t ? '<span class="ok">splněno</span>' : ''}</td>
+        <td class="pts num">${fmt(p.points)}</td>
+        <td class="games">${GAMES.filter((g) => p.games?.[g.id]?.points).map((g) => `${esc(g.title)} ${fmt(p.games[g.id].points!)}`).join(' · ') || '–'}</td>
+        <td><div class="edit">
+          <input class="num" type="number" value="10" min="1" aria-label="Kolik bodů pro ${esc(p.name)}">
+          <button class="btn btn-outline btn-sm" data-a="add" type="button">Přidat</button>
+          <button class="btn btn-outline btn-sm" data-a="sub" type="button">Odebrat</button>
+          <button class="btn btn-outline btn-sm del" data-a="del" type="button">Smazat</button>
+        </div></td>
+      </tr>`).join('') || '<tr><td colspan="5" class="caption">Žádní hráči.</td></tr>';
+  }
+
+  $('rows').addEventListener('click', async (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-a]');
+    if (!b) return;
+    const tr = b.closest('tr')!, p = players.find((x) => x.key === tr.dataset.k)!;
+    const n = Math.abs(parseInt(tr.querySelector('input')!.value, 10) || 0);
+    if (b.dataset.a === 'add' && n) { await adjust(p, n); toast(`Přidáno ${n} pro ${esc(p.name)}`); }
+    if (b.dataset.a === 'sub' && n) { await adjust(p, -n); toast(`Odebráno ${n} hráči ${esc(p.name)}`); }
+    if (b.dataset.a === 'del') {
+      // dvoukrokové potvrzení v rozhraní
+      if (!b.dataset.armed) { b.dataset.armed = '1'; b.textContent = 'Opravdu smazat?'; setTimeout(() => { delete b.dataset.armed; b.textContent = 'Smazat'; }, 4000); return; }
+      await removePlayer(p.key);
+      toast(`Hráč ${esc(p.name)} smazán`);
+    }
+  });
+
+  const word = $<HTMLInputElement>('resetWord');
+  word.addEventListener('input', () => ($<HTMLButtonElement>('reset').disabled = word.value.trim() !== 'SMAZAT'));
+  $('reset').addEventListener('click', async () => {
+    await resetAll();
+    word.value = '';
+    $<HTMLButtonElement>('reset').disabled = true;
+    toast('Všichni hráči a body smazány');
+  });
+</script>

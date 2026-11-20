@@ -1,0 +1,152 @@
+/* DOD hry – vychází z DESIGN.md (Oura): teplý papír, tenký serif na velké věci,
+   grotesk na čtení, zemité barvy pro data a ilustrace, jediná modrá pro hlavní akci. */
+:root {
+  /* plochy */
+  --canvas: #f7f1e8;
+  --canvas-deep: #efe7da;
+  --surface: #ffffff;
+  --hairline: #e1dcd3;
+  --ink-band: #121214;
+  --ink-band-soft: #19191c;
+  /* text – ink 16:1, stone 8.6:1, muted 5.2:1 na canvas */
+  --ink: #1c1b1a;
+  --stone: #4a4741;
+  --muted: #6b6862;
+  --mute-on-dark: #a8a5a0;
+  /* akce – bílá na modré 4.7:1 */
+  --primary: #2a72de;
+  --primary-hover: #1f5fc0;
+  /* zemitá paleta (data, ilustrace) */
+  --gold: #af751b;
+  --ochre: #bc924c;
+  --gold-soft: #ddaa61;
+  --gold-pale: #ddbe78;
+  --clay: #6b443d;
+  --espresso: #39221e;
+  --forest: #224228;
+  --olive: #5c6f5d;
+  --sage: #849671;
+  --sage-pale: #ced4b8;
+  --error: #b8301c;
+
+  --serif: 'Fraunces Variable', 'Newsreader', Georgia, serif;
+  --sans: 'Inter Variable', 'Hanken Grotesk', -apple-system, system-ui, sans-serif;
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 24px;
+  --r-xl: 40px;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --max: 1200px;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font: 400 1.0625rem/1.5 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.num { font-variant-numeric: tabular-nums; }
+.wrap { width: 100%; max-width: calc(var(--max) + 2 * var(--gutter)); margin: 0 auto; padding-inline: var(--gutter); }
+
+/* ---- typografie ---- */
+.display, .h1, .h2, .h3 {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-variation-settings: 'opsz' 144;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+.display { font-size: clamp(2.75rem, 7vw, 5.5rem); line-height: 1.04; }
+.h1 { font-size: clamp(2.25rem, 5vw, 4.25rem); line-height: 1.08; }
+.h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.15; }
+.h3 { font-size: 1.75rem; line-height: 1.2; }
+.lead { font-family: var(--serif); font-weight: 300; font-size: 1.375rem; line-height: 1.35; color: var(--stone); margin: 0; max-width: 34ch; }
+.eyebrow { font: 700 0.75rem/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); margin: 0; }
+.caption { font-size: 0.875rem; color: var(--muted); }
+em.serif { font-style: italic; }
+
+/* ---- tlačítka (pilulky) ---- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  min-height: 48px; padding: 0 1.5rem; border-radius: 999px; border: 1px solid transparent;
+  font: 600 1rem/1 var(--sans); text-decoration: none; white-space: nowrap;
+  transition: background-color 0.15s, border-color 0.15s, transform 0.1s;
+}
+.btn:active { transform: scale(0.98); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-secondary { background: var(--stone); color: #fff; }
+.btn-secondary:hover { background: #3a3833; }
+.btn-outline { background: transparent; color: var(--stone); border-color: var(--stone); }
+.btn-outline:hover { background: var(--canvas-deep); }
+.btn-on-dark { background: var(--canvas); color: var(--stone); }
+.btn-ghost-dark { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+.btn-sm { min-height: 40px; padding: 0 1.125rem; font-size: 0.9375rem; }
+.btn-block { width: 100%; }
+.btn[disabled] { opacity: 0.55; pointer-events: none; }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--hairline); color: var(--stone); flex: none;
+}
+.icon-btn:hover { border-color: var(--stone); }
+.icon-btn svg { width: 20px; height: 20px; }
+
+/* ---- pole ---- */
+.field { display: grid; gap: 0.5rem; }
+.field label { font-weight: 600; font-size: 0.9375rem; color: var(--stone); }
+.input {
+  width: 100%; min-height: 56px; padding: 0 1.25rem; border-radius: var(--r-md);
+  border: 1.5px solid var(--stone); background: var(--stone); color: #fff; font-size: 1.125rem; outline: none;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.input::placeholder { color: #c9c4bb; }
+.input:focus { background: var(--surface); color: var(--ink); }
+.input:focus::placeholder { color: #8f8b84; }
+.input[aria-invalid='true'] { border-color: var(--error); background: var(--surface); color: var(--ink); }
+.hint { font-size: 0.9375rem; color: var(--muted); min-height: 1.5em; margin: 0; }
+.hint.is-error { color: var(--error); }
+
+/* ---- kruh (Ring.astro) ---- */
+.ring { position: relative; display: inline-grid; place-items: center; flex: none; --p: 0; }
+.ring svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.ring .ring-track { stroke: var(--hairline); }
+.ring .ring-bar {
+  stroke: var(--gold); stroke-dasharray: calc(var(--p) * 100) 100;
+  transition: stroke-dasharray 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s;
+}
+.ring.is-done .ring-bar { stroke: var(--forest); }
+.ring.is-empty .ring-bar { opacity: 0; }
+.ring-label { position: relative; text-align: center; line-height: 1; }
+
+/* ---- toast ---- */
+.toasts {
+  position: fixed; z-index: 100; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  display: grid; gap: 8px; width: min(420px, calc(100% - 32px)); pointer-events: none;
+}
+.toast {
+  display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-radius: var(--r-lg);
+  background: var(--surface); color: var(--ink); box-shadow: 0 12px 40px rgba(57, 34, 30, 0.18), 0 0 0 1px var(--hairline);
+  font-size: 0.9375rem; animation: toast-in 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.toast b { font: 300 1.75rem/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--gold); }
+.toast.is-out { animation: toast-out 0.3s ease-in both; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(12px); } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(8px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

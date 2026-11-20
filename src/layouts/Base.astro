@@ -1,0 +1,26 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/fraunces/opsz.css';
+import '../styles/global.css';
+
+interface Props { title?: string; description?: string; theme?: 'paper' | 'ink' }
+const { title = 'DOD hry', description = 'Hry studentů ze dne otevřených dveří. Hraj a sbírej body.', theme = 'paper' } = Astro.props;
+---
+<!doctype html>
+<html lang="cs" data-auth="out" data-theme={theme}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content={theme === 'ink' ? '#121214' : '#f7f1e8'} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <!-- přihlášení známe hned, ať se neukáže špatná obrazovka -->
+  <script is:inline>
+    try { if (localStorage.getItem('dodhry:me')) document.documentElement.dataset.auth = 'in'; } catch (e) {}
+  </script>
+</head>
+<body>
+  <slot />
+</body>
+</html>

@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+---
+<Base title="Žebříček · DOD hry">
+  <Nav />
+  <main class="wrap page">
+    <header class="head">
+      <p class="eyebrow">Aktualizuje se živě</p>
+      <h1 class="h1">Žebříček</h1>
+      <p class="caption" id="summary">&nbsp;</p>
+    </header>
+
+    <div class="table" role="table" aria-label="Pořadí hráčů">
+      <div class="row th" role="row">
+        <span role="columnheader">Pořadí</span><span role="columnheader">Hráč</span>
+        <span role="columnheader" class="col-bar">Cesta k cíli</span><span role="columnheader" class="r">Body</span>
+      </div>
+      <div id="rows" role="rowgroup">
+        <p class="empty">Načítám…</p>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .page { padding-block: 56px 96px; }
+  .head { display: grid; gap: 12px; margin-bottom: 40px; }
+  .head .caption { margin: 0; }
+  .table { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
+  .table :global(.row) { display: grid; grid-template-columns: 72px minmax(0, 1fr) minmax(120px, 280px) 80px; align-items: center; gap: 16px; padding: 14px 24px; border-top: 1px solid var(--hairline); }
+  .th { border-top: 0 !important; font: 700 0.75rem/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); }
+  .table :global(.rank) { font: 300 1.75rem/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--muted); }
+  .table :global(.name) { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .table :global(.done) { margin-left: 8px; font-size: 0.8125rem; font-weight: 600; color: var(--forest); }
+  .table :global(.track) { height: 4px; border-radius: 4px; background: var(--hairline); overflow: hidden; }
+  .table :global(.fill) { height: 100%; background: var(--gold); border-radius: inherit; }
+  .table :global(.is-done .fill) { background: var(--forest); }
+  .table :global(.pts) { text-align: right; font: 300 1.75rem/1 var(--serif); font-variation-settings: 'opsz' 144; }
+  .table :global(.is-me) { background: var(--canvas); }
+  .table :global(.is-me .name::after) { content: ' · ty'; font-weight: 400; color: var(--muted); }
+  .r { text-align: right; }
+  .table :global(.empty) { margin: 0; padding: 40px 24px; text-align: center; color: var(--muted); }
+  @media (max-width: 640px) {
+    .table :global(.row) { grid-template-columns: 48px minmax(0, 1fr) 64px; padding: 12px 16px; }
+    .table :global(.col-bar), .table :global(.track) { display: none; }
+  }
+</style>
+
+<script>
+  import { watchPlayers, type Player } from '../lib/db';
+  import { requirePlayer } from '../lib/session';
+  import { fillNav } from '../lib/nav';
+  import { $, esc, fmt, bodu } from '../lib/ui';
+
+  let me: Player | null = null, target = 100, players: Player[] = [];
+
+  requirePlayer((p, s) => { me = p; target = Number(s.target) || 100; fillNav(p, s); render(); });
+  watchPlayers((p) => { players = p; render(); }, 200);
+
+  function render() {
+    if (!players.length) { $('rows').innerHTML = '<p class="empty">Zatím nikdo nehrál. Buď první.</p>'; return; }
+    const done = players.filter((p) => p.points >= target).length;
+    $('summary').textContent = `${fmt(players.length)} hráčů · cíl ${fmt(target)} ${bodu(target)} splnilo ${fmt(done)}`;
+    $('rows').innerHTML = players.map((p, i) => {
+      const f = Math.min(1, p.points / target);
+      return `<div class="row ${p.key === me?.key ? 'is-me' : ''} ${f >= 1 ? 'is-done' : ''}" role="row">
+        <span class="rank num" role="cell">${i + 1}</span>
+        <span class="name" role="cell">${esc(p.name)}${f >= 1 ? '<span class="done">splněno</span>' : ''}</span>
+        <span class="track" role="cell" aria-label="${Math.round(f * 100)} % cíle"><span class="fill" style="display:block;width:${f * 100}%"></span></span>
+        <span class="pts num" role="cell">${fmt(p.points)}</span>
+      </div>`;
+    }).join('');
+  }
+</script>

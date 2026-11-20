@@ -1,0 +1,126 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Projektor · DOD hry" theme="ink">
+  <div class="tv">
+    <header class="tv-head">
+      <div>
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span><span data-title>DOD hry</span> · živě</span></p>
+        <h1>Žebříček</h1>
+      </div>
+      <div class="cta">
+        <span class="cta-label">Hraj taky</span>
+        <span class="cta-url" id="url"></span>
+      </div>
+    </header>
+
+    <main class="tv-body">
+      <section class="podium" id="podium" aria-label="První tři"></section>
+      <section class="list" id="list" aria-label="Další pořadí"></section>
+      <section class="feed" aria-label="Právě získali">
+        <p class="eyebrow">Právě získali</p>
+        <div id="feed"></div>
+      </section>
+    </main>
+
+    <footer class="tv-foot">
+      <span><b id="count">0</b> hráčů</span>
+      <span>Cíl <b id="goal">100</b> bodů splnilo <b id="done">0</b></span>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  :global(body) { background: var(--ink-band); color: #fff; overflow: hidden; }
+  .tv { height: 100vh; display: grid; grid-template-rows: auto 1fr auto; gap: 4vh; padding: 5vh 4vw 4vh; }
+  .tv-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 4vw; }
+  .eyebrow { color: var(--mute-on-dark); font-size: max(12px, 1.5vh); display: flex; align-items: center; gap: 0.8em; }
+  .dot { width: 0.8em; height: 0.8em; border-radius: 50%; background: #e33a22; animation: pulse 2s infinite; }
+  @keyframes pulse { 50% { opacity: 0.35; } }
+  h1 { margin: 1vh 0 0; font: 300 11vh/0.95 var(--serif); font-variation-settings: 'opsz' 144; letter-spacing: -0.02em; }
+  .cta { text-align: right; display: grid; gap: 0.6vh; }
+  .cta-label { font-size: 2vh; color: var(--mute-on-dark); }
+  .cta-url { font: 400 4.2vh/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--gold-pale); }
+
+  .tv-body { display: grid; grid-template-columns: 1.15fr 1fr 0.8fr; gap: 3vw; min-height: 0; }
+
+  .podium { display: grid; grid-template-rows: repeat(3, 1fr); gap: 2vh; min-height: 0; }
+  .podium :global(.card) {
+    display: grid; grid-template-columns: 7vh minmax(0, 1fr) auto; align-items: center; gap: 2vw;
+    padding: 0 2.4vw; border-radius: 3vh; background: var(--canvas); color: var(--ink); min-height: 0;
+  }
+  .podium :global(.card:nth-child(1)) { background: var(--gold-pale); }
+  .podium :global(.rk) { font: italic 300 7vh/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--clay); }
+  .podium :global(.nm) { font: 400 5.4vh/1.05 var(--serif); font-variation-settings: 'opsz' 144; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .podium :global(.sc) { font: 300 7.5vh/1 var(--serif); font-variation-settings: 'opsz' 144; text-align: right; }
+  .podium :global(.sc small) { display: block; font: 500 1.6vh/1.4 var(--sans); color: var(--stone); }
+
+  .list { display: grid; align-content: start; min-height: 0; }
+  .list :global(.row) { display: grid; grid-template-columns: 6vh minmax(0, 1fr) auto; align-items: baseline; gap: 1.4vw; padding: 1.55vh 0; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+  .list :global(.rk) { font: 300 3vh/1 var(--serif); color: var(--mute-on-dark); }
+  .list :global(.nm) { font: 500 3vh/1.2 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .list :global(.sc) { font: 300 3.6vh/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--gold-pale); }
+  :global(.ok) { color: var(--sage); font-size: 0.7em; margin-left: 0.5em; }
+
+  .feed { display: grid; grid-template-rows: auto 1fr; gap: 2vh; min-height: 0; overflow: hidden; }
+  #feed { display: grid; align-content: start; gap: 1.4vh; overflow: hidden; }
+  #feed :global(.ev) { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.4vh 1vw; padding: 1.8vh 1.6vw; border-radius: 2vh; background: var(--ink-band-soft); border: 1px solid rgba(255, 255, 255, 0.08); animation: ev-in 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.1) both; }
+  #feed :global(.ev b) { font: 600 2.4vh/1.2 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #feed :global(.ev .p) { grid-row: span 2; align-self: center; font: 300 4vh/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--gold-pale); }
+  #feed :global(.ev .p.neg) { color: #e88a7a; }
+  #feed :global(.ev span) { font-size: 1.9vh; color: var(--mute-on-dark); }
+  @keyframes ev-in { from { opacity: 0; transform: translateY(-1.5vh); } }
+  :global(.flash) { animation: flash 1.4s ease-out; }
+  @keyframes flash { from { box-shadow: 0 0 0 0.6vh var(--gold-soft); } }
+
+  .tv-foot { display: flex; gap: 4vw; font-size: 2.2vh; color: var(--mute-on-dark); }
+  .tv-foot b { color: #fff; font-weight: 600; }
+  :global(.empty-tv) { font: 300 5vh/1.2 var(--serif); color: var(--mute-on-dark); }
+</style>
+
+<script>
+  import { watchPlayers, watchEvents, watchSettings, type Player } from '../lib/db';
+  import { gameById } from '../lib/games';
+  import { $, esc, fmt } from '../lib/ui';
+
+  let target = 100, players: Player[] = [], last = new Map<string, number>();
+  $('url').textContent = location.host;
+
+  watchSettings((s) => {
+    target = Number(s.target) || 100;
+    $('goal').textContent = fmt(target);
+    document.querySelectorAll('[data-title]').forEach((el) => (el.textContent = s.title));
+    render();
+  });
+  watchPlayers((p) => { players = p; render(); }, 500);
+  watchEvents((evs) => {
+    $('feed').innerHTML = evs.slice(0, 6).map((e) => {
+      const where = e.gameId ? gameById(e.gameId)?.title ?? '' : 'od organizátorů';
+      return `<div class="ev"><b>${esc(e.name)}</b><span class="p num ${e.points < 0 ? 'neg' : ''}">${e.points > 0 ? '+' : ''}${fmt(e.points)}</span>
+        <span>${e.reason === 'win' ? 'výhra · ' : ''}${esc(where)}</span></div>`;
+    }).join('');
+  }, 6);
+
+  function render() {
+    $('count').textContent = fmt(players.length);
+    $('done').textContent = fmt(players.filter((p) => p.points >= target).length);
+    if (!players.length) {
+      $('podium').innerHTML = '<p class="empty-tv">Zatím nikdo nehraje. Buď první.</p>';
+      $('list').innerHTML = '';
+      return;
+    }
+    const ok = (p: Player) => (p.points >= target ? '<span class="ok">✓</span>' : '');
+    const fl = (p: Player) => (last.has(p.key) && last.get(p.key) !== p.points ? 'flash' : '');
+    $('podium').innerHTML = players.slice(0, 3).map((p, i) => `
+      <div class="card ${fl(p)}"><span class="rk">${i + 1}</span><span class="nm">${esc(p.name)}${ok(p)}</span>
+        <span class="sc num">${fmt(p.points)}<small>bodů</small></span></div>`).join('');
+    $('list').innerHTML = players.slice(3, 13).map((p, i) => `
+      <div class="row ${fl(p)}"><span class="rk num">${i + 4}</span><span class="nm">${esc(p.name)}${ok(p)}</span><span class="sc num">${fmt(p.points)}</span></div>`).join('');
+    last = new Map(players.map((p) => [p.key, p.points]));
+  }
+
+  // projektor: schovat kurzor, dvojklik = celá obrazovka
+  let hide: number | undefined;
+  document.addEventListener('mousemove', () => { document.body.style.cursor = ''; clearTimeout(hide); hide = window.setTimeout(() => (document.body.style.cursor = 'none'), 2000); });
+  document.addEventListener('dblclick', () => document.documentElement.requestFullscreen?.().catch(() => {}));
+</script>

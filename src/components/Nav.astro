@@ -1,0 +1,49 @@
+---
+import Ring from './Ring.astro';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const links = [
+  { href: '/', label: 'Hry' },
+  { href: '/zebricek', label: 'Žebříček' },
+];
+---
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="wordmark" href="/" data-title>DOD hry</a>
+    <nav class="tabs" aria-label="Hlavní">
+      {links.map((l) => (
+        <a class="tab" href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</a>
+      ))}
+    </nav>
+    <div class="me">
+      <Ring size={40} stroke={3.5} id="navRing" label="Tvoje body k cíli">
+        <span class="me-initial" id="navInitial"></span>
+      </Ring>
+      <div class="me-text">
+        <span class="me-name" id="navName"></span>
+        <span class="me-pts num"><span id="navPts">0</span> / <span id="navTarget">100</span> bodů</span>
+      </div>
+      <button class="btn btn-outline btn-sm" data-logout type="button">Odhlásit</button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav { position: sticky; top: 0; z-index: 20; background: rgba(247, 241, 232, 0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--hairline); padding-top: env(safe-area-inset-top, 0px); }
+  .nav-inner { display: flex; align-items: center; gap: 24px; min-height: 72px; }
+  .wordmark { font: 400 1.5rem/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--stone); text-decoration: none; letter-spacing: -0.01em; }
+  .tabs { display: flex; gap: 6px; }
+  .tab { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 2px solid transparent; color: var(--stone); text-decoration: none; font-size: 0.9375rem; font-weight: 500; }
+  .tab:hover { background: var(--canvas-deep); }
+  .tab[aria-current='page'] { border-color: var(--stone); }
+  .me { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .me-initial { font: 600 0.875rem/1 var(--sans); color: var(--stone); }
+  .me-text { display: grid; line-height: 1.2; }
+  .me-name { font-weight: 600; font-size: 0.9375rem; max-width: 14ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .me-pts { font-size: 0.8125rem; color: var(--muted); }
+  @media (max-width: 720px) {
+    .nav-inner { flex-wrap: wrap; gap: 8px 12px; padding-block: 10px; }
+    .tabs { order: 3; width: 100%; }
+    .tab { flex: 1; justify-content: center; }
+    .me-text { display: none; }
+  }
+</style>

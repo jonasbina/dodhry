@@ -1,0 +1,14 @@
+---
+// Kruh postupu k cíli – podpisový prvek portálu (prsten Oura → prsten bodů).
+interface Props { size?: number; stroke?: number; id?: string; label?: string; class?: string }
+const { size = 44, stroke = 4, id, label = 'Postup k cíli', class: cls = '' } = Astro.props;
+const r = 50 - stroke / 2 - 1;
+---
+<div class:list={['ring', 'is-empty', cls]} id={id} role="progressbar" aria-label={label} aria-valuemin="0"
+  style={`width:${size}px;height:${size}px`}>
+  <svg viewBox="0 0 100 100" aria-hidden="true">
+    <circle class="ring-track" cx="50" cy="50" r={r} fill="none" stroke-width={stroke * (100 / size)} />
+    <circle class="ring-bar" cx="50" cy="50" r={r} fill="none" stroke-width={stroke * (100 / size)} stroke-linecap="round" pathLength="100" />
+  </svg>
+  <div class="ring-label"><slot /></div>
+</div>

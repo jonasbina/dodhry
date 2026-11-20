@@ -1,0 +1,322 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Ring from '../components/Ring.astro';
+import Cover from '../components/Cover.astro';
+import { GAMES, MINUTE_CAP } from '../lib/games';
+---
+<Base>
+  <!-- ================= PŘIHLÁŠENÍ ================= -->
+  <div class="when-out">
+    <header class="wrap login-top">
+      <span class="wordmark-lg" data-title>DOD hry</span>
+    </header>
+
+    <main class="wrap login">
+      <section class="login-intro">
+        <p class="eyebrow">Den otevřených dveří</p>
+        <h1 class="display">Zahraj si hry našich&nbsp;studentů.</h1>
+        <p class="lead">Za každou dohranou hru dostaneš body. Nasbírej <span data-target>100</span> a máš splněno.</p>
+      </section>
+
+      <section class="login-card" aria-labelledby="loginH">
+        <form id="nameForm" novalidate>
+          <h2 class="h3" id="loginH">Jak ti máme říkat?</h2>
+          <p class="caption">Stačí přezdívka, heslo nepotřebuješ. Na jiném počítači se přihlásíš stejným jménem.</p>
+          <p class="hint bye" id="bye" hidden></p>
+          <div class="field">
+            <label for="nameInput">Přezdívka</label>
+            <input class="input" id="nameInput" autocomplete="off" autocapitalize="words" spellcheck="false" maxlength="24" placeholder="Třeba Tomáš z 9.B" aria-describedby="nameHint" />
+            <p class="hint" id="nameHint" aria-live="polite"></p>
+          </div>
+          <div class="chips" id="suggest" hidden></div>
+          <button class="btn btn-primary btn-block" type="submit" id="nameGo">Pokračovat</button>
+        </form>
+
+        <div id="conflict" hidden>
+          <h2 class="h3">„<span id="cName"></span>“ už tu někdo hraje</h2>
+          <p class="caption">Jsi to ty z jiného počítače, nebo jsi tu poprvé?</p>
+          <div class="who">
+            <Ring size={56} stroke={4} id="cRing" label="Body hráče"><span class="who-pts num" data-ring-value>0</span></Ring>
+            <div><b id="cName2"></b><div class="caption"><span id="cPts">0</span> bodů</div></div>
+          </div>
+          <div class="stack">
+            <button class="btn btn-primary btn-block" id="cMe" type="button">Ano, to jsem já</button>
+            <button class="btn btn-outline btn-block" id="cNew" type="button">Jsem tu poprvé</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section class="wrap login-games" aria-label="Hry na portálu">
+      {GAMES.map((g) => (
+        <figure class="mini">
+          <Cover game={g.id} class="mini-cover" />
+          <figcaption><b>{g.title}</b><span class="caption">{g.author}</span></figcaption>
+        </figure>
+      ))}
+    </section>
+  </div>
+
+  <!-- ================= PŘEHLED ================= -->
+  <div class="when-in">
+    <Nav />
+    <main>
+      <section class="wrap summary" aria-labelledby="sumH">
+        <div class="summary-text">
+          <p class="eyebrow">Tvoje body</p>
+          <h1 class="display" id="sumH"><span id="sumHead">Ještě 100 bodů</span></h1>
+          <p class="lead" id="sumLead">Body dostaneš za každou dohranou hru a za čas strávený hraním.</p>
+          <div class="summary-cta">
+            <a class="btn btn-primary" id="nextGame" href="/hra/nocni-velka-cena/">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+              <span id="nextLabel">Hrát</span>
+            </a>
+            <span class="caption" id="nextWhy">Tady ti body ještě chybí</span>
+          </div>
+        </div>
+
+        <div class="summary-ring">
+          <Ring size={264} stroke={10} id="bigRing" label="Body k cíli">
+            <span class="big-pts num" data-ring-value>0</span>
+            <span class="big-of">z <span data-target>100</span> bodů</span>
+          </Ring>
+          <ul class="breakdown" aria-label="Body podle her">
+            {GAMES.map((g) => (
+              <li data-break={g.id}>
+                <span class="b-name">{g.title}</span>
+                <span class="b-val num">0</span>
+                <span class="b-track"><span class="b-fill" style={`background:${g.tone}`}></span></span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="wrap games" aria-labelledby="gamesH">
+        <div class="section-head">
+          <p class="eyebrow">Hry studentů</p>
+          <h2 class="h1" id="gamesH">Čtyři hry, čtyři autoři</h2>
+        </div>
+        <div class="game-grid">
+          {GAMES.map((g) => (
+            <a class="game" href={`/hra/${g.id}/`} data-game={g.id}>
+              <Cover game={g.id} class="game-cover" />
+              <div class="game-body">
+                <div class="game-title-row">
+                  <h3 class="h2">{g.title}</h3>
+                  <span class="pill num">až {g.maxPoints} b</span>
+                </div>
+                <p class="game-blurb">{g.blurb}</p>
+                <p class="caption">{g.author} · {g.group} · {g.genre}</p>
+                <p class="game-mine num" data-mine hidden></p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <footer class="band">
+      <div class="wrap">
+        <p class="eyebrow on-dark">Jak to funguje</p>
+        <h2 class="h1">Hraj, sbírej, střídej.</h2>
+        <div class="how">
+          <div><h3>Dohraj hru</h3><p>Na konci každé hry dostaneš body podle výsledku. Kolik přesně, uvidíš ve hře pod tlačítkem <i>Body</i>.</p></div>
+          <div><h3>Hraj dál</h3><p>Za každou minutu hraní +1 bod, v jedné hře nejvýš {MINUTE_CAP}.</p></div>
+          <div><h3>Střídáš počítač?</h3><p>Odhlas se nahoře a na jiném počítači napiš stejnou přezdívku. Body ti zůstanou.</p></div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  html[data-auth='out'] .when-in, html[data-auth='in'] .when-out { display: none; }
+
+  /* ---------- přihlášení ---------- */
+  .login-top { padding-top: calc(28px + env(safe-area-inset-top, 0px)); }
+  .wordmark-lg { font: 400 1.75rem/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--stone); }
+  .login { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, 440px); gap: 48px 72px; align-items: center; padding-block: 72px 56px; }
+  .login-intro { display: grid; gap: 20px; }
+  .login-card { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 32px 28px; }
+  .login-card form, #conflict { display: grid; gap: 18px; }
+  .login-card .caption { margin: -8px 0 0; }
+  .bye { margin: 0; padding: 12px 16px; border-radius: var(--r-md); background: var(--canvas); color: var(--stone); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: -6px; }
+  .chips :global(.chip) { min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--stone); background: transparent; color: var(--stone); font-size: 0.9375rem; }
+  .chips :global(.chip:hover) { background: var(--canvas); }
+  .who { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: var(--r-md); background: var(--canvas); }
+  .who-pts { font: 600 0.9375rem/1 var(--sans); }
+  .stack { display: grid; gap: 10px; }
+  .login-games { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding-bottom: 64px; }
+  .mini { margin: 0; display: grid; gap: 12px; }
+  .mini :global(.mini-cover) { aspect-ratio: 4 / 3; border-radius: var(--r-lg); }
+  .mini figcaption { display: grid; gap: 2px; font-size: 0.9375rem; }
+
+  /* ---------- přehled ---------- */
+  .summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 48px 80px; align-items: center; padding-block: 72px 96px; }
+  .summary-text { display: grid; gap: 20px; }
+  .summary-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+  .summary-ring { display: grid; gap: 28px; justify-items: center; }
+  .big-pts { display: block; font: 300 5rem/0.9 var(--serif); font-variation-settings: 'opsz' 144; color: var(--ink); }
+  .big-of { display: block; margin-top: 8px; font-size: 0.9375rem; color: var(--muted); }
+  .breakdown { list-style: none; margin: 0; padding: 0; width: 300px; display: grid; gap: 14px; }
+  .breakdown li { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 0.9375rem; }
+  .b-name { color: var(--stone); }
+  .b-val { font-weight: 600; }
+  .b-track { grid-column: 1 / -1; height: 4px; border-radius: 4px; background: var(--hairline); overflow: hidden; }
+  .b-fill { display: block; height: 100%; width: 0; border-radius: inherit; transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+  .games { padding-bottom: 112px; }
+  .section-head { display: grid; gap: 12px; margin-bottom: 40px; }
+  .game-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 40px; }
+  .game { display: grid; gap: 20px; text-decoration: none; color: inherit; border-radius: var(--r-xl); }
+  .game :global(.game-cover) { aspect-ratio: 4 / 3; border-radius: var(--r-xl); }
+  .game :global(.game-cover svg) { transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .game:hover :global(.game-cover svg) { transform: scale(1.03); }
+  .game:focus-visible { outline-offset: 6px; }
+  .game-body { display: grid; gap: 8px; padding-inline: 4px; }
+  .game-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .game-blurb { margin: 0; color: var(--stone); max-width: 52ch; }
+  .game-body .caption { margin: 0; }
+  .pill { flex: none; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--hairline); font-size: 0.875rem; color: var(--stone); background: var(--surface); }
+  .game-mine { margin: 4px 0 0; font-weight: 600; color: var(--gold); }
+
+  .band { background: var(--ink-band-soft); color: #fff; padding-block: 96px calc(96px + env(safe-area-inset-bottom, 0px)); }
+  .band .wrap { display: grid; gap: 16px; }
+  .eyebrow.on-dark { color: var(--mute-on-dark); }
+  .how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 40px; }
+  .how h3 { font: 600 1.125rem/1.3 var(--sans); margin: 0 0 8px; }
+  .how p { margin: 0; color: var(--mute-on-dark); max-width: 36ch; }
+
+  @media (max-width: 960px) {
+    .login, .summary { grid-template-columns: 1fr; padding-block: 40px 56px; }
+    .login-games { grid-template-columns: repeat(2, 1fr); }
+    .summary-ring { justify-items: start; }
+    .game-grid { grid-template-columns: 1fr; gap: 48px; }
+    .how { grid-template-columns: 1fr; gap: 28px; }
+  }
+  @media (max-width: 480px) {
+    .breakdown { width: 100%; }
+    .summary-ring { justify-items: stretch; }
+    .summary-ring :global(.ring) { justify-self: center; }
+  }
+</style>
+
+<script>
+  import { GAMES } from '../lib/games';
+  import { getPlayer, createPlayer, nameKey, cleanName, watchSettings, type Player, type Settings } from '../lib/db';
+  import { getSession, setSession, requirePlayer } from '../lib/session';
+  import { fillNav } from '../lib/nav';
+  import { $, esc, fmt, bodu, setRing } from '../lib/ui';
+
+  let target = 100;
+  const fillTarget = (s: Settings) => {
+    target = Number(s.target) || 100;
+    document.querySelectorAll('[data-target]').forEach((el) => (el.textContent = fmt(target)));
+    document.querySelectorAll('[data-title]').forEach((el) => (el.textContent = s.title));
+    document.title = s.title;
+  };
+
+  if (getSession()) {
+    requirePlayer((me, s) => { fillTarget(s); fillNav(me, s); render(me, s); });
+  } else {
+    watchSettings(fillTarget);
+    initLogin();
+  }
+
+  // ---------------- přehled ----------------
+  function render(me: Player, s: Settings) {
+    const t = Number(s.target) || 100, left = Math.max(0, t - me.points);
+    $('sumHead').textContent = left ? `Ještě ${fmt(left)} ${bodu(left)}` : 'Cíl splněn';
+    $('sumLead').textContent = left
+      ? `Máš ${fmt(me.points)} z ${fmt(t)} bodů. Body dostaneš za každou dohranou hru a za čas strávený hraním.`
+      : `Máš ${fmt(me.points)} bodů. Ukaž tuhle obrazovku u stolu organizátorů – a klidně hraj dál.`;
+    setRing($('bigRing'), me.points, t);
+
+    const maxPer = Math.max(...GAMES.map((g) => g.maxPoints)) * 2;
+    for (const g of GAMES) {
+      const gp = me.games?.[g.id]?.points || 0;
+      const li = document.querySelector(`[data-break="${g.id}"]`)!;
+      li.querySelector('.b-val')!.textContent = fmt(gp);
+      (li.querySelector('.b-fill') as HTMLElement).style.width = `${Math.min(100, (gp / maxPer) * 100)}%`;
+      const mine = document.querySelector(`[data-game="${g.id}"] [data-mine]`) as HTMLElement;
+      mine.hidden = !gp;
+      mine.textContent = `Máš tu ${fmt(gp)} ${bodu(gp)}`;
+    }
+
+    // doporuč hru, kde má hráč nejmíň bodů
+    const next = [...GAMES].sort((a, b) => (me.games?.[a.id]?.points || 0) - (me.games?.[b.id]?.points || 0))[0];
+    ($('nextGame') as HTMLAnchorElement).href = `/hra/${next.id}/`;
+    $('nextLabel').textContent = `Hrát ${next.title}`;
+    $('nextWhy').textContent = me.games?.[next.id] ? 'Tady máš zatím nejmíň bodů' : 'Tuhle jsi ještě nehrál(a)';
+  }
+
+  // ---------------- přihlášení ----------------
+  function initLogin() {
+    const input = $<HTMLInputElement>('nameInput');
+    const hint = (text: string, err = false) => {
+      $('nameHint').textContent = text;
+      $('nameHint').classList.toggle('is-error', err);
+      input.setAttribute('aria-invalid', String(err));
+    };
+    try {
+      const bye = sessionStorage.getItem('dodhry:bye');
+      if (bye) { $('bye').textContent = bye; $('bye').hidden = false; sessionStorage.removeItem('dodhry:bye'); }
+    } catch {}
+    input.focus();
+    input.addEventListener('input', () => { hint(''); $('suggest').hidden = true; });
+
+    let pending = '';
+    const enter = (p: Player) => { setSession(p.key); location.reload(); };
+
+    $('nameForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = cleanName(input.value);
+      if (nameKey(name).length < 2) return hint('Napiš aspoň dvě písmena nebo číslice.', true);
+      const go = $<HTMLButtonElement>('nameGo');
+      go.disabled = true;
+      try {
+        const existing = await getPlayer(nameKey(name));
+        if (existing) return conflict(name, existing);
+        const created = await createPlayer(name);
+        if (created) return enter(created);
+        conflict(name, (await getPlayer(nameKey(name)))!);
+      } catch (err) {
+        console.error(err);
+        hint('Nepodařilo se spojit s databází. Zkontroluj připojení a zkus to znovu.', true);
+      } finally {
+        go.disabled = false;
+      }
+    });
+
+    function conflict(name: string, p: Player) {
+      pending = name;
+      $('nameForm').hidden = true;
+      $('conflict').hidden = false;
+      $('cName').textContent = p.name;
+      $('cName2').textContent = p.name;
+      $('cPts').textContent = fmt(p.points);
+      setRing($('cRing'), p.points, target);
+      $('cMe').onclick = () => enter(p);
+      $('cMe').focus();
+    }
+
+    $('cNew').addEventListener('click', async () => {
+      $('conflict').hidden = true;
+      $('nameForm').hidden = false;
+      input.value = pending;
+      hint('Tohle jméno už má někdo jiný. Přidej k němu třeba třídu nebo příjmení.', true);
+      input.focus();
+      input.select();
+      const ideas = [`${pending} ${new Date().getFullYear() % 100}`, `${pending} 2`, `${pending} ${10 + Math.floor(Math.random() * 89)}`];
+      const free: string[] = [];
+      for (const o of ideas) if (!free.includes(o) && !(await getPlayer(nameKey(o)))) free.push(o);
+      const box = $('suggest');
+      box.innerHTML = free.map((o) => `<button type="button" class="chip">${esc(o)}</button>`).join('');
+      box.hidden = !free.length;
+      box.querySelectorAll('button').forEach((b) => (b.onclick = () => { input.value = b.textContent!; $<HTMLFormElement>('nameForm').requestSubmit(); }));
+    });
+  }
+</script>

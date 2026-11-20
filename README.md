@@ -1,33 +1,30 @@
-# DOD Hry – herní portál pro den otevřených dveří
+# DOD hry
 
-Návštěvníci hrají hry studentů a sbírají body. Přihlášení jen přezdívkou (bez hesla),
-body se ukládají do Firebase Firestore, takže se dá střídat počítače.
+Portál pro den otevřených dveří: návštěvníci hrají hry studentů a sbírají body.
+Přihlášení jen přezdívkou, data ve Firebase Firestore. Postavené v Astru, vzhled podle `DESIGN.md`.
 
-| Stránka | K čemu |
+| Adresa | K čemu |
 |---|---|
-| `index.html` | portál pro hráče (přihlášení, hry, body, žebříček) |
-| `tv.html` | žebříček na projektor (živě, dvojklik = celá obrazovka) |
-| `admin.html` | admin: PIN (výchozí `2026`), cíl bodů, úpravy bodů, mazání, odkaz na projektor |
+| `/` | přihlášení a přehled (body, kruh k cíli, hry) |
+| `/hra/<id>/` | hra v rámu, body se připisují samy |
+| `/zebricek/` | žebříček |
+| `/tv/` | žebříček na projektor (dvojklik = celá obrazovka) |
+| `/admin/` | PIN (výchozí `2026`): cíl, úpravy bodů, mazání, projektor |
 
-## Jak se získávají body
-Pravidla jsou v `js/config.js` (`GAMES[].points`, `MINUTE_*`). Každá hra v `games/` má na konci
-`<script src="../../bridge.js">`, který hlídá koncovou obrazovku hry a pošle výsledek portálu.
-Hry samotné nejsou upravené (jen v Crimson Horde je vypnutý service worker).
-
-## Spuštění
-ES moduly nefungují z `file://`, je potřeba server:
+## Vývoj
 ```bash
-python3 -m http.server 8000   # pak http://localhost:8000
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # → dist/
 ```
-Bez Firebase configu běží **demo režim** (data jen v localStorage jednoho prohlížeče).
 
-## Firebase
-1. https://console.firebase.google.com → nový projekt → **Firestore Database** → Create (production mode).
-2. Project settings → *Your apps* → Web (`</>`) → zkopíruj `firebaseConfig` do `js/config.js`.
-3. Pravidla + hosting:
-```bash
-npm i -g firebase-tools
-firebase login
-firebase use --add            # vyber projekt
-firebase deploy --only firestore:rules,hosting
-```
+## Kde co je
+- `src/lib/games.ts` – seznam her a pravidla bodování
+- `src/lib/db.ts` – Firestore (config je tam taky)
+- `public/games/` – hry studentů; každá má na konci `<script src="../../bridge.js">`
+- `public/bridge.js` – hlídá konec hry a pošle výsledek portálu
+- `firestore.rules` – pravidla databáze (záměrně otevřená)
+
+## Cloudflare Pages
+Výstupní složku bere z `wrangler.jsonc`. V nastavení projektu musí být
+**Build command `npm run build`** (Framework preset: Astro nebo None). Node verzi určuje `.nvmrc`.
