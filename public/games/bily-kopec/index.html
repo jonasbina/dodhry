@@ -844,7 +844,7 @@ function collect(i){const s=S.slopes[i];if(s.box<=0)return;const k=kasaW(i);fl3(
 
 /* ================= skiers ================= */
 function cellIdx(i,x,y){const r=Math.floor((y-TOP)/10);if(r<0||r>=ROWS)return-1;const l=Math.floor((x-center(i,y)+HALF)/10);if(l<0||l>=LANES)return-1;return r*LANES+l;}
-const POPMAX=4000,popMax=()=>Math.min(POPMAX,Math.max(250,334*lifted().length));
+const POPMAX=2000,popMax=()=>Math.min(POPMAX,Math.max(250,170*lifted().length));
 // how many people belong to each slope right now (on it, on its lift, in its queue or walking to it)
 function slotCounts(){const c=Array(NS).fill(0);for(const sk of K)if(sk.next!=='gone')c[sk.slot]++;return c;}
 function spawn(list,noRoute){const w=list.map(i=>S.slopes[i].lift+(S.slopes[i].park?1:0));let r=Math.random()*w.reduce((a,b)=>a+b,0),slot=list[0];
@@ -946,8 +946,8 @@ function updWalker(dt){
     if(WK.level&&WK.level!=='ground')moveUp(nx,ny);
     // if you already stand inside something (a gate that just closed, a tree, a wall you were dropped next to), every step is allowed until you are out
     else if(S.upg.restaurace&&inRest(nx,ny)&&restEntry(nx,ny)&&restOK(nx,ny)){WK.x=nx;WK.y=ny;WK.level='rest';}
-    else{const stuck=treeNear(WK.x,WK.y,.6)||blocked(WK.x,WK.y,.32),ok=(x,y)=>(stuck||(!treeNear(x,y,.6)&&!blocked(x,y,.32)))&&steepOK(WK.x,WK.y,x,y)&&!solidHit(WK.x,WK.y,x,y,.32)&&!hotelDoorBlocked(x,y);
-      if(ok(nx,WK.y))WK.x=nx;if(ok(WK.x,ny))WK.y=ny;
+    else{const stuck=blocked(WK.x,WK.y,.32)||treeNear(WK.x,WK.y,.42),ok=(x,y)=>(stuck||(!blocked(x,y,.32)&&!treeNear(x,y,.42)))&&steepOK(WK.x,WK.y,x,y)&&!solidHit(WK.x,WK.y,x,y,.32)&&!hotelDoorBlocked(x,y);
+      if(ok(nx,ny)){WK.x=nx;WK.y=ny;}else{if(ok(nx,WK.y))WK.x=nx;if(ok(WK.x,ny))WK.y=ny;}
       if(inR(WK.x,WK.y,STR)&&WK.y>STR.y1-1.3)WK.level='stairs';}
     WK.bob+=sp*2.1;}
   if(keys.jump&&!WK.air){WK.air=true;WK.vz=4.2;}
@@ -972,7 +972,7 @@ function updHeli(dt){const H=RD;H.t+=dt;H.rot=Math.min(1,H.rot+dt*.45);
   const nf=heliFloor(H.x,H.y);if(H.alt<nf){if(H.vz<-6)fl3(X(H.x),nf+4,H.y,'Tvrdé přistání!','#d63a3a');H.alt=nf;H.vz=Math.max(0,H.vz);H.v*=.5;}
   if(H.rot<.75&&climb>0&&!H.warned){H.warned=1;toast('Rotor se roztáčí… ještě chvilku.');}
   if(Math.random()<dt*20&&H.alt-nf<8)parts.push({x:X(H.x)+(Math.random()-.5)*8,y:nf+.3,z:H.y+(Math.random()-.5)*8,vx:(Math.random()-.5)*12,vy:1+Math.random()*2,vz:(Math.random()-.5)*12,l:1.2,c:[1,1,1],g:.2});}
-function startRide(veh){const p=S.vp[veh];
+function startRide(veh){if((veh==='lyze'||veh==='snowboard')&&!MT&&!tutDone('ski')&&!tutOpen)setTimeout(()=>{if(!MT&&mode==='ride')mtStart('ski');},600);const p=S.vp[veh];
   RD={veh,x:p.x,y:p.y,hd:p.hd,v:0,alt:p.alt!=null?p.alt:hgt(p.x,p.y),vz:0,air:false,airMax:0,spin:0,fall:0,pts:0,look:0,pitch:0,hop:0,held:0,t:0,rot:0,tp:0,tr:0};
   setMode('ride');toast(`${VEH[veh].name}: ${veh==='heli'?'Mezerník stoupat, Shift klesat, W/S vpřed a vzad, A/D otáčení. Vystoupit (F) jde jen po přistání.':veh==='rolba'?'W plyn, S couvání, A/D zatáčení. Projeď sjezdovky a uhlaď je.':VEH[veh].motor?'W plyn, S brzda, A/D zatáčení.':'Z kopce to jede samo. W odraz, S brzda, mezerník skok.'} F vystoupit.`);}
 function exitRide(){if(!RD)return;
@@ -999,10 +999,13 @@ function updRide(dt){const V=VEH[RD.veh];RD.t+=dt;
   const steer=V.car?clamp(Math.abs(RD.v)/5,0,1)*(RD.v<0?-1:1)*(1-clamp((Math.abs(RD.v)-30)/80,0,.45)):V.motor?1:(RD.v<4?.95:1.2-clamp((RD.v-12)/45,0,.4))*(tuck?.6:1);
   if(glide){RD.tv=(RD.tv||0)+(turn*V.turn*steer-(RD.tv||0))*Math.min(1,dt*7);RD.hd+=RD.tv*dt*(RD.air?.3:1);}
   else if(!RD.air)RD.hd+=turn*V.turn*steer*dt;
-  const dx=Math.sin(RD.hd),dy=Math.cos(RD.hd),[gx,gy]=grad(RD.x,RD.y),sl=gx*dx+gy*dy;
+  if(RD.vd==null||!glide||RD.v<1.5)RD.vd=RD.hd;
+  let skid=0;if(glide&&!RD.air){const df=Math.atan2(Math.sin(RD.hd-RD.vd),Math.cos(RD.hd-RD.vd)),grip=(onPiste(RD.x,RD.y)?8:4.5)*(keys.down?.55:1)*(tuck?1.25:1);RD.vd+=df*Math.min(1,dt*grip);skid=Math.abs(df);}
+  const dx=Math.sin(RD.vd),dy=Math.cos(RD.vd),[gx,gy]=grad(RD.x,RD.y),sl=gx*dx+gy*dy;
   if(!RD.air){
     // tracks and a winch: the snowcat walks up steep pistes at an even pace
-    let a=-9.81*sl/Math.sqrt(1+sl*sl)*(V.motor?(RD.veh==='rolba'?.1:.45):1);
+    let a=-9.81*sl/Math.sqrt(1+sl*sl)*(V.motor?.1:1);
+    if(!V.motor&&keys.up&&sl>0&&RD.v<6)a+=9.81*sl/Math.sqrt(1+sl*sl)*.95+1.6;
     if(V.motor){if(keys.up)a+=V.motor;if(keys.down)a-=RD.v>.5?(V.car?22:12):V.motor*.6;
       if(V.car&&keys.nitro&&keys.up){a+=14;if(Math.random()<.8){const bx=X(RD.x)-Math.sin(RD.hd)*2.4,bz=RD.y-Math.cos(RD.hd)*2.4;for(const s of[-.35,.35])parts.push({x:bx+Math.cos(RD.hd)*s,y:RD.alt+.4,z:bz-Math.sin(RD.hd)*s,vx:-Math.sin(RD.hd)*6,vy:.3,vz:-Math.cos(RD.hd)*6,l:.25,c:[.35,.6,1],g:0});}}}
     // S brakes harder the faster you go (snowplough / sliding the board sideways) and throws up snow
@@ -1010,13 +1013,20 @@ function updRide(dt){const V=VEH[RD.veh];RD.t+=dt;
     // off the piste the powder slows you down but does not stop you dead; in a tuck the air drag halves
     const off=glide?V.off*.3:V.off,carve=Math.abs(RD.tv||0)/V.turn;
     a-=RD.v*(onPiste(RD.x,RD.y)?.03:off)+(tuck?.0008:.0016)*RD.v*Math.abs(RD.v)+(glide?carve*.7:Math.abs(turn))*Math.abs(RD.v)*.05;
-    if(glide&&carve>.55&&RD.v>9&&Math.random()<.6)spray(.6);
+    if(glide){a-=Math.min(.8,Math.max(0,skid-.1)*1.4)*RD.v*.6;// skidding sideways brakes
+      // on gentle ground the skis keep running a little (no sticky snow), on the flat W skates you along
+      if(keys.up&&sl>-.05&&sl<=0&&RD.v<9)a+=1.2;}
     RD.v=clamp(RD.v+a*dt,V.motor?-V.max*.35:0,V.max*(tuck?1.15:1));}
   if(RD.veh!=='heli')attSmooth(RD,RD.veh,RD.x,RD.y,RD.hd,dt);
-  const nx=RD.x+dx*RD.v*dt,ny=RD.y+dy*RD.v*dt,rad=RD.veh==='rolba'?2.6:RD.veh==='car'?1.3:RD.veh==='skutr'?1.1:.5;
+  let nx=RD.x+dx*RD.v*dt,ny=RD.y+dy*RD.v*dt;const rad=RD.veh==='rolba'?2.6:RD.veh==='car'?1.3:RD.veh==='skutr'?1.1:.5;
   if(!RD.air||RD.alt-hgt(nx,ny)<12){
-    if(!(treeNear(RD.x,RD.y,rad)||blocked(RD.x,RD.y,rad))&&(treeNear(nx,ny,rad)||blocked(nx,ny,rad))){if(Math.abs(RD.v)>9&&!V.motor){crash('Au, náraz!');return;}RD.v=0;return;}
-    if(RD.veh!=='heli'){const hit=solidHit(RD.x,RD.y,nx,ny,rad,RD.veh);if(hit&&hit!=='park'){if(Math.abs(RD.v)>9&&!V.motor){crash(hit==='skier'?'Au, srážka s lyžařem!':'Au, náraz!');return;}RD.v=0;return;}}}
+    if(RD.veh!=='heli'&&!RD.air){const up=hgt(nx,ny)-hgt(RD.x,RD.y),dl=Math.hypot(nx-RD.x,ny-RD.y);if(dl>1e-4&&up>dl*TAN50+.004){RD.v=0;return;}}
+    const tr=rad*.75,inside=blocked(RD.x,RD.y,rad)||treeNear(RD.x,RD.y,tr),free=(x,y)=>inside||(!blocked(x,y,rad)&&!treeNear(x,y,tr)&&(RD.veh==='heli'||(h=>!h||h==='park')(solidHit(RD.x,RD.y,x,y,rad,RD.veh))));
+    if(!free(nx,ny)){const hit=RD.veh!=='heli'&&solidHit(RD.x,RD.y,nx,ny,rad,RD.veh);
+      // glancing contact: keep the part of the move along the obstacle; only a head-on hit at speed knocks you over
+      if(free(nx,RD.y)){ny=RD.y;RD.v*=1-Math.min(.6,dt*3);}
+      else if(free(RD.x,ny)){nx=RD.x;RD.v*=1-Math.min(.6,dt*3);}
+      else{if(Math.abs(RD.v)>11&&!V.motor){crash(hit==='skier'?'Au, srážka s lyžařem!':'Au, náraz!');return;}RD.v=0;return;}}}
   RD.x=clamp(nx,-450,1850);RD.y=clamp(ny,-1450,2900);
   const gh=hgt(RD.x,RD.y);
   // the park is checked in its slope's own frame (pv: where you are, dyv: how much you head downhill)
@@ -1091,7 +1101,7 @@ function unloadChair(){if(!PL)return;const i=PL.i,lx=liftX(i),[x,y]=PW(i,lx-7,TO
 function standUp(){const s=WK.sit;WK.sit=null;if(s.ux!==undefined){WK.x=s.ux;WK.y=s.uy;}else WK.x=474.6;}
 function enterDesk(){WK.sit=null;Object.assign(WK,{x:CHAIR.x,y:CHAIR.y,yaw:-Math.PI/2,pitch:-.12});setMode('desk');}
 function leaveDesk(){Object.assign(WK,{x:CHAIR.x+1.2,y:CHAIR.y,yaw:-Math.PI/2,pitch:0,level:'ground',z:0});setMode('walk');}
-function interact(){if(jobF())return;if(mode==='ride'){exitRide();return;}if(mode==='desk'){leaveDesk();return;}if(mode!=='walk')return;
+function interact(){if(MT)MT.f=true;if(jobF())return;if(mode==='ride'){exitRide();return;}if(mode==='desk'){leaveDesk();return;}if(mode!=='walk')return;
   if(WK.sit){standUp();return;}
   const sp=nearSpot(),dr=nearDoor(),v=nearVehicle();
   if(dr&&!sp&&doorBeforeVehicle(dr,v)){toggleDoor(dr.id);return;}
@@ -1180,7 +1190,7 @@ function update(dt){
 
 /* ================= THREE: renderer, sky, light ================= */
 // a logarithmic depth buffer: from a ski tip in front of your nose to peaks 20 km away, surfaces no longer fight (no flicker)
-const renderer=new THREE.WebGLRenderer({canvas:cvs,antialias:true,logarithmicDepthBuffer:true});
+const renderer=new THREE.WebGLRenderer({canvas:cvs,antialias:false,logarithmicDepthBuffer:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));
 renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
 renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
@@ -1210,7 +1220,7 @@ const sky=new THREE.Mesh(new THREE.SphereGeometry(30000,32,16),new THREE.ShaderM
 sky.renderOrder=-1;scene.add(sky);
 const stars=(()=>{const n=1800,p=new Float32Array(n*3),r=rng(31);for(let k=0;k<n;k++){const a=r()*6.283,e=Math.asin(.05+r()*.95);p.set([Math.cos(a)*Math.cos(e)*25000,Math.sin(e)*25000,Math.sin(a)*Math.cos(e)*25000],k*3);}
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));
-  const m=new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:1.6,sizeAttenuation:false,transparent:true,opacity:0,fog:false,depthWrite:false}));m.frustumCulled=false;scene.add(m);return m;})();
+  const m=new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:1.6,sizeAttenuation:false,transparent:true,opacity:0,fog:false,depthWrite:false}));m.frustumCulled=false;m.visible=false;scene.add(m);return m;})();
 
 /* snow detail texture */
 const snowTex=(()=>{const N=512,c=document.createElement('canvas');c.width=c.height=N;const g=c.getContext('2d'),d=g.createImageData(N,N),r=rng(5);
@@ -2459,6 +2469,7 @@ function syncCrew(t){if(crewDirty)buildCrew();crewG.visible=S.phase!=='night'||m
     // workers at a post (booth, gate, counter) keep facing their customers and just shift from foot to foot
     const yaw=w.fy!=null&&!w.ovr?w.fy:Math.atan2((Bp[0]-A[0])*dir,(Bp[1]-A[1])*dir),still=(w.fy!=null&&!w.ovr)||w.frz!=null;
     const ph=t*6+w.ph,sw=still?.08:Math.min(1,Math.abs(dir)*1.5)*.55;w.g.position.set(X(x),h,y);w.g.rotation.set(0,yaw,0);w.px=x;w.py=y;w.ph3=h;
+    {const c=camera.position,dx=X(x)-c.x,dz=y-c.z;w.g.visible=mode==='map'||mode==='cctv'||dx*dx+dz*dz<PEOPLE_R*PEOPLE_R;}
     w.legs[0].rotation.x=Math.sin(ph)*sw;w.legs[1].rotation.x=-Math.sin(ph)*sw;w.arms[0].rotation.x=-Math.sin(ph)*sw*.8;w.arms[1].rotation.x=w.arms[1].userData.tray?-1.25:Math.sin(ph)*sw*.8;if(w.waveT>0)w.arms[1].rotation.x=-2.7+Math.sin(t*8)*.35;
     w.kids.forEach((kd,c)=>{const bx=x-Math.sin(yaw)*(1.4+c*1.2)+(c?.6:-.6),by=y-Math.cos(yaw)*(1.4+c*1.2);kd.g.position.set(X(bx),hgt(bx,by),by);kd.g.rotation.y=yaw;
       kd.legs[0].rotation.x=Math.sin(ph*1.4+c)*sw;kd.legs[1].rotation.x=-Math.sin(ph*1.4+c)*sw;});}}
@@ -2757,7 +2768,7 @@ function syncUnique(t,dt){const night=sunState().nightF>.35;if(UQ.coins.length){
 function rebuildWorld(){worldDirty=false;condDirty=true;MOGON[0]=MOGON[1]=false;// no moguls: every piste is groomed smooth
   UQ.coins=[];UQ.eyes=[];UQ.lights=[];
   while(dyn.children.length)dyn.remove(dyn.children[0]);BLOCKS.length=0;WBLK.length=0;BUILD.length=0;LAMPS.length=0;CHIMNEYS.length=0;GATES.length=0;BELTS.length=0;ICICLES.length=0;
-  chalet(700,545,34,18,3,{});safe('chata personálu',staffChalet);safe('skála',hillBlocks);
+  chalet(700,545,34,18,3,{});safe('chata personálu',staffChalet);
   managerHouse();garage();velin();bank();tower();buildGondola();crewDirty=true;
   if(S.upg.restaurace)restaurant();else{RBLK.length=0;restPlot();}
   kiosk();staffGarage();depot();
@@ -2826,7 +2837,7 @@ const tc=c=>tcol.set(c).convertSRGBToLinear();
 function visPeople(cam,CULL,top,cfx,cfz){const V=[];for(const sk of K){const turned=!isWC(sk)&&south(sk.slot),[wx,wy]=turned?PW(sk.slot,sk.x,sk.y):[sk.x,sk.y],dx=X(wx)-cam.x,dz=wy-cam.z,d2=dx*dx+dz*dz;
     if(d2>CULL||(!top&&d2>900&&dx*cfx+dz*cfz<-15))continue;sk._d2=d2;V.push(sk);}const cap=Math.min(MAXP-20,[450,900,1500][GQ]||450);if(V.length>cap){V.sort((a,b)=>a._d2-b._d2);V.length=cap;}return V;}
 function syncPeople(t){let n=0,nl=0,na=0,nf=0,ns=0,nb=0,np2=0;const cam=camera.position;t=t||performance.now()/1000;
-  camera.getWorldDirection(RG.cf=RG.cf||new THREE.Vector3());const cfl=Math.hypot(RG.cf.x,RG.cf.z)||1,cfx=RG.cf.x/cfl,cfz=RG.cf.z/cfl,top=RG.cf.y<-.75||third,CULL=top?1600*1600:GCULL*GCULL;
+  camera.getWorldDirection(RG.cf=RG.cf||new THREE.Vector3());const cfl=Math.hypot(RG.cf.x,RG.cf.z)||1,cfx=RG.cf.x/cfl,cfz=RG.cf.z/cfl,top=RG.cf.y<-.75||third,CULL=mode==='map'||mode==='cctv'?1600*1600:PEOPLE_R*PEOPLE_R;
   for(const sk of visPeople(cam,CULL,top,cfx,cfz)){const L=S.slopes[sk.slot].lift,turned=!isWC(sk)&&south(sk.slot);
     // walkers are in the world already; everyone else is in slope space and on the south side gets turned round
     const [wx,wy]=turned?PW(sk.slot,sk.x,sk.y):[sk.x,sk.y],yaw=sk.yaw+(turned?Math.PI:0);
@@ -2902,7 +2913,7 @@ function syncPeople(t){let n=0,nl=0,na=0,nf=0,ns=0,nb=0,np2=0;const cam=camera.p
         for(const o of[-.03,.03]){J.P0.set(J.A0.x-.02+o,J.A0.y+.42,J.A0.z-.04);J.P1.set(J.A0.x+.01+o,.06,J.A0.z+.16);limb(skiPoleM,np2++,J.P0,J.P1);}}}}
   legM.count=nl;armM.count=na;bootM.count=gloveM.count=nf;torsoM.count=hipM.count=collarM.count=headM.count=helmM.count=gogM.count=n;skiM.count=ns;boardM.count=nb;skiPoleM.count=np2;
   for(const m of[legM,armM,bootM,gloveM,torsoM,hipM,collarM,headM,helmM,gogM,skiM,boardM,skiPoleM]){m.instanceMatrix.needsUpdate=true;if(m.instanceColor)m.instanceColor.needsUpdate=true;}}
-function syncParts(){let n=0,m=0;for(const p of parts){if(p.smoke){if(m<PMAX){sPos2[m*3]=p.x;sPos2[m*3+1]=p.y;sPos2[m*3+2]=p.z;m++;}continue;}
+function syncParts(){parts.length=0;pts.visible=false;smoke.visible=false;return;let n=0,m=0;for(const p of parts){if(p.smoke){if(m<PMAX){sPos2[m*3]=p.x;sPos2[m*3+1]=p.y;sPos2[m*3+2]=p.z;m++;}continue;}
     if(n<PMAX){pPos[n*3]=p.x;pPos[n*3+1]=p.y;pPos[n*3+2]=p.z;pCol[n*3]=p.c[0];pCol[n*3+1]=p.c[1];pCol[n*3+2]=p.c[2];n++;}}
   pGeo.setDrawRange(0,n);pGeo.attributes.position.needsUpdate=true;pGeo.attributes.color.needsUpdate=true;sGeo2.setDrawRange(0,m);sGeo2.attributes.position.needsUpdate=true;}
 function syncMe(t){const P=ME.userData.P;
@@ -3013,10 +3024,30 @@ function nearKasa(){const [x,y]=eye();let best=-1,bd=14;S.slopes.forEach((s,i)=>
 labelBox.addEventListener('pointerdown',e=>{const b=e.target.closest('[data-kasa]');if(!b)return;e.stopPropagation();const i=+b.dataset.kasa,k=kasaW(i),[x,y]=eye();
   if(mode!=='map'&&Math.hypot(x-k.x,y-k.y)>14){toast('Dojdi k pokladně blíž, tržbu ti pokladní předá jen osobně.');return;}collect(i);});
 
+/* ================= streaming: buildings and props load in around you as you move, nearest first, a few per frame;
+   the ones far behind you are put away again. Terrain, forests, lifts and anything big stay loaded all the time. ================= */
+const STRM={items:[],t:0,dirty:true,shown:0};
+const PEOPLE_R=50;   // people (skiers, staff, guards) are drawn only within 50 m of you
+const strmR=()=>[320,500,750][GQ]||320;
+function streamIndex(){STRM.items.length=0;const b=new THREE.Box3(),v=new THREE.Vector3();
+  for(const o of dyn.children){if(!o.visible||o.isLight)continue;let lit=false;o.traverse(q=>{if(q.isLight||q.isInstancedMesh||q.isPoints||q.isLine||q.isSprite)lit=true;});if(lit)continue;
+    try{b.setFromObject(o);}catch(e){continue;}if(b.isEmpty())continue;b.getSize(v);const sz=Math.max(v.x,v.z);if(sz>160)continue;b.getCenter(v);
+    STRM.items.push({o,x:v.x,z:v.z,r:sz/2,on:false});o.visible=false;}
+  STRM.dirty=false;STRM.t=0;STRM.shown=0;STRM.first=true;}
+function updStream(dt){if(STRM.dirty)streamIndex();STRM.t-=dt;if(STRM.t>0)return;STRM.t=.15;
+  const c=camera.position,far=mode==='map'||mode==='cctv',R=far?1e6:strmR(),R2=R*R,U=(R*1.3)**2;
+  // the very first pass loads what is right round you at once, then up to 12 objects every 0.15 s
+  let budget=STRM.first?40:12;STRM.first=false;const want=[];
+  for(const it of STRM.items){const dx=it.x-c.x,dz=it.z-c.z,d=Math.max(0,Math.sqrt(dx*dx+dz*dz)-it.r);
+    if(!it.on){if(d*d<R2)want.push([d,it]);}else if(d*d>U){it.on=false;it.o.visible=false;STRM.shown--;}}
+  want.sort((a,b)=>a[0]-b[0]);for(const [,it] of want){if(budget--<=0)break;it.on=true;it.o.visible=true;STRM.shown++;}
+  let el=document.getElementById('strmInfo');if(!el){el=document.createElement('div');el.id='strmInfo';el.hidden=true;el.style.cssText='position:absolute;left:12px;bottom:12px;z-index:5;padding:4px 10px;border-radius:999px;background:rgba(10,16,24,.62);color:#fff;font:600 12px Rubik,system-ui,sans-serif;pointer-events:none';(document.getElementById('stage')||document.body).appendChild(el);}
+  {const n=want.length-Math.max(0,Math.min(want.length,STRM.first?40:12));el.hidden=n<=0;if(n>0)el.textContent=`Načítám okolí… ${n}`;}}
 /* ================= render ================= */
 function sunState(){const hour=S.phase==='morning'?7.5+(S.mt||0)/MORN*.5:S.phase==='day'?8+S.t/DAY*8.5:16.5+S.nt/NIGHT*6,nightF=clamp((hour-16.2)/1.5,0,1),el=.5*Math.sin(Math.PI*clamp((hour-7)/10.2,0,1)),az=-1.25+2.5*clamp((hour-8)/9,0,1);return{hour,nightF,el,az};}
 function render(dt,t){if(shakeT>0){shakeT-=dt;const a=shakeT*.5;camera.position.x+=(Math.random()-.5)*a;camera.position.y+=(Math.random()-.5)*a;}
-  if(worldDirty)rebuildWorld();if(treesDirty)rebuildTrees();
+  if(worldDirty){rebuildWorld();STRM.dirty=true;}if(treesDirty)rebuildTrees();
+  try{updStream(dt);}catch(e){reportErr('načítání okolí',e);STRM.items.forEach(it=>it.o.visible=true);STRM.items.length=0;}
   measureSpeed(dt);syncLifts();syncGondola();syncUnique(t,dt);syncPeople(t);syncParts();syncMe(t);updViewModel(dt,t);
   DOORP.house+=clamp(S.doors.house-DOORP.house,-dt*1.4,dt*1.4);for(let k=0;k<5;k++)DOORP.g[k]+=clamp(S.doors.g[k]-DOORP.g[k],-dt*.45,dt*.45);
   if(DOORS.house)DOORS.house.rotation.y=-1.7*(1-(1-DOORP.house)**2);
@@ -3042,9 +3073,8 @@ function render(dt,t){if(shakeT>0){shakeT-=dt;const a=shakeT*.5;camera.position.
   else aiRolba.visible=false;
   for(let k=0;k<fallMeshes.length;k++){const m=fallMeshes[k],f=falling[k];m.visible=!!f;if(!f)continue;
     m.position.set(X(f.x),f.h-Math.max(0,1.2-f.l)*2,f.y);m.rotation.set(0,0,0);m.scale.setScalar(f.s);m.rotateOnWorldAxis(v3.set(f.az,0,-f.ax).normalize(),f.a);}
-  const sp=snGeo.attributes.position.array,c=camera.position,indoors=mode==='walk'&&(inHouse(WK.x,WK.y)||WK.level==='tower'||WK.level==='vault');
-  for(let k=0;k<SNO;k++){sp[k*3+1]-=dt*(1.2+(k%5)*.25);sp[k*3]+=Math.sin(k+t/1.4)*dt*.6;if(sp[k*3+1]<-10)sp[k*3+1]+=70;}
-  snowPts.position.set(c.x,c.y-20,c.z);snGeo.attributes.position.needsUpdate=true;snowPts.visible=mode!=='map'&&!indoors;
+  snowPts.visible=false;   // particles are off: they cost too much on weaker computers
+  const c=camera.position;
   const st=sunState(),ce=Math.cos(st.el),dir=new THREE.Vector3(Math.sin(st.az)*ce,Math.sin(st.el),Math.cos(st.az)*ce).normalize();
   skyU.sunDir.value.copy(dir);skyU.night.value=st.nightF;
   const lowSun=clamp(1-st.el/.35,0,1);
@@ -3669,6 +3699,7 @@ cvs.addEventListener('wheel',e=>{e.preventDefault();if(mode==='map'){MAPCAM.dist
 const KW={arrowleft:'left',arrowright:'right',arrowup:'up',w:'up',arrowdown:'down',s:'down',a:'sl',d:'sr',shift:'run',' ':'jump'};
 const KR={arrowleft:'left',a:'left',arrowright:'right',d:'right',arrowup:'up',w:'up',arrowdown:'down',s:'down',' ':'jump',shift:'run',n:'nitro'};
 addEventListener('keydown',e=>{const k=e.key.toLowerCase();
+  if(tutOpen){if(k==='enter'||k==='arrowright'||k===' ')tutGo(1);else if(k==='arrowleft')tutGo(-1);else if(k==='escape')tutClose(true);e.preventDefault();return;}
   const typing=e.target&&e.target.tagName==='INPUT'&&e.target.type!=='checkbox'&&e.target.type!=='range';
   if(bankOpen){if(k==='escape')closeBank();else if(k==='f'&&!typing){closeBank();standUp();}return;}
   if(acctOpen)return;
@@ -3773,14 +3804,14 @@ function openRoles(first){if(mode==='chair'||mode==='gondola'||mode==='desk'||mo
 function setRole(id,keep){acctClose();if(mode==='map')setMode('walk');if(mode==='ride')exitRide();
   const prev=S.role;jobReset();S.role=id;crewDirty=true;charsInit().role=id;if(!keep)S.payT=0;
   if(mode==='walk')placeForRole(id,prev);
-  const r=ROLES[id];toast(`${r.ic} Jsi ${r.n.toLowerCase()}. ${jobIntro(id)}`,'ok');updJobChip();save();}
+  const r=ROLES[id];toast(`${r.ic} Jsi ${r.n.toLowerCase()}. ${jobIntro(id)}`,'ok');updJobChip();save();setTimeout(()=>{try{tutForRole(id);}catch(e){}},500);}
 function jobIntro(id){return{spravce:'Kniha správce je na E, notebook s rozpočtem na 5.',hs:'Skútr máš v garáži za sebou (vrata jsou otevřená). Čekej na hlášení z vysílačky, zraněné ukáže červená značka.',
-  bufet:'Stojíš u okénka bufíku. Klávesou F začneš obsluhovat.',rolbar:'Rolba stojí v garáži před tebou, vrata jsou otevřená. Sedni do ní (F) a uhlazuj nejvíc rozježděné sjezdovky. Bydlíš v hotelu: máš tam vlastní vchod a pokoj.',
+  bufet:'Stojíš u okénka bufíku. Klávesou F začneš obsluhovat.',rolbar:'Rolba stojí v garáži před tebou, vrata jsou otevřená. Sedni do ní (F) a uhlazuj nejvíc rozježděné sjezdovky.',
   instr:'Jsi nahoře na sjezdovce u srazu lyžařské školy. Lyže leží vedle tebe: F je zvedneš, R nasadíš.',kuchar:'Stojíš v kuchyni za pultem, za zády máš sporák. Klávesou F začneš vařit.'}[id];}
 function placeForRole(id,prev){const put=(x,y,yaw,level='ground')=>Object.assign(WK,{x,y,yaw,pitch:-.05,z:0,vz:0,air:false,level,sit:null,spd:0});
   if(id==='spravce'){if(prev&&prev!=='spravce')put(466,505.5,-Math.PI/2);}
   else if(id==='hs'){S.doors.g[3]=1;put(BAYS[3]+3.5,GDOOR_Y+3,Math.PI);}
-  else if(id==='rolbar'){if(prev==='ráno')put(HOT.x-14.6,HOT.y-6.2,Math.PI/2);else{S.doors.g[4]=1;put(BAYS[4]-3.5,GDOOR_Y+4,Math.PI);}}
+  else if(id==='rolbar'){if(prev==='ráno')put(HOT.x,HOT.y+HOT.d/2+3,0);else{S.doors.g[4]=1;put(BAYS[4]-3.5,GDOOR_Y+4,Math.PI);}}
   else if(id==='bufet')put(KIOSK.x,KIOSK.y+2.6,Math.PI);
   else if(id==='kuchar'){if(!S.upg.restaurace){S.upg.restaurace=1;worldDirty=true;toast('Restaurace Sluneční se otevírá, aby měl kuchař kde vařit.','ok');}put(REST.x+COOKP.x,REST.y,-Math.PI/2,'rest');}
   else if(id==='instr'){JOB.lesson=newLesson();const L=JOB.lesson;if(!L)return;buildLesson();
@@ -3995,6 +4026,7 @@ let menuOpen=false;
 {const w=document.createElement('div');w.className='savewrap';w.id='menuwrap';w.hidden=true;
   w.innerHTML=`<div class="savebox menubox" role="dialog" aria-label="Menu"><div class="savehead"><div><b>Menu</b><small id="menuWho"></small></div><button type="button" id="menuX" aria-label="Zavřít">×</button></div>
     <button type="button" class="go" id="mGo">Pokračovat ve hře (Esc)</button>
+    <button type="button" class="go alt" id="mTut">🎓 Tutoriál</button>
     <button type="button" class="go alt" id="mRules">📖 Pravidla hry</button>
     <button type="button" class="go alt" id="mChars">👥 Výběr postavy</button>
     <button type="button" class="go alt" id="mRole">🔁 Změnit roli této postavy (J)</button>
@@ -4004,13 +4036,13 @@ let menuOpen=false;
     <button type="button" class="go red" id="mFull">🎁 Plně postavené středisko (250 000 Kč)</button>
     <button type="button" class="go red" id="mOut">🚪 Odhlásit se</button>
     <p class="fine" id="menuMsg">Hra je pozastavená, dokud je menu otevřené.</p></div>`;stage.appendChild(w);
-  const rw=document.createElement('div');rw.className='savewrap';rw.id='ruleswrap';rw.hidden=true;rw.innerHTML=`<div class="savebox rulesbox" role="dialog" aria-label="Pravidla hry"><div class="savehead"><div><b>Pravidla hry</b><small>všechno, co se ve hře dá dělat</small></div><button type="button" id="rulesX" aria-label="Zavřít">×</button></div><div class="rulesbody"><h3>O hře</h3><p>Staráš se o lyžařské středisko se dvěma areály: <b>Bílý Kopec</b> (sever) a <b>Medvědí hora</b> (jih). Mezi nimi je přírodní údolí se zamrzlou řekou, vesnicí, chatami, parkovišti a skálou s tvojí chatou správce. Každý areál má 6 sjezdovek s lanovkami, freestyle park a big jump park. V plně postaveném středisku je až 4000 lyžařů.</p><p><b>Den a noc:</b> vstáváš v 7:30, lanovky jedou od 8:00 do 16:30. Večer zaměstnanci jdou spát do chaty pro personál, rolby upravují sjezdovky a ty jdeš spát do postele. Ráno začíná nový den.</p><h3>Ovládání</h3><table><tr><td>W A S D / šipky</td><td>chůze, jízda</td></tr><tr><td>Myš</td><td>rozhlížení (klikni do hry)</td></tr><tr><td>Shift</td><td>běh; na lyžích sjezdový postoj; ve vrtulníku klesání</td></tr><tr><td>Mezerník</td><td>skok; ve vrtulníku stoupání</td></tr><tr><td>F</td><td>všechno kolem tebe: dveře, nasednout a vystoupit, sednout, koupit, ošetřit, lyže na záda, mluvit s výtržníkem (co F udělá, ukazuje hra dole)</td></tr><tr><td>V</td><td>pohled z očí / třetí osoba</td></tr><tr><td>E</td><td>kniha správce</td></tr><tr><td>1–6</td><td>věc v ruce: sekera, baterka, termoska, mapa, sněhová koule, notebook</td></tr><tr><td>Klik</td><td>použít věc v ruce (hodit kouli, napít se…)</td></tr><tr><td>H</td><td>velká mapa obou areálů</td></tr><tr><td>M</td><td>volný pohled z výšky na celé středisko</td></tr><tr><td>R / X</td><td>nasadit / položit lyže nebo snowboard ze zad</td></tr><tr><td>B</td><td>přivolat elektrokolo k sobě</td></tr><tr><td>O</td><td>odtahovka vrátí všechna vozidla do garáže</td></tr><tr><td>L</td><td>vybrat všechny pokladny</td></tr><tr><td>G</td><td>vzít ležícího výtržníka na záda; ve vozidle otevřít vrata garáže</td></tr><tr><td>Q</td><td>posadit výtržníka na skútr</td></tr><tr><td>J</td><td>změnit roli postavy</td></tr><tr><td>P</td><td>ohňostroj (jen správce, 3 000 Kč)</td></tr><tr><td>K</td><td>siréna na voze (jen horská služba)</td></tr><tr><td>N</td><td>nitro v autě</td></tr><tr><td>Esc</td><td>menu a pauza; zavře otevřené okno</td></tr></table><p>V kabince: Shift = rychleji, 5 = notebook. Na sedačce: F = evakuace, když lanovka stojí.</p><h3>Postavy a role</h3><p>Účet má jméno a heslo; na stejném zařízení pak stačí heslo. V menu přes <b>Výběr postavy</b> hraješ za další postavu ve stejném středisku, klávesa <b>J</b> mění roli.</p><table><tr><td>🏔️ Správce</td><td>řídíš celé středisko: sjezdovky, lanovky, personál, peníze. Jen on smí do podzemní základny a odpálit ohňostroj.</td></tr><tr><td>🚑 Horská služba</td><td>ke zraněnému dojeď (nejrychleji skútrem, K = siréna) a ošetři ho klávesou F. Čím dřív, tím větší odměna.</td></tr><tr><td>🌭 Pán v bufíku</td><td>za okénkem u Talstation podáváš čaj, párky, svařák a langoše. Správně a rychle = spropitné.</td></tr><tr><td>🚜 Rolbař</td><td>rolbou uhlazuješ rozježděné sjezdovky, platí se za každý upravený kus.</td></tr><tr><td>⛷️ Instruktor</td><td>nahoře na sjezdovce je sraz s dětmi, jedou za tebou ve vláčku a projíždíte branky.</td></tr><tr><td>👨‍🍳 Kuchař</td><td>v Horské restauraci Sluneční skládáš jídla ze správných surovin podle receptu.</td></tr></table><h3>Správce: peníze, stavby, personál</h3><p>Nová hra začíná s 8 000 Kč. V menu se dá koupit plně postavené středisko za 250 000 Kč.</p><ul><li><b>Kniha správce (E):</b> stavíš a otvíráš sjezdovky, kupuješ lanovky a vylepšení, najímáš personál.</li><li><b>Lanovky:</b> vlek 3 000 Kč, čtyřsedačka 9 000 Kč, kabinka 20 000 Kč.</li><li><b>Vylepšení:</b> sněžná děla 4 000, velké parkoviště 5 000, horská restaurace 7 000, večerní osvětlení 6 000, moderní pokladny 9 000 (peníze rovnou na účet), hotel 20 000 Kč.</li><li><b>Pokladny:</b> každá sjezdovka má kasu; plná kasa už nebere. Větší kasy: kasička 3 000, ocelová 6 000, trezor 12 000, bankovní trezor 30 000 Kč. L vybere všechny.</li><li><b>Personál:</b> instruktor, horská služba, údržbář sjezdovek, prodavač, hlasatel, rolbař. Každý chce denní mzdu – nezaplatíš-li, stávkují a lanovky stojí.</li><li><b>Notebook (6):</b> tržby, výdaje, lyžaři, spokojenost, mzdy.</li><li><b>Banka:</b> podepíšeš smlouvu a vybereš až 50 000 Kč, další výběr za 10 minut.</li><li><b>Velín lanovek:</b> rychlost lanovek, nouzové zastavení, C = kamery.</li><li><b>Řídicí věž:</b> rozhlas, maják, siréna, lanovky, nábor personálu.</li></ul><h3>Vozidla a lyžování</h3><p>Vozidla stojí v garáži vedle chaty na skále, odtud vede jediná cesta do údolí. K vozidlu dojdi a stiskni F.</p><table><tr><td>Lyže / snowboard</td><td>A/D oblouky, Shift sjezdový postoj, S brzda, W odraz, mezerník skok, F sundat (neseš je na zádech)</td></tr><tr><td>Kolo, elektrokolo</td><td>W/S, A/D, mezerník skok; elektrokolo vyjede i do kopce</td></tr><tr><td>Sněžný skútr</td><td>nejrychlejší přesuny, vyjede kopec</td></tr><tr><td>Rolba</td><td>uhlazuje sjezdovky</td></tr><tr><td>Sporťák</td><td>W plyn, S brzda, N nitro</td></tr><tr><td>Vrtulník</td><td>na heliportu na střeše garáže: mezerník stoupá, Shift klesá, W/S, A/D, F vystoupit po přistání</td></tr></table><p>Ve freestyle parku jsou můstky, zábradlí, box, wall ride a airbag; skoky dávají body. Přes zamrzlou řeku se dá přejet na lyžích.</p><h3>Místa v areálu</h3><ul><li><b>Chata správce:</b> postel, gauč, krb, televize, kávovar (termoska), výtah do podzemní základny.</li><li><b>Talstation:</b> střed střediska a bufík.</li><li><b>Horská restaurace:</b> objednáš si u pultu, kuchař ti jídlo podá na talíři. Jídlo a pití zrychlí chůzi.</li><li><b>Chata pro personál:</b> pod skálou, sem chodí zaměstnanci spát.</li><li><b>Řeka:</b> bobří hráz, bobři a ryby, které vyskakují z děr v ledu.</li></ul><h3>Výtržníci, ochranka, sněhové koule</h3><ol><li>K výtržníkovi dojdi a F s ním promluv. Když odmítne odejít, tref ho sněhovou koulí (věc 5).</li><li>Ležícího vezmeš na záda (G) nebo posadíš na skútr (Q) a odvezeš na parkoviště za odměnu.</li><li>Když to do 25 s nevyřešíš, přijde ochranka, odvede ho na parkoviště a ty dostaneš 250 Kč.</li></ol><p>Sněhovou koulí trefíš kohokoli. Trefený spadne a něco řekne, s 50% šancí se naštve a praští tě.</p><h3>Podzemní základna (jen správce)</h3><p>Výtah je v ložnici chaty (dveře TREZOR). Dole je <b>velín</b> s kamerami obou areálů a pultem, vlevo <b>trezor</b> s penězi, zlatem a obrazy, vpravo <b>salonek</b> s krbem, barem a postelí.</p><p>Na pultu: kamery na celou obrazovku (šipky přepínají), řídicí pult věže, rychlost všech lanovek, ochranka na výtržníky a <b>mluvení k zaměstnancům</b> – pracuj rychleji, pauza, přijď k chatě, zamávej, pochvala, vynadat, zpátky do práce, nebo vlastní věta.</p><h3>Tipy</h3><ul><li>Když se hra seká nebo je obraz černý, dej v menu Grafiku na Nízkou.</li><li>Hru ulož v menu; přenos uložené hry ji zkopíruje na jiné zařízení.</li><li>Večer po 16:30 jdi spát a ráno začne nový den.</li></ul></div><button type="button" class="go" id="rulesBack">Zpět do menu (Esc)</button></div>`;stage.appendChild(rw);
+  const rw=document.createElement('div');rw.className='savewrap';rw.id='ruleswrap';rw.hidden=true;rw.innerHTML=`<div class="savebox rulesbox" role="dialog" aria-label="Pravidla hry"><div class="savehead"><div><b>Pravidla hry</b><small>všechno, co se ve hře dá dělat</small></div><button type="button" id="rulesX" aria-label="Zavřít">×</button></div><div class="rulesbody"><h3>O hře</h3><p>Staráš se o lyžařské středisko se dvěma areály: <b>Bílý Kopec</b> (sever) a <b>Medvědí hora</b> (jih). Mezi nimi je přírodní údolí se zamrzlou řekou, vesnicí, chatami, parkovišti a skálou s tvojí chatou správce. Každý areál má 6 sjezdovek s lanovkami, freestyle park a big jump park. V plně postaveném středisku je až 2000 lyžařů.</p><p><b>Kam smíš:</b> chodit i jezdit můžeš úplně všude, přes kopce, lesy i louky. Zastaví tě jen svah prudší než 50° do kopce. Stromy, budovy a lidi jsou pevné, ale když do nich narazíš bokem, sklouzneš podél nich. Na lyžích, snowboardu a kole tě <kbd>W</kbd> pomalu vytlačí i do kopce.</p><p><b>Den a noc:</b> vstáváš v 7:30, lanovky jedou od 8:00 do 16:30. Večer zaměstnanci jdou spát do chaty pro personál, rolby upravují sjezdovky a ty jdeš spát do postele. Ráno začíná nový den.</p><h3>Ovládání</h3><table><tr><td>W A S D / šipky</td><td>chůze, jízda</td></tr><tr><td>Myš</td><td>rozhlížení (klikni do hry)</td></tr><tr><td>Shift</td><td>běh; na lyžích sjezdový postoj; ve vrtulníku klesání</td></tr><tr><td>Mezerník</td><td>skok; ve vrtulníku stoupání</td></tr><tr><td>F</td><td>všechno kolem tebe: dveře, nasednout a vystoupit, sednout, koupit, ošetřit, lyže na záda, mluvit s výtržníkem (co F udělá, ukazuje hra dole)</td></tr><tr><td>V</td><td>pohled z očí / třetí osoba</td></tr><tr><td>E</td><td>kniha správce</td></tr><tr><td>1–6</td><td>věc v ruce: sekera, baterka, termoska, mapa, sněhová koule, notebook</td></tr><tr><td>Klik</td><td>použít věc v ruce (hodit kouli, napít se…)</td></tr><tr><td>H</td><td>velká mapa obou areálů</td></tr><tr><td>M</td><td>volný pohled z výšky na celé středisko</td></tr><tr><td>R / X</td><td>nasadit / položit lyže nebo snowboard ze zad</td></tr><tr><td>B</td><td>přivolat elektrokolo k sobě</td></tr><tr><td>O</td><td>odtahovka vrátí všechna vozidla do garáže</td></tr><tr><td>L</td><td>vybrat všechny pokladny</td></tr><tr><td>G</td><td>vzít ležícího výtržníka na záda; ve vozidle otevřít vrata garáže</td></tr><tr><td>Q</td><td>posadit výtržníka na skútr</td></tr><tr><td>J</td><td>změnit roli postavy</td></tr><tr><td>K</td><td>siréna na voze (jen horská služba)</td></tr><tr><td>N</td><td>nitro v autě</td></tr><tr><td>Esc</td><td>menu a pauza; zavře otevřené okno</td></tr></table><p>V kabince: Shift = rychleji, 5 = notebook. Na sedačce: F = evakuace, když lanovka stojí.</p><h3>Postavy a role</h3><p>Účet má jméno a heslo; na stejném zařízení pak stačí heslo. V menu přes <b>Výběr postavy</b> hraješ za další postavu ve stejném středisku, klávesa <b>J</b> mění roli.</p><table><tr><td>🏔️ Správce</td><td>řídíš celé středisko: sjezdovky, lanovky, personál, peníze. Jen on smí do podzemní základny.</td></tr><tr><td>🚑 Horská služba</td><td>ke zraněnému dojeď (nejrychleji skútrem, K = siréna) a ošetři ho klávesou F. Čím dřív, tím větší odměna.</td></tr><tr><td>🌭 Pán v bufíku</td><td>za okénkem u Talstation podáváš čaj, párky, svařák a langoše. Správně a rychle = spropitné.</td></tr><tr><td>🚜 Rolbař</td><td>rolbou uhlazuješ rozježděné sjezdovky, platí se za každý upravený kus.</td></tr><tr><td>⛷️ Instruktor</td><td>nahoře na sjezdovce je sraz s dětmi, jedou za tebou ve vláčku a projíždíte branky.</td></tr><tr><td>👨‍🍳 Kuchař</td><td>v Horské restauraci Sluneční skládáš jídla ze správných surovin podle receptu.</td></tr></table><h3>Správce: peníze, stavby, personál</h3><p>Nová hra začíná s 8 000 Kč. V menu se dá koupit plně postavené středisko za 250 000 Kč.</p><ul><li><b>Kniha správce (E):</b> stavíš a otvíráš sjezdovky, kupuješ lanovky a vylepšení, najímáš personál.</li><li><b>Lanovky:</b> vlek 3 000 Kč, čtyřsedačka 9 000 Kč, kabinka 20 000 Kč.</li><li><b>Vylepšení:</b> sněžná děla 4 000, velké parkoviště 5 000, horská restaurace 7 000, večerní osvětlení 6 000, moderní pokladny 9 000 (peníze rovnou na účet), hotel 20 000 Kč.</li><li><b>Pokladny:</b> každá sjezdovka má kasu; plná kasa už nebere. Větší kasy: kasička 3 000, ocelová 6 000, trezor 12 000, bankovní trezor 30 000 Kč. L vybere všechny.</li><li><b>Personál:</b> instruktor, horská služba, údržbář sjezdovek, prodavač, hlasatel, rolbař. Každý chce denní mzdu – nezaplatíš-li, stávkují a lanovky stojí.</li><li><b>Notebook (6):</b> tržby, výdaje, lyžaři, spokojenost, mzdy.</li><li><b>Banka:</b> podepíšeš smlouvu a vybereš až 50 000 Kč, další výběr za 10 minut.</li><li><b>Velín lanovek:</b> rychlost lanovek, nouzové zastavení, C = kamery.</li><li><b>Řídicí věž:</b> rozhlas, maják, siréna, lanovky, nábor personálu.</li></ul><h3>Vozidla a lyžování</h3><p>Vozidla stojí v garáži vedle chaty na skále, odtud vede jediná cesta do údolí. K vozidlu dojdi a stiskni F.</p><table><tr><td>Lyže / snowboard</td><td>A/D oblouky, Shift sjezdový postoj, S brzda, W odraz, mezerník skok, F sundat (neseš je na zádech)</td></tr><tr><td>Kolo, elektrokolo</td><td>W/S, A/D, mezerník skok; elektrokolo vyjede i do kopce</td></tr><tr><td>Sněžný skútr</td><td>nejrychlejší přesuny, vyjede kopec</td></tr><tr><td>Rolba</td><td>uhlazuje sjezdovky</td></tr><tr><td>Sporťák</td><td>W plyn, S brzda, N nitro</td></tr><tr><td>Vrtulník</td><td>na heliportu na střeše garáže: mezerník stoupá, Shift klesá, W/S, A/D, F vystoupit po přistání</td></tr></table><p>Ve freestyle parku jsou můstky, zábradlí, box, wall ride a airbag; skoky dávají body. Přes zamrzlou řeku se dá přejet na lyžích.</p><h3>Místa v areálu</h3><ul><li><b>Chata správce:</b> postel, gauč, krb, televize, kávovar (termoska), výtah do podzemní základny.</li><li><b>Talstation:</b> střed střediska a bufík.</li><li><b>Horská restaurace:</b> objednáš si u pultu, kuchař ti jídlo podá na talíři. Jídlo a pití zrychlí chůzi.</li><li><b>Chata pro personál:</b> pod skálou, sem chodí zaměstnanci spát.</li><li><b>Řeka:</b> bobří hráz, bobři a ryby, které vyskakují z děr v ledu.</li></ul><h3>Výtržníci, ochranka, sněhové koule</h3><ol><li>K výtržníkovi dojdi a F s ním promluv. Když odmítne odejít, tref ho sněhovou koulí (věc 5).</li><li>Ležícího vezmeš na záda (G) nebo posadíš na skútr (Q) a odvezeš na parkoviště za odměnu.</li><li>Když to do 25 s nevyřešíš, přijde ochranka, odvede ho na parkoviště a ty dostaneš 250 Kč.</li></ol><p>Sněhovou koulí trefíš kohokoli. Trefený spadne a něco řekne, s 50% šancí se naštve a praští tě.</p><h3>Podzemní základna (jen správce)</h3><p>Výtah je v ložnici chaty (dveře TREZOR). Dole je <b>velín</b> s kamerami obou areálů a pultem, vlevo <b>trezor</b> s penězi, zlatem a obrazy, vpravo <b>salonek</b> s krbem, barem a postelí.</p><p>Na pultu: kamery na celou obrazovku (šipky přepínají), řídicí pult věže, rychlost všech lanovek, ochranka na výtržníky a <b>mluvení k zaměstnancům</b> – pracuj rychleji, pauza, přijď k chatě, zamávej, pochvala, vynadat, zpátky do práce, nebo vlastní věta.</p><h3>Tipy</h3><ul><li>Když se hra seká nebo je obraz černý, dej v menu Grafiku na Nízkou. Lidi vidíš do 50 m, budovy se načítají postupně, jak se pohybuješ.</li><li>Návod k postavě i tutoriál pohybu si kdykoli pustíš znovu v menu tlačítkem Tutoriál. Při první jízdě na lyžích nebo snowboardu se sám spustí tutoriál jízdy.</li><li>Hru ulož v menu; přenos uložené hry ji zkopíruje na jiné zařízení.</li><li>Večer po 16:30 jdi spát a ráno začne nový den.</li></ul></div><button type="button" class="go" id="rulesBack">Zpět do menu (Esc)</button></div>`;stage.appendChild(rw);
   const st=document.createElement('style');st.textContent='.rulesbox{width:min(760px,100%);max-height:88vh;display:flex;flex-direction:column}.rulesbody{overflow:auto;padding-right:6px;margin:6px 0 10px;font-size:13.5px;line-height:1.5}.rulesbody h3{margin:14px 0 6px;font-size:15px}.rulesbody table{border-collapse:collapse;width:100%}.rulesbody td{border-bottom:1px solid rgba(127,127,127,.25);padding:4px 6px;vertical-align:top}.rulesbody td:first-child{white-space:nowrap;font-weight:700;width:1%}.rulesbody ul,.rulesbody ol{padding-left:20px;margin:4px 0}.menubox{width:min(360px,100%)}.menubox .go{text-align:left}.savebox .go.red{background:#5a6470}';document.head.appendChild(st);}
 function openMenu(){if(acctOpen)return;menuOpen=true;gid('mGfx').textContent='🎨 Grafika: '+GFXN[GQ];unlock();Object.keys(keys).forEach(k=>keys[k]=0);const c=charsInit(),r=ROLES[role()];
   gid('menuWho').textContent=`${c.name} · ${r.n} · ${ACC.resort||'Bílý Kopec'}, den ${S.day}`;gid('menuMsg').textContent='Hra je pozastavená, dokud je menu otevřené.';gid('menuwrap').hidden=false;gid('mGo').focus();}
 function closeMenu(){if(!menuOpen)return;menuOpen=false;gid('menuwrap').hidden=true;cvs.focus();}
 let rulesOpen=false;const openRules=()=>{rulesOpen=true;gid('menuwrap').hidden=true;gid('ruleswrap').hidden=false;gid('ruleswrap').querySelector('.rulesbody').scrollTop=0;gid('rulesBack').focus();},closeRules=()=>{rulesOpen=false;gid('ruleswrap').hidden=true;if(menuOpen)gid('menuwrap').hidden=false;};
-gid('mRules').addEventListener('click',openRules);gid('rulesX').addEventListener('click',closeRules);gid('rulesBack').addEventListener('click',closeRules);gid('ruleswrap').addEventListener('click',e=>{if(e.target.id==='ruleswrap')closeRules();});
+gid('mRules').addEventListener('click',openRules);gid('mTut').addEventListener('click',()=>{closeMenu();tutForRole(S.role||'spravce',true);});gid('rulesX').addEventListener('click',closeRules);gid('rulesBack').addEventListener('click',closeRules);gid('ruleswrap').addEventListener('click',e=>{if(e.target.id==='ruleswrap')closeRules();});
 gid('menuX').addEventListener('click',closeMenu);gid('mGo').addEventListener('click',closeMenu);gid('menuwrap').addEventListener('click',e=>{if(e.target.id==='menuwrap')closeMenu();});
 gid('mChars').addEventListener('click',openChars);
 gid('mGfx').addEventListener('click',()=>{GQ=(GQ+1)%3;applyGfx();gid('mGfx').textContent='🎨 Grafika: '+GFXN[GQ];gid('menuMsg').textContent=GQ===0?'Nízká: bez stínů, méně světel, nižší rozlišení. Nejrychlejší.':GQ===1?'Střední: stíny a světla, běžné rozlišení.':'Vysoká: ostré stíny a plné rozlišení. Jen pro silný počítač.';});
@@ -4052,7 +4084,7 @@ function updBad(dt){melonCD=Math.max(0,melonCD-dt);updMelons(dt);
     if((sk.st==='carried'||sk.st==='onSkutr')&&inLot(sk.x,sk.y)){const bonus=sk.st==='onSkutr'?0:150,pay=450+bonus;if(CARRYP===sk)CARRYP=null;sk.st='gone';sk.bad=null;S.expelled=(S.expelled||0)+1;
       earn(pay);S.payT=(S.payT||0)+pay;fl3(X(sk.x),hgt(sk.x,sk.y)+3,sk.y,`🚫 +${fmt(pay)}`,'#1f7e56');
       toast(`🚫 Výtržník vyhoštěn ze střediska a má zákaz vstupu! +${fmt(pay)}${bonus?' (s bonusem za nesení na zádech)':''}`,'ok');}}
-  if(CARRYP&&CARRYP.st!=='carried')CARRYP=null;safe('ochranka',()=>updSec(dt));safe('trezor',()=>updVault(dt));}
+  if(CARRYP&&CARRYP.st!=='carried')CARRYP=null;safe('ochranka',()=>updSec(dt));safe('tutoriál',()=>mtTick(dt));safe('trezor',()=>updVault(dt));}
 function nearBad(r,f){const [ex,ey]=eye();let best=null,bd=r;for(const sk of badList()){if(sk.st==='lift'||(f&&!f(sk)))continue;const [x,y]=wposK(sk),d=Math.hypot(x-ex,y-ey);if(d<bd){bd=d;best=sk;}}return best;}
 // F: tell him to leave. Some go on their own, the rest talk back
 function badTalk(){const sk=nearBad(mode==='ride'?5.5:4,s=>s.st!=='down'&&s.st!=='carried'&&s.st!=='onSkutr'&&s.st!=='escort');if(!sk)return false;const b=sk.bad;
@@ -4140,7 +4172,7 @@ let FX=[],SIREN=null,LOST=[],lostT=6;
 const PALETTE=[0xff4d4d,0xffd23a,0x4dd2ff,0x7dff6a,0xff7ad9,0xffffff,0xff9a2b];
 function funUpd(dt){ccWear(dt);updWildlife(dt);updKO(dt);updFireworks(dt);updSiren(dt);updLost(dt);}
 // správce: fireworks over the valley (P)
-function fireworks(){if(role()!=='spravce'){toast('Ohňostroj může odpálit jen správce.','bad');return;}if(FX.length){toast('Ohňostroj už běží!');return;}
+function fireworks(){toast('Ohňostroj je vypnutý, aby se hra nesekala.');return;if(role()!=='spravce'){toast('Ohňostroj může odpálit jen správce.','bad');return;}if(FX.length){toast('Ohňostroj už běží!');return;}
   if(S.money<3000){toast('Ohňostroj stojí 3 000 Kč a tolik v pokladně nemáš.','bad');return;}S.money-=3000;
   toast(S.phase==='day'?'🎆 Ohňostroj odpálen! Ve dne není tolik vidět, večer je to krása.':'🎆 Ohňostroj nad údolím! Hosté tleskají a fotí.','ok');
   for(let k=0;k<18;k++)FX.push({t:-k*.5-Math.random()*.3,x:TOWER.x-60+Math.random()*120,y:TOWER.y-50+Math.random()*100,top:120+Math.random()*70,col:pick(PALETTE),st:0});}
@@ -4520,7 +4552,8 @@ function hillBlocks(){// rock walls: one along the plateau edge, one round the f
 // deklarace funkce (ne const): hillMesh() ji volá už při stavbě scény, dřív než se sem skript dostane
 function inPatch(x,y){return x>HPATCH.x0&&x<HPATCH.x1&&y>HPATCH.y0&&y<HPATCH.y1;}
 // walking: on the rock you cannot climb or jump down a face, only use the road
-function steepOK(ax,ay,bx,by){if(!inPatch(bx,by))return true;const dh=Math.abs(hgt(bx,by)-hgt(ax,ay)),dl=Math.hypot(bx-ax,by-ay)+.001;return dh<dl*1.3+.04;}
+const TAN50=Math.tan(50*Math.PI/180);
+function steepOK(ax,ay,bx,by){const up=hgt(bx,by)-hgt(ax,ay);if(up<=0)return true;return up<=Math.hypot(bx-ax,by-ay)*TAN50+.004;}
 function hillMesh(){// the coarse valley mesh cannot draw a vertical rock, so the tower gets its own fine 2 m mesh
   const P=HPATCH,S2=2,g=new THREE.PlaneGeometry(P.x1-P.x0,P.y1-P.y0,(P.x1-P.x0)/S2,(P.y1-P.y0)/S2);g.rotateX(-Math.PI/2);
   const p=g.attributes.position,n=p.count,cx=(P.x0+P.x1)/2,cy=(P.y0+P.y1)/2,xs=new Float32Array(n),ys=new Float32Array(n);
@@ -4616,7 +4649,7 @@ function updSec(dt){buildGuards();if(HFIRE){const tt=performance.now()/1000;HFIR
     else if(g.st==='come'){if(gStep(g,6,dt)){g.st='wait';g.wt=90;}}
     else if(g.st==='wait'){g.wt-=dt;if(g.wt<=0){g.st='back';g.wp=route(g.x,g.y,[[g.hx,g.hy]]);}}
     // pose
-    const h=hgt(g.x,g.y);g.bob+=g.mv*dt*2.1;const sw=g.mv?Math.min(.75,g.mv*.09):0,ph=g.bob;g.g.position.set(X(g.x),h,g.y);g.g.rotation.set(0,g.yaw,0);
+    const h=hgt(g.x,g.y);{const c=camera.position,dx=X(g.x)-c.x,dz=g.y-c.z;g.g.visible=mode==='map'||mode==='cctv'||dx*dx+dz*dz<PEOPLE_R*PEOPLE_R;}g.bob+=g.mv*dt*2.1;const sw=g.mv?Math.min(.75,g.mv*.09):0,ph=g.bob;g.g.position.set(X(g.x),h,g.y);g.g.rotation.set(0,g.yaw,0);
     g.legs[0].rotation.x=Math.sin(ph)*sw;g.legs[1].rotation.x=-Math.sin(ph)*sw;g.arms[0].rotation.x=-Math.sin(ph)*sw*.8;
     g.arms[1].rotation.x=g.st==='escort'?-.9:Math.sin(ph)*sw*.8;g.px=g.x;g.py=g.y;g.ph3=h;}
   staffTick(dt);}
@@ -4853,6 +4886,125 @@ gid('vaultwrap').addEventListener('click',e=>{const b=e.target.closest('[data-v]
   renderVault(true);});
 gid('vaultwrap').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='vText'){e.preventDefault();gid('vaultwrap').querySelector('[data-v="say"]').click();}});
 
+/* ================= tutorial: a short guide when the game starts, and one for each role the first time you play it ================= */
+const TUT={
+  start:[
+    ['👋','Vítej na Bílém Kopci!','Jsi v lyžařském středisku se dvěma areály: Bílý Kopec a Medvědí hora. Pracuješ tu a pomáháš, aby středisko fungovalo. Tenhle krátký návod tě naučí základy.'],
+    ['🖱️','Rozhlížení a chůze','Klikni myší do hry. Pak se myší rozhlížíš.<br><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> = chůze<br><kbd>Shift</kbd> = běh &nbsp; <kbd>Mezerník</kbd> = skok<br><kbd>V</kbd> = pohled z očí, nebo zezadu na postavu'],
+    ['✋','Klávesa F dělá skoro všechno','Otevře dveře, posadí tě, nasedneš s ní do vozidla nebo na lyže a něco koupíš.<br>Když stojíš u něčeho, s čím jde něco udělat, <b>dole na obrazovce se objeví nápověda</b>, co F právě udělá. Řiď se jí.'],
+    ['🗺️','Mapa a menu','<kbd>H</kbd> = velká mapa obou areálů, uvidíš na ní, kde co je.<br><kbd>Esc</kbd> = menu. Najdeš tam <b>Pravidla hry</b> (úplně všechno), výběr postavy, grafiku a uložení hry.'],
+    ['⛷️','Lyže a vozidla','Vozidla stojí v garáži vedle tvé chaty na skále. Dojdi k nim a stiskni <kbd>F</kbd>.<br>Na lyžích: <kbd>A</kbd>/<kbd>D</kbd> zatáčení, <kbd>S</kbd> brzda, <kbd>Shift</kbd> rychleji. Sundáš je zase klávesou <kbd>F</kbd>.'],
+    ['🎯','Teď tvoje práce','Hned teď dostaneš krátký návod k postavě, kterou hraješ. Kdykoli si ho pustíš znovu v menu (<kbd>Esc</kbd>) tlačítkem <b>Tutoriál</b>.']],
+  spravce:[
+    ['🏔️','Jsi správce','Šéfuješ celému středisku. Tvým úkolem je, aby jezdily lanovky, přijížděli lyžaři a středisko vydělávalo.'],
+    ['📖','Kniha správce = klávesa E','V knize stavíš nové sjezdovky a lanovky, kupuješ vylepšení (restaurace, osvětlení, sněžná děla) a najímáš zaměstnance.'],
+    ['💰','Peníze','Lyžaři platí do pokladen u sjezdovek. Klávesa <kbd>L</kbd> vybere všechny pokladny najednou.<br>Zaměstnancům se platí mzda. Když na ni nemáš, začnou stávkovat a lanovky stojí.'],
+    ['🔐','Tvoje tajná základna','Tvoje chata je nahoře na skále. V ložnici je výtah (<kbd>F</kbd>) do podzemní základny. Najdeš tam kamery celého areálu, trezor s penězi a pult, kde zaměstnancům dáváš příkazy.']],
+  hs:[
+    ['🚑','Jsi horská služba','Pomáháš lyžařům, kteří se zranili na sjezdovce.'],
+    ['🛷','Vezmi si skútr','Skútr stojí v garáži přímo za tebou. Dojdi k němu a stiskni <kbd>F</kbd>. Jezdíš <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd>, klávesou <kbd>K</kbd> zapneš sirénu.'],
+    ['🆘','Zraněný lyžař','Když se někdo zraní, přijde hlášení z vysílačky a nad zraněným se objeví <b>červená značka</b>. Jeď za ní.'],
+    ['🩹','Ošetři ho','U zraněného zastav a stiskni <kbd>F</kbd>. Čím rychleji k němu dojedeš, tím víc peněz dostaneš.']],
+  bufet:[
+    ['🌭','Jsi pán v bufíku','Prodáváš jídlo a pití v bufíku u Talstation, uprostřed údolí.'],
+    ['✋','Začni obsluhovat','Stojíš u okénka. Stiskni <kbd>F</kbd> a otevře se okénko s objednávkami.'],
+    ['🧾','Podej, co chtějí','Host řekne, co si dá. Klikni přesně na to, co si objednal, a podej mu to. Rychle a správně = spropitné navíc.'],
+    ['🌙','Večer se zavírá','Po 16:30 už nikdo nepřijde. Ráno zase otevřeš.']],
+  rolbar:[
+    ['🚜','Jsi rolbař','Uhlazuješ sjezdovky, aby byly krásně rovné.'],
+    ['🔑','Sedni do rolby','Rolba stojí v garáži před tebou a vrata jsou otevřená. Dojdi k ní a stiskni <kbd>F</kbd>. <kbd>W</kbd> = jedeš, <kbd>S</kbd> = couváš, <kbd>A</kbd>/<kbd>D</kbd> = zatáčení.'],
+    ['❄️','Uhlazuj sjezdovky','Projížděj rozježděné sjezdovky odshora dolů. Za každý upravený kus dostaneš peníze. Nejvíc se jezdí večer po zavření lanovek.'],
+    ['🛏️','Spát','Večer jdeš spát do postele. Ráno začne nový den.']],
+  instr:[
+    ['⛷️','Jsi instruktor lyžování','Učíš děti lyžovat.'],
+    ['🎿','Nasaď si lyže','Lyže leží vedle tebe. <kbd>F</kbd> je zvedneš a <kbd>R</kbd> nasadíš.'],
+    ['🟡','Sraz u žluté cedule','Děti čekají nahoře na sjezdovce u žluté cedule. Když nejsi u nich, vyjeď lanovkou nahoru.'],
+    ['🚩','Jeď branky','Pomalu jeď dolů a projížděj branky. Děti jedou za tebou jako vláček. Čím víc branek a dětí dojede, tím víc zaplatí rodiče.']],
+  kuchar:[
+    ['👨‍🍳','Jsi kuchař','Vaříš v Horské restauraci Sluneční.'],
+    ['✋','Začni vařit','Stojíš v kuchyni za pultem. Stiskni <kbd>F</kbd> a otevře se kuchyně s objednávkami.'],
+    ['🥘','Podle receptu','Do hrnce dej <b>všechny suroviny z receptu a nic navíc</b>. Pak jídlo dovař a podej hostovi.'],
+    ['⭐','Odměna','Za každé správně uvařené jídlo dostaneš peníze. Večer je kuchyně zavřená.']]};
+let tutOpen=false,tutList=null,tutI=0,tutAfter=null;
+const tutDone=k=>{try{return localStorage.getItem('bk-tut-'+k)==='1';}catch(e){return false;}},tutMark=k=>{try{localStorage.setItem('bk-tut-'+k,'1');}catch(e){}};
+function tutEl(){let w=document.getElementById('tutwrap');if(w)return w;w=document.createElement('div');w.id='tutwrap';w.hidden=true;
+  w.innerHTML='<div class="tutbox" role="dialog" aria-live="polite" aria-label="Návod"><div class="tutic" id="tutIc"></div><div class="tutstep" id="tutStep"></div><h3 id="tutH"></h3><p id="tutP"></p><div class="tutdots" id="tutDots"></div><div class="tutbtns"><button type="button" id="tutSkip" class="tutghost">Přeskočit návod</button><button type="button" id="tutBack" class="tutghost">← Zpět</button><button type="button" id="tutNext" class="tutgo">Další →</button></div></div>';
+  (document.getElementById('stage')||document.body).appendChild(w);
+  const st=document.createElement('style');st.textContent=`#tutwrap{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(6,12,20,.55);backdrop-filter:blur(2px)}
+#tutwrap[hidden]{display:none}.tutbox{width:min(480px,92vw);background:#fff;color:#14202e;border-radius:18px;padding:22px 24px 18px;box-shadow:0 20px 60px rgba(0,0,0,.4);text-align:center;font-family:Rubik,system-ui,sans-serif}
+.tutic{font-size:46px;line-height:1}.tutstep{margin-top:6px;font-size:12px;font-weight:700;letter-spacing:.06em;color:#5b6b7d;text-transform:uppercase}
+.tutbox h3{margin:6px 0 8px;font-size:22px}.tutbox p{margin:0 0 14px;font-size:16px;line-height:1.55;color:#2a3a4c}
+.tutbox kbd{display:inline-block;min-width:22px;padding:1px 7px;border-radius:6px;border:1px solid #c5cfda;border-bottom-width:3px;background:#f4f7fa;font:700 13px Rubik,system-ui,sans-serif;color:#14202e}
+.tutdots{display:flex;gap:6px;justify-content:center;margin-bottom:14px}.tutdots i{width:8px;height:8px;border-radius:50%;background:#d4dce5}.tutdots i.on{background:#2f6fd6;width:22px;border-radius:4px}
+.tutbtns{display:flex;gap:8px;justify-content:space-between;align-items:center}.tutbtns button{border:0;border-radius:10px;padding:10px 16px;font:700 15px Rubik,system-ui,sans-serif;cursor:pointer}
+.tutgo{background:#2f6fd6;color:#fff;margin-left:auto}.tutgo:hover{background:#2459b0}.tutghost{background:transparent;color:#5b6b7d}.tutghost:hover{color:#14202e}`;
+  document.head.appendChild(st);
+  w.querySelector('#tutNext').addEventListener('click',()=>tutGo(1));w.querySelector('#tutBack').addEventListener('click',()=>tutGo(-1));w.querySelector('#tutSkip').addEventListener('click',()=>tutClose(true));
+  return w;}
+function tutShow(key,after){const L=TUT[key];if(!L)return;tutList={key,L};tutI=0;tutAfter=after||null;tutOpen=true;try{document.exitPointerLock&&document.exitPointerLock();}catch(e){}
+  Object.keys(keys).forEach(k=>keys[k]=0);tutEl().hidden=false;tutDraw();}
+function tutDraw(){const {L}=tutList,[ic,h,p]=L[tutI],w=tutEl();w.querySelector('#tutIc').textContent=ic;w.querySelector('#tutH').textContent=h;w.querySelector('#tutP').innerHTML=p;
+  w.querySelector('#tutStep').textContent=`Krok ${tutI+1} z ${L.length}`;w.querySelector('#tutDots').innerHTML=L.map((_,k)=>`<i class="${k===tutI?'on':''}"></i>`).join('');
+  w.querySelector('#tutBack').style.visibility=tutI?'visible':'hidden';w.querySelector('#tutNext').textContent=tutI===L.length-1?'Hrát! ✓':'Další →';w.querySelector('#tutNext').focus();}
+function tutGo(d){if(!tutList)return;const n=tutI+d;if(n<0)return;if(n>=tutList.L.length){tutClose(false);return;}tutI=n;tutDraw();}
+function tutClose(skip){if(!tutList)return;const k=tutList.key;tutMark(k);tutOpen=false;tutEl().hidden=true;tutList=null;const a=tutAfter;tutAfter=null;
+  if(skip&&k==='start'){tutMark('skipall');}if(a&&!(skip&&k==='start'))a();else try{cvs.focus();}catch(e){}}
+// first start on this device: the general guide, then the one for your role; later only a role you have never played
+function tutForRole(id,force){if(!TUT[id])return;const go=()=>{if(force||!tutDone(id))tutShow(id);};
+  if(force){tutShow('start',()=>mtStart('move',()=>tutShow(id)));return;}
+  if(!tutDone('start'))tutShow('start',()=>mtStart('move',go));else if(!tutDone('skipall'))go();}
+
+/* ================= hands-on trainer: little tasks you really do, each one ticks itself off; keycaps light up for the keys you need ================= */
+const MTSETS={
+  move:{t:'Tutoriál pohybu',done:'🎉 Výborně! Pohyb umíš. Teď už jen hraj.',L:[
+    ['🖱️','Rozhlédni se','Klikni do hry a pohni <b>myší</b> doleva a doprava.',['mouse'],m=>m.look>1.2],
+    ['⬆️','Jdi dopředu','Drž <b>W</b> a ujdi pár kroků.',['W'],m=>m.walk>5],
+    ['↔️','Do strany a dozadu','Zkus <b>A</b>, <b>D</b> a <b>S</b>.',['A','S','D'],m=>m.side>.8],
+    ['🏃','Běž','Drž <b>Shift</b> a k tomu <b>W</b>.',['Shift','W'],m=>m.run>1.2],
+    ['🦘','Skoč','Zmáčkni <b>Mezerník</b>.',['Mezerník'],m=>m.jump],
+    ['🎥','Změň pohled','Zmáčkni <b>V</b>, uvidíš se zezadu. Dalším <b>V</b> se vrátíš do očí.',['V'],m=>m.view],
+    ['🗺️','Mapa','Zmáčkni <b>H</b>, podívej se a zase ji zavři klávesou <b>H</b>.',['H'],m=>m.mapDone],
+    ['✋','Klávesa F','Dojdi k něčemu, u čeho se dole objeví nápověda (dveře, lavička, vozidlo…), a zmáčkni <b>F</b>.',['F'],m=>m.f]]},
+  ski:{t:'Tutoriál jízdy na lyžích a snowboardu',done:'🎉 Paráda! Umíš jezdit. Tak hurá na sjezdovku!',L:[
+    ['⛷️','Rozjeď se','Namiř dolů z kopce. Na rovině se odrážíš klávesou <b>W</b>.',['W'],m=>m.v>5],
+    ['↪️','Zatoč','Drž <b>A</b> nebo <b>D</b>. Ve velké rychlosti zatáčíš v širokém oblouku, prudký oblouk tě přibrzdí.',['A','D'],m=>m.turn>1.2],
+    ['💨','Sjezdový postoj','Drž <b>Shift</b>. Pojedeš rychleji, ale hůř se zatáčí.',['Shift'],m=>m.tuck>1.2],
+    ['🛑','Zabrzdi','Drž <b>S</b>, dokud skoro nezastavíš.',['S'],m=>m.brake],
+    ['🦘','Skoč','Zmáčkni <b>Mezerník</b>. Na můstcích v parku skočíš víc.',['Mezerník'],m=>m.air],
+    ['👢','Sundej lyže','Zmáčkni <b>F</b>. Poneseš je na zádech, <b>R</b> je zase nasadíš.',['F','R'],m=>m.off]]}};
+let MT=null;
+function mtStart(set,after){const S0=MTSETS[set];if(!S0){if(after)after();return;}
+  MT={set,S:S0,k:0,look:0,walk:0,side:0,run:0,jump:false,view:false,map:false,mapDone:false,f:false,v:0,turn:0,tuck:0,fast:false,brake:false,air:false,off:false,yaw:WK.yaw,x:WK.x,y:WK.y,third,after:after||null,ok:0};
+  let el=document.getElementById('mtbox');if(!el){el=document.createElement('div');el.id='mtbox';(document.getElementById('stage')||document.body).appendChild(el);
+    const st=document.createElement('style');st.textContent=`#mtbox{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:40;width:min(460px,92vw);background:rgba(255,255,255,.97);color:#14202e;border-radius:16px;padding:12px 16px 10px;box-shadow:0 12px 34px rgba(0,0,0,.32);font-family:Rubik,system-ui,sans-serif;transition:box-shadow .3s}
+#mtbox[hidden]{display:none}#mtbox.win{box-shadow:0 0 0 4px #2fa86a,0 12px 34px rgba(0,0,0,.32)}#mtbox .mth{display:flex;align-items:center;gap:12px}#mtbox .mti{font-size:34px;line-height:1}#mtbox b.t{font-size:17px}
+#mtbox small{display:block;color:#5b6b7d;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}#mtbox p{margin:6px 0 8px;font-size:15px;line-height:1.45}
+#mtbox .keys{display:flex;gap:6px;justify-content:center;margin:2px 0 10px;flex-wrap:wrap}#mtbox .key{min-width:38px;padding:7px 10px;border-radius:8px;border:1px solid #c5cfda;border-bottom-width:4px;background:#f4f7fa;font:800 15px Rubik,system-ui,sans-serif;text-align:center;animation:mtp 1.1s ease-in-out infinite}
+#mtbox .key.on{background:#2f6fd6;color:#fff;border-color:#1d4fa3;animation:none;transform:translateY(2px)}#mtbox .key.mouse{font-size:20px;padding:4px 12px}
+@keyframes mtp{0%,100%{box-shadow:0 0 0 0 rgba(47,111,214,.0)}50%{box-shadow:0 0 0 5px rgba(47,111,214,.22)}}
+#mtbox .mtbar{height:6px;border-radius:3px;background:#e3e9ef;overflow:hidden}#mtbox .mtbar i{display:block;height:100%;background:linear-gradient(90deg,#2fa86a,#55c98a);transition:width .4s}
+#mtbox .mtrow{display:flex;justify-content:space-between;align-items:center;margin-top:8px}#mtbox button{border:0;background:transparent;color:#5b6b7d;font:700 13px Rubik,system-ui,sans-serif;cursor:pointer}#mtbox .ok{color:#2fa86a;font-weight:800}`;
+    document.head.appendChild(st);el.addEventListener('click',e=>{if(e.target.id==='mtSkip')mtEnd(true);});}
+  el.hidden=false;mtDraw();}
+function mtKeyOn(k){return k==='W'?keys.up:k==='S'?keys.down:k==='A'?keys.left:k==='D'?keys.right:k==='Shift'?keys.run:k==='Mezerník'?keys.jump:false;}
+function mtDraw(){const el=document.getElementById('mtbox');if(!el||!MT)return;const L=MT.S.L,[ic,h,p,ks]=L[MT.k];el.classList.toggle('win',MT.ok>0);
+  el.innerHTML=`<div class="mth"><div class="mti">${MT.ok>0?'✅':ic}</div><div><small>${MT.S.t} · úkol ${MT.k+1} z ${L.length}</small><b class="t">${h}</b></div></div><p>${p}</p>
+    <div class="keys">${ks.map(k=>`<span class="key${k==='mouse'?' mouse':''}" data-k="${k}">${k==='mouse'?'🖱️':k}</span>`).join('')}</div>
+    <div class="mtbar"><i style="width:${(MT.k+(MT.ok>0?1:0))/L.length*100}%"></i></div><div class="mtrow"><span class="ok">${MT.ok>0?'✓ Výborně!':''}</span><button type="button" id="mtSkip">Přeskočit tutoriál</button></div>`;}
+function mtEnd(skip){if(!MT)return;const a=MT.after,set=MT.set,msg=MT.S.done;MT=null;const el=document.getElementById('mtbox');if(el)el.hidden=true;tutMark(set==='move'?'move':'ski');
+  if(!skip){chime([660,880,1100],.12);toast(msg,'ok');}if(a)setTimeout(a,skip?50:900);}
+// called every frame: watch what you did
+function mtTick(dt){if(!MT||tutOpen||menuOpen)return;const m=MT,el=document.getElementById('mtbox');
+  if(el)el.querySelectorAll('.key').forEach(k=>k.classList.toggle('on',!!mtKeyOn(k.dataset.k)));
+  if(m.ok>0){m.ok-=dt;if(m.ok<=0){m.k++;if(m.k>=m.S.L.length){mtEnd(false);return;}mtDraw();}return;}
+  if(m.set==='move'){let dy=WK.yaw-m.yaw;dy=Math.atan2(Math.sin(dy),Math.cos(dy));m.look+=Math.abs(dy);m.yaw=WK.yaw;
+    const d=Math.hypot(WK.x-m.x,WK.y-m.y);m.x=WK.x;m.y=WK.y;if(mode==='walk'&&d<3){if(keys.up)m.walk+=d;if(keys.left||keys.right||keys.down)m.side+=dt;if(keys.run&&keys.up)m.run+=dt;}
+    if(keys.jump)m.jump=true;if(third!==m.third)m.view=true;m.third=third;if(mapOpen||mode==='map')m.map=true;else if(m.map)m.mapDone=true;}
+  else{const on=mode==='ride'&&RD&&(RD.veh==='lyze'||RD.veh==='snowboard');
+    if(on){m.v=Math.max(m.v,RD.v);if((keys.left||keys.right)&&RD.v>2)m.turn+=dt;if(RD.tuck)m.tuck+=dt;if(RD.v>6)m.fast=true;if(m.fast&&keys.down&&RD.v<2.5)m.brake=true;if(RD.air)m.air=true;}
+    else if(m.k===m.S.L.length-1&&mode==='walk')m.off=true;}
+  if(m.S.L[m.k][4](m)){m.ok=1;chime([880,1175],.08);mtDraw();}}
+
 function resize(){const r=stage.getBoundingClientRect();vw=r.width;vh=r.height;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/Math.max(1,r.height);camera.updateProjectionMatrix();}
 new ResizeObserver(resize).observe(stage);
 
@@ -4862,7 +5014,7 @@ let sdt=1/60,frameMs=16,prT=0,PRMAX=Math.min(devicePixelRatio||1,1.75),PR=PRMAX;
 /* graphics quality (kept per device): Low = no shadows, few lights, lower resolution, people drawn closer in */
 const GFXN=['Nízká','Střední','Vysoká'];let GQ=(()=>{try{const v=localStorage.getItem('bk-gfx');return v===null?0:clamp(+v,0,2);}catch(e){return 0;}})(),GCULL=450,rlT=0;
 cvs.addEventListener('webglcontextlost',e=>{e.preventDefault();toast('Grafická karta hru nezvládla. Obnov stránku (F5); grafika se přepne na Nízkou.','bad');try{localStorage.setItem('bk-gfx',0);}catch(x){}});
-function applyGfx(){const q=GQ;PRMAX=Math.min(devicePixelRatio||1,[.75,1,1.75][q]);PR=Math.min(PR,PRMAX);if(q===0)PR=PRMAX;try{renderer.setPixelRatio(PR);resize();}catch(e){}GCULL=[450,650,720][q];
+function applyGfx(){const q=GQ;PRMAX=Math.min(devicePixelRatio||1,[.6,.85,1.25][q]);PR=Math.min(PR,PRMAX);if(q===0)PR=PRMAX;try{renderer.setPixelRatio(PR);resize();}catch(e){}GCULL=[450,650,720][q];
   sun.castShadow=q>0;renderer.shadowMap.enabled=q>0;if(q>0){const ms=q===1?1024:2048;if(sun.shadow.mapSize.x!==ms){sun.shadow.mapSize.set(ms,ms);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}}}
   lampLights.forEach(l=>l.visible=q>0);beaconLight.visible=q>0;floodLights.forEach(l=>l.visible=q>0);headlight.visible=q>0;aiLight.visible=q>0;STG.lights.forEach(l=>l.visible=q>0);
   roomLightsNear(true);try{localStorage.setItem('bk-gfx',q);}catch(e){}}
@@ -4870,7 +5022,7 @@ function applyGfx(){const q=GQ;PRMAX=Math.min(devicePixelRatio||1,[.75,1,1.75][q
 function roomLightsNear(force){rlT-=1;if(rlT>0&&!force)return;rlT=60;const c=camera.position,n=GQ===0?0:3;
   const ord=roomLights.map((l,k)=>[k,(l.position.x-c.x)**2+(l.position.z-c.z)**2]).sort((a,b)=>a[1]-b[1]);ord.forEach(([k],j)=>roomLights[k].visible=j<n);}
 function loop(now){const raw=Math.min(1,(now-last)/1000);last=now;sdt=raw>.1?raw:sdt+(raw-sdt)*.35;const dt=raw>.1?raw:sdt;
-  try{if(!menuOpen)for(let left=dt;left>0;left-=.05)update(Math.min(.05,left));}catch(e){reportErr('update',e);}
+  try{if(!menuOpen&&!tutOpen)for(let left=dt;left>0;left-=.05)update(Math.min(.05,left));}catch(e){reportErr('update',e);}
   try{updCamera(Math.min(dt,.1));}catch(e){reportErr('kamera',e);}
   try{render(Math.min(dt,.1),now/1000);}catch(e){reportErr('vykreslení',e);try{renderer.render(scene,camera);}catch(x){}}
   frameMs+=(raw*1000-frameMs)*.05;prT+=raw;if(prT>2){prT=0;const np=frameMs>24&&PR>Math.min(.8,PRMAX*.8)?Math.max(Math.min(.8,PRMAX*.8),PR-.15):frameMs<15.5&&PR<PRMAX?Math.min(PRMAX,PR+.1):PR;if(np!==PR){PR=np;renderer.setPixelRatio(PR);resize();}}
