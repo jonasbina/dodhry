@@ -6,8 +6,7 @@ import Nav from '../components/Nav.astro';
   <Nav />
   <main class="wrap page">
     <header class="head">
-      <p class="eyebrow">Aktualizuje se živě</p>
-      <h1 class="h1">Žebříček</h1>
+            <h1 class="h1">Žebříček</h1>
       <p class="caption" id="summary">&nbsp;</p>
     </header>
 
@@ -24,19 +23,19 @@ import Nav from '../components/Nav.astro';
 </Base>
 
 <style>
-  .page { padding-block: 56px 96px; }
-  .head { display: grid; gap: 12px; margin-bottom: 40px; }
+  .page { padding-block: 24px 48px; }
+  .head { display: grid; gap: 6px; margin-bottom: 16px; }
   .head .caption { margin: 0; }
   .table { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
-  .table :global(.row) { display: grid; grid-template-columns: 72px minmax(0, 1fr) minmax(120px, 280px) 80px; align-items: center; gap: 16px; padding: 14px 24px; border-top: 1px solid var(--hairline); }
+  .table :global(.row) { display: grid; grid-template-columns: 72px minmax(0, 1fr) minmax(120px, 280px) 80px; align-items: center; gap: 16px; padding: 10px 20px; border-top: 1px solid var(--hairline); }
   .th { border-top: 0 !important; font: 700 0.75rem/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); }
-  .table :global(.rank) { font: 300 1.75rem/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--muted); }
+  .table :global(.rank) { font: 600 1.125rem/1 var(--sans); color: var(--muted); }
   .table :global(.name) { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .table :global(.done) { margin-left: 8px; font-size: 0.8125rem; font-weight: 600; color: var(--forest); }
   .table :global(.track) { height: 4px; border-radius: 4px; background: var(--hairline); overflow: hidden; }
   .table :global(.fill) { height: 100%; background: var(--gold); border-radius: inherit; }
   .table :global(.is-done .fill) { background: var(--forest); }
-  .table :global(.pts) { text-align: right; font: 300 1.75rem/1 var(--serif); font-variation-settings: 'opsz' 144; }
+  .table :global(.pts) { text-align: right; font: 700 1.125rem/1 var(--sans); }
   .table :global(.is-me) { background: var(--canvas); }
   .table :global(.is-me .name::after) { content: ' · ty'; font-weight: 400; color: var(--muted); }
   .r { text-align: right; }

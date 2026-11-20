@@ -14,6 +14,10 @@ export type Game = {
   path: string;
   maxPoints: number;
   rule: string;
+  /** jak se hra ukončí, aby se body připsaly */
+  finish: string;
+  /** přehled bodů: co udělat → kolik bodů */
+  howTo: [string, string][];
   /** barva pro grafy a akcenty (ze zemité palety DESIGN.md) */
   tone: string;
   points: (r: Result, prev: Result | null) => number;
@@ -40,7 +44,9 @@ export const GAMES: Game[] = [
     controls: 'Šipky nebo WASD · C kamera · R restart',
     path: '/games/nocni-velka-cena/index.html',
     maxPoints: 30,
-    rule: 'Za dojetí závodu podle umístění: 1. místo 30, 2. místo 24, 3. místo 20, 4. místo 16, 5. místo 12, jinak 10 bodů.',
+    rule: 'Dojeď závod. Body podle umístění.',
+    finish: 'Body se připíšou, když projedeš cílem posledního kola.',
+    howTo: [['1. místo', '30 b'], ['2. místo', '24 b'], ['3. místo', '20 b'], ['4. místo', '16 b'], ['5. místo', '12 b'], ['6. místo', '10 b']],
     tone: 'var(--gold)',
     points: (r) => [30, 24, 20, 16, 12][(r.position ?? 6) - 1] ?? 10,
   },
@@ -54,7 +60,9 @@ export const GAMES: Game[] = [
     controls: 'WASD nebo šipky',
     path: '/games/horde-survivor/index.html',
     maxPoints: 40,
-    rule: 'Za konec hry 4 body a 4 za každou další zónu, nejvýš 30. Porazíš-li posledního bosse, 40 bodů.',
+    rule: 'Přežij co nejdál. Každá zóna, do které se dostaneš, přidá 4 body.',
+    finish: 'Body se připíšou, když hra skončí (hrdina padne nebo vyhraješ).',
+    howTo: [['Padneš v 1. zóně', '4 b'], ['Každá další zóna', '+4 b'], ['Nejvíc bez výhry', '30 b'], ['Porazíš posledního bosse', '40 b']],
     tone: 'var(--clay)',
     points: (r) => (r.win ? 40 : Math.min(30, 4 + (Math.max(1, r.stage ?? 1) - 1) * 4)),
   },
@@ -68,7 +76,9 @@ export const GAMES: Game[] = [
     controls: 'Myš · 1–5 výběr · U vylepšit · N další vlna',
     path: '/games/stadium-defense/index.html',
     maxPoints: 40,
-    rule: 'Za konec hry 3 body a 2 za každou přežitou vlnu, nejvýš 30. Ubráníš-li všech 15 vln, 40 bodů.',
+    rule: 'Ubraň co nejvíc vln. Každá vlna přidá 2 body.',
+    finish: 'Body se připíšou, když hra skončí (pohár padne nebo ubráníš všech 15 vln).',
+    howTo: [['Za odehranou hru', '3 b'], ['Každá vlna', '+2 b'], ['Nejvíc bez výhry', '30 b'], ['Ubráníš všech 15 vln', '40 b']],
     tone: 'var(--olive)',
     points: (r) => (r.win ? 40 : Math.min(30, 3 + (r.wave ?? 0) * 2)),
   },
@@ -82,7 +92,9 @@ export const GAMES: Game[] = [
     controls: 'Šipky nebo WASD · Esc pauza a konec jízdy',
     path: '/games/halovy-kros/index.html',
     maxPoints: 30,
-    rule: 'Za ukončenou jízdu podle skóre: 10 000 bodů hry ≈ 8 bodů, 40 000 ≈ 16, od 130 000 plných 30.',
+    rule: 'Dělej skoky a salta. Čím vyšší skóre jízdy, tím víc bodů.',
+    finish: 'Body se připíšou, až jízdu ukončíš: Esc → Ukončit jízdu.',
+    howTo: [['Skóre 10 000', '8 b'], ['Skóre 40 000', '16 b'], ['Skóre 90 000', '25 b'], ['Skóre 130 000 a víc', '30 b']],
     tone: 'var(--ochre)',
     points: (r, prev) => Math.max(0, krosPts(r.score) - (prev ? krosPts(prev.score) : 0)),
     cumulative: true,

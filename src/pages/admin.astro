@@ -77,12 +77,12 @@ import Base from '../layouts/Base.astro';
   .card { width: min(420px, 100%); background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 32px 28px; display: grid; gap: 18px; }
   .top { border-bottom: 1px solid var(--hairline); }
   .top-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; min-height: 72px; padding-block: 12px; }
-  .wordmark { font: 400 1.375rem/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--stone); }
+  .wordmark { font: 700 1.375rem/1 var(--sans); color: var(--stone); }
   .actions { display: flex; gap: 8px; flex-wrap: wrap; }
   .admin { display: grid; gap: 24px; padding-block: 40px 80px; }
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
   .stats > div { display: grid; gap: 4px; padding: 20px 24px; border-radius: var(--r-lg); background: var(--surface); border: 1px solid var(--hairline); }
-  .stat { font: 300 3rem/1 var(--serif); font-variation-settings: 'opsz' 144; }
+  .stat { font: 700 2rem/1 var(--sans); }
   .panel { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 28px; display: grid; gap: 20px; }
   .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .input.light { background: var(--canvas); color: var(--ink); border-color: var(--hairline); min-height: 48px; font-size: 1rem; }
@@ -94,7 +94,7 @@ import Base from '../layouts/Base.astro';
   table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
   th { text-align: left; font: 700 0.75rem/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); padding: 0 12px 12px; }
   .table-cell, :global(#rows td) { padding: 12px; border-top: 1px solid var(--hairline); vertical-align: middle; }
-  :global(#rows .pts) { font: 300 1.75rem/1 var(--serif); font-variation-settings: 'opsz' 144; text-align: right; }
+  :global(#rows .pts) { font: 700 1.125rem/1 var(--sans); text-align: right; }
   :global(#rows .games) { color: var(--muted); font-size: 0.875rem; }
   :global(#rows .edit) { display: flex; gap: 6px; align-items: center; }
   :global(#rows .edit input) { width: 72px; min-height: 40px; padding: 0 10px; border-radius: var(--r-sm); border: 1px solid var(--hairline); background: var(--canvas); }

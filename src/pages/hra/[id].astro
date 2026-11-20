@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Ring from '../../components/Ring.astro';
-import { GAMES, MINUTE_CAP, MINUTE_POINTS, type Game } from '../../lib/games';
+import Player from '../../components/Player.astro';
+import { GAMES, type Game } from '../../lib/games';
 
 export function getStaticPaths() {
   return GAMES.map((g) => ({ params: { id: g.id }, props: { game: g } }));
@@ -9,136 +9,12 @@ export function getStaticPaths() {
 const { game } = Astro.props as { game: Game };
 ---
 <Base title={`${game.title} · DOD hry`}>
-  <div class="player" data-game={game.id}>
-    <header class="bar">
-      <a class="btn btn-outline btn-sm back" href="/">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-        Hry
-      </a>
-      <div class="title">
-        <h1>{game.title}</h1>
-        <span class="caption">{game.author} · {game.controls}</span>
-      </div>
-      <div class="right">
-        <span class="earned num" id="earned" title="Body získané teď v této hře">+0 teď</span>
-        <div class="me">
-          <Ring size={36} stroke={3} id="navRing" label="Tvoje body k cíli"><span class="me-initial" id="navInitial"></span></Ring>
-          <span class="me-pts num"><b id="navPts">0</b><span class="of"> / <span id="navTarget">100</span></span></span>
-          <span id="navName" hidden></span>
-        </div>
-        <button class="btn btn-outline btn-sm" id="rulesBtn" type="button" aria-expanded="false" aria-controls="rules">Body</button>
-        <button class="icon-btn" id="fsBtn" type="button" title="Celá obrazovka">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-          <span class="sr-only">Celá obrazovka</span>
-        </button>
-      </div>
-    </header>
-
-    <aside class="rules" id="rules" hidden aria-label="Jak získat body">
-      <p class="eyebrow">Jak tu získat body</p>
-      <p>{game.rule}</p>
-      <p>K tomu +{MINUTE_POINTS} bod za každou minutu hraní, v této hře nejvýš {MINUTE_CAP}.</p>
-      <p class="caption">Ovládání: {game.controls}</p>
-    </aside>
-
-    <iframe id="frame" src={game.path} title={game.title} allow="fullscreen; autoplay; gamepad"></iframe>
-  </div>
+  <Player gameId={game.id} />
 </Base>
 
-<style>
-  .player { position: fixed; inset: 0; display: flex; flex-direction: column; background: #000; }
-  .bar {
-    display: flex; align-items: center; gap: 16px; flex: none;
-    min-height: 64px; padding: env(safe-area-inset-top, 0px) var(--gutter) 0;
-    background: var(--canvas); border-bottom: 1px solid var(--hairline);
-  }
-  .title { min-width: 0; display: grid; }
-  .title h1 { margin: 0; font: 400 1.375rem/1.15 var(--serif); font-variation-settings: 'opsz' 144; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .title .caption { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-  .earned { padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--hairline); font-weight: 600; font-size: 0.9375rem; color: var(--gold); }
-  .me { display: flex; align-items: center; gap: 10px; }
-  .me-initial { font: 600 0.8125rem/1 var(--sans); color: var(--stone); }
-  .me-pts { font-size: 0.9375rem; }
-  .me-pts .of { color: var(--muted); }
-  .rules {
-    position: absolute; z-index: 5; top: calc(72px + env(safe-area-inset-top, 0px)); right: var(--gutter);
-    width: min(400px, calc(100% - 32px)); padding: 24px; border-radius: var(--r-lg);
-    background: var(--surface); box-shadow: 0 20px 60px rgba(57, 34, 30, 0.25); display: grid; gap: 10px;
-  }
-  .rules p { margin: 0; }
-  iframe { flex: 1; width: 100%; border: 0; background: #000; }
-  @media (max-width: 760px) {
-    .title .caption, .me-pts .of { display: none; }
-    .bar { gap: 10px; }
-    .right { gap: 8px; }
-  }
-  @media (max-width: 520px) { .me { display: none; } }
-</style>
-
 <script>
-  import { gameById, MINUTE_POINTS, MINUTE_CAP, MIN_RUN_SECONDS, type Result } from '../../lib/games';
-  import { award } from '../../lib/db';
-  import { requirePlayer, markActive } from '../../lib/session';
-  import { fillNav } from '../../lib/nav';
-  import { $, esc, fmt, bodu, toast } from '../../lib/ui';
-
-  const game = gameById(document.querySelector<HTMLElement>('[data-game]')!.dataset.game!)!;
-  const frame = $<HTMLIFrameElement>('frame');
-  let session: Awaited<ReturnType<typeof requirePlayer>>;
-  requirePlayer((me, s) => fillNav(me, s)).then((s) => (session = s));
-
-  let earned = 0;
-  let activeSec = 0;
-  let lastEndAt = Date.now();
-  let prev: Result | null = null;
-
-  async function give(pts: number, reason: 'minute' | 'run' | 'win') {
-    if (!session || pts <= 0) return;
-    earned += pts;
-    $('earned').textContent = `+${fmt(earned)} teď`;
-    try {
-      await award(session.me, game.id, pts, reason);
-      if (reason !== 'minute') toast(`<b>+${pts}</b><span>${bodu(pts)} za ${esc(game.title)}</span>`);
-    } catch (e) {
-      console.error(e);
-      toast('Body se nepodařilo uložit. Zkontroluj připojení.');
-    }
-  }
-
-  window.addEventListener('message', (e) => {
-    const m = e.data;
-    if (!session || !m || m.source !== 'dodhry' || e.source !== frame.contentWindow) return;
-    markActive();
-
-    if (m.type === 'dodhry:active') {
-      activeSec += 5;
-      if (activeSec >= 60) {
-        activeSec -= 60;
-        if ((session.me.games?.[game.id]?.minutes || 0) < MINUTE_CAP) give(MINUTE_POINTS, 'minute');
-      }
-    }
-
-    if (m.type === 'dodhry:end' && m.result) {
-      const r: Result = m.result;
-      const secs = (Date.now() - lastEndAt) / 1000;
-      // kumulativní skóre: nová jízda (skóre kleslo) začíná od nuly
-      const base = game.cumulative && prev && (r.score ?? 0) >= (prev.score ?? 0) ? prev : null;
-      const pts = Math.max(0, Math.round(game.points(r, base)));
-      if (!r.win && !game.cumulative && secs < MIN_RUN_SECONDS) {
-        toast(`Tahle hra byla moc krátká. Body se počítají od ${MIN_RUN_SECONDS} sekund hraní.`);
-      } else {
-        give(pts, r.win ? 'win' : 'run');
-      }
-      prev = r;
-      lastEndAt = Date.now();
-    }
-  });
-
-  const rules = $('rules'), rulesBtn = $('rulesBtn');
-  const setRules = (open: boolean) => { rules.hidden = !open; rulesBtn.setAttribute('aria-expanded', String(open)); };
-  rulesBtn.addEventListener('click', () => setRules(rules.hidden));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setRules(false); });
-  frame.addEventListener('load', () => frame.focus());
-  $('fsBtn').addEventListener('click', () => frame.requestFullscreen?.().catch(() => {}));
+  import { requirePlayer } from '../../lib/session';
+  import { initPlayer, updatePlayer } from '../../lib/player';
+  initPlayer({ standalone: true });
+  requirePlayer(updatePlayer);
 </script>

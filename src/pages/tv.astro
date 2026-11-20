@@ -37,10 +37,10 @@ import Base from '../layouts/Base.astro';
   .eyebrow { color: var(--mute-on-dark); font-size: max(12px, 1.5vh); display: flex; align-items: center; gap: 0.8em; }
   .dot { width: 0.8em; height: 0.8em; border-radius: 50%; background: #e33a22; animation: pulse 2s infinite; }
   @keyframes pulse { 50% { opacity: 0.35; } }
-  h1 { margin: 1vh 0 0; font: 300 11vh/0.95 var(--serif); font-variation-settings: 'opsz' 144; letter-spacing: -0.02em; }
+  h1 { margin: 2.4vh 0 0; font: 700 9vh/1.05 var(--sans); letter-spacing: -0.02em; }
   .cta { text-align: right; display: grid; gap: 0.6vh; }
   .cta-label { font-size: 2vh; color: var(--mute-on-dark); }
-  .cta-url { font: 400 4.2vh/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--gold-pale); }
+  .cta-url { font: 700 4.2vh/1 var(--sans); color: var(--gold-pale); }
 
   .tv-body { display: grid; grid-template-columns: 1.15fr 1fr 0.8fr; gap: 3vw; min-height: 0; }
 
@@ -50,23 +50,23 @@ import Base from '../layouts/Base.astro';
     padding: 0 2.4vw; border-radius: 3vh; background: var(--canvas); color: var(--ink); min-height: 0;
   }
   .podium :global(.card:nth-child(1)) { background: var(--gold-pale); }
-  .podium :global(.rk) { font: italic 300 7vh/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--clay); }
-  .podium :global(.nm) { font: 400 5.4vh/1.05 var(--serif); font-variation-settings: 'opsz' 144; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .podium :global(.sc) { font: 300 7.5vh/1 var(--serif); font-variation-settings: 'opsz' 144; text-align: right; }
+  .podium :global(.rk) { font: 700 7vh/1 var(--sans); color: var(--clay); }
+  .podium :global(.nm) { font: 650 4.4vh/1.1 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .podium :global(.sc) { font: 700 6.4vh/1 var(--sans); text-align: right; }
   .podium :global(.sc small) { display: block; font: 500 1.6vh/1.4 var(--sans); color: var(--stone); }
 
   .list { display: grid; align-content: start; min-height: 0; }
   .list :global(.row) { display: grid; grid-template-columns: 6vh minmax(0, 1fr) auto; align-items: baseline; gap: 1.4vw; padding: 1.55vh 0; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
-  .list :global(.rk) { font: 300 3vh/1 var(--serif); color: var(--mute-on-dark); }
+  .list :global(.rk) { font: 700 3vh/1 var(--sans); color: var(--mute-on-dark); }
   .list :global(.nm) { font: 500 3vh/1.2 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .list :global(.sc) { font: 300 3.6vh/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--gold-pale); }
+  .list :global(.sc) { font: 700 3.6vh/1 var(--sans); color: var(--gold-pale); }
   :global(.ok) { color: var(--sage); font-size: 0.7em; margin-left: 0.5em; }
 
   .feed { display: grid; grid-template-rows: auto 1fr; gap: 2vh; min-height: 0; overflow: hidden; }
   #feed { display: grid; align-content: start; gap: 1.4vh; overflow: hidden; }
   #feed :global(.ev) { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.4vh 1vw; padding: 1.8vh 1.6vw; border-radius: 2vh; background: var(--ink-band-soft); border: 1px solid rgba(255, 255, 255, 0.08); animation: ev-in 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.1) both; }
   #feed :global(.ev b) { font: 600 2.4vh/1.2 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #feed :global(.ev .p) { grid-row: span 2; align-self: center; font: 300 4vh/1 var(--serif); font-variation-settings: 'opsz' 144; color: var(--gold-pale); }
+  #feed :global(.ev .p) { grid-row: span 2; align-self: center; font: 700 4vh/1 var(--sans); color: var(--gold-pale); }
   #feed :global(.ev .p.neg) { color: #e88a7a; }
   #feed :global(.ev span) { font-size: 1.9vh; color: var(--mute-on-dark); }
   @keyframes ev-in { from { opacity: 0; transform: translateY(-1.5vh); } }
@@ -75,7 +75,7 @@ import Base from '../layouts/Base.astro';
 
   .tv-foot { display: flex; gap: 4vw; font-size: 2.2vh; color: var(--mute-on-dark); }
   .tv-foot b { color: #fff; font-weight: 600; }
-  :global(.empty-tv) { font: 300 5vh/1.2 var(--serif); color: var(--mute-on-dark); }
+  :global(.empty-tv) { font: 700 5vh/1.2 var(--sans); color: var(--mute-on-dark); }
 </style>
 
 <script>
