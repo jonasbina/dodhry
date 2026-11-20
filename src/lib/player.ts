@@ -41,7 +41,8 @@ export function openGame(id: string, opts: { push?: boolean } = {}) {
   player().hidden = false;
   document.body.style.overflow = 'hidden';
   goFullscreen();
-  frame().src = g.path;
+  // hra může převzít jméno z portálu (Bílý Kopec tím přeskočí vlastní registraci)
+  frame().src = me ? `${g.path}?hrac=${encodeURIComponent(me.name)}&k=${encodeURIComponent(me.key)}` : g.path;
   frame().focus();
   if (opts.push) history.pushState({ game: id }, '', `/hra/${id}/`);
   document.title = `${g.title} · DOD hry`;

@@ -1128,12 +1128,12 @@ function elevator(up){if(sleeping)return;const fade=$('fade');fade.classList.add
 function fl3(x,y,z,t,c){floats.push({x,y,z,t,c,l:1.6,id:++fid});}
 function toast(msg,kind=''){const el=document.createElement('div');el.className='toast '+kind;el.textContent=msg;const box=document.getElementById('toasts');box.prepend(el);
   while(box.children.length>4)box.lastChild.remove();setTimeout(()=>el.remove(),6000);}
-function save(){try{localStorage.setItem('bilykopec-alpy3',JSON.stringify(S));}catch(e){}if(ACC&&ACC.on&&Date.now()-ACC.savedAt>10000)cloudSave();}
+function save(){try{localStorage.setItem(saveKey(),JSON.stringify(S));}catch(e){}if(ACC&&ACC.on&&Date.now()-ACC.savedAt>10000)cloudSave();}
 // saves from before the south side get its six slopes added, still as forest
 function migrate(d){if(d&&d.slopes&&d.slopes.length===NN){const ns=newState();d.slopes=d.slopes.concat(ns.slopes.slice(NN));d.lspd=(d.lspd||[]).slice(0,NN).concat(ns.lspd.slice(NN));}
   // the old one-off "night-shift snowcat driver" upgrade becomes two hired drivers, each with his own snowcat
   if(d&&d.upg&&d.upg.rolbar){delete d.upg.rolbar;d.crew=d.crew||{};d.crew.rolbar=Math.max(d.crew.rolbar||0,2);}return d;}
-function load(){try{const d=migrate(JSON.parse(localStorage.getItem('bilykopec-alpy3')));if(d&&d.slopes&&d.slopes.length===NS){S=Object.assign(newState(),d);if(!S.vp.car)for(const k of VORDER)S.vp[k]=garageSpot(k);S.carry=null;return;}}catch(e){}S=newState();}
+function load(){try{const d=migrate(JSON.parse(localStorage.getItem(saveKey())));if(d&&d.slopes&&d.slopes.length===NS){S=Object.assign(newState(),d);if(!S.vp.car)for(const k of VORDER)S.vp[k]=garageSpot(k);S.carry=null;return;}}catch(e){}S=newState();}
 
 /* ================= simulation step ================= */
 function update(dt){
@@ -3329,7 +3329,14 @@ const pwField=(id,lbl,ph,auto)=>`<label>${lbl}<span class="pwrow"><input id="${i
 function pwEyes(){gid('acctBody').querySelectorAll('[data-eye]').forEach(b=>b.addEventListener('click',()=>{const i=gid(b.dataset.eye);i.type=i.type==='password'?'text':'password';}));}
 function locProfile(){try{return JSON.parse(localStorage.getItem('bilykopec-ucet'));}catch(e){return null;}}
 function locStore(o){try{localStorage.setItem('bilykopec-ucet',JSON.stringify(o));return true;}catch(e){return false;}}
-async function acctInit(){acctShow('<p class="wait">Připojuji tvůj účet…</p>');
+/* DOD hry portál: hráč je přihlášený v portálu, jméno a klíč přijdou v adrese (?hrac=…&k=…).
+   Pak se registrace přeskočí a postup se ukládá zvlášť pro každého hráče. Mimo portál beze změny. */
+function portalName(){try{return (new URLSearchParams(location.search).get('hrac')||'').trim().slice(0,24);}catch(e){return '';}}
+function saveKey(){try{const k=(new URLSearchParams(location.search).get('k')||'').replace(/[^a-z0-9-]/g,'');return k?'bilykopec-alpy3:'+k:'bilykopec-alpy3';}catch(e){return 'bilykopec-alpy3';}}
+async function acctInit(){if(portalName()){Object.assign(ACC,{name:portalName(),resort:ACC.resort||'Bílý Kopec',pw:'',on:false,ref:null});
+    const o=gid('mOut');if(o)o.hidden=true;acctClose();toast(`Vítej, ${portalName()}! Středisko Bílý Kopec čeká.`,'ok');
+    if(!S.role)openRoles(true);else{const id=S.role;S.role=null;setRole(id,true);}return;}
+  acctShow('<p class="wait">Připojuji tvůj účet…</p>');
   let db=null,user=null,uid=null;
   try{if(window.claude&&typeof window.claude.use==='function'){const r=await within(Promise.all([window.claude.use('db'),window.claude.use('user')]),9000);if(r)[db,user]=r;}}catch(e){}
   try{if(user)uid=await within(user.id(),6000);}catch(e){uid=null;}
