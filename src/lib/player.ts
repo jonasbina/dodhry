@@ -91,12 +91,18 @@ export function initPlayer({ standalone = false } = {}) {
       const secs = (Date.now() - lastEndAt) / 1000;
       // kumulativní skóre: nová jízda (skóre kleslo) začíná od nuly
       const base = game.cumulative && prev && (r.score ?? 0) >= (prev.score ?? 0) ? prev : null;
-      const pts = Math.max(0, Math.round(game.points(r, base)));
+      let pts = Math.max(0, Math.round(game.points(r, base)));
+      if (game.cap) {
+        // strop bodů za výsledky v této hře (minuty se nepočítají)
+        const g = me.games?.[game.id], fromResults = (g?.points || 0) - (g?.minutes || 0) * MINUTE_POINTS;
+        pts = Math.min(pts, Math.max(0, game.cap - fromResults));
+        if (!pts) { toast(`V téhle hře už máš maximum ${game.cap} bodů. Body za minuty běží dál.`); prev = r; lastEndAt = Date.now(); return; }
+      }
       const minSecs = game.minRunSeconds ?? MIN_RUN_SECONDS;
       const runs = me.games?.[game.id]?.runs || 0;
       if (game.runCap && runs >= game.runCap) {
         toast(`V téhle hře už máš maximum bodů za ${game.runCap}× dohrání. Body za minuty běží dál.`);
-      } else if (!r.win && !game.cumulative && secs < minSecs) {
+      } else if (!r.win && !r.levelDone && !game.cumulative && secs < minSecs) {
         toast(`Hra byla moc krátká. Body se počítají od ${minSecs >= 120 ? `${Math.round(minSecs / 60)} minut` : `${minSecs} sekund`} hraní.`);
       } else {
         give(pts, r.win ? 'win' : 'run');

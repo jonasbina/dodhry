@@ -1,0 +1,3948 @@
+{
+ "barliman": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.36,
+   "duration": 2.8,
+   "fwd": 0.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_wipe": {
+   "duration": 3.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.2,
+   "loop": true,
+   "speed": 1.15
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "boar": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "growl": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.4,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.4,
+   "loop": true,
+   "speed": 7.2
+  },
+  "trot": {
+   "duration": 0.4667,
+   "loop": true,
+   "speed": 3.4
+  },
+  "walk": {
+   "duration": 0.6667,
+   "loop": true,
+   "speed": 1.3
+  }
+ },
+ "farmer": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.36,
+   "duration": 2.8,
+   "fwd": 0.784,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "guard": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.36,
+   "duration": 2.8,
+   "fwd": 0.816,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "hero": {
+  "attack1": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "attack2": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "attack2h1": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "attack2h2": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "attack3": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "attack4": {
+   "duration": 1.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "block": {
+   "duration": 2.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "bow_aim": {
+   "duration": 2.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "bow_draw": {
+   "duration": 0.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "bow_shoot": {
+   "duration": 0.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dodge": {
+   "duration": 0.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "drink": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "heavy": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "heavy2h": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hit2": {
+   "duration": 0.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_blade": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "jump": {
+   "duration": 0.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "land": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "roll": {
+   "duration": 0.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sprint": {
+   "duration": 0.5333,
+   "loop": true,
+   "speed": 8.2
+  },
+  "stagger": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "stance2h": {
+   "duration": 2.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "throw": {
+   "duration": 0.7333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "xbow_aim": {
+   "duration": 2.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "xbow_reload": {
+   "duration": 1.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "xbow_shoot": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "hobbit": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.36,
+   "duration": 2.8,
+   "fwd": 0.454,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 0.8,
+   "loop": true,
+   "speed": 1.1
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_barliman": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_wipe": {
+   "duration": 3.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.2,
+   "loop": true,
+   "speed": 1.15
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_brok": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.808,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_farmer": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.792,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_fenwick": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.784,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_gill": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.832,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_harry": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.816,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_lapka": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_lily": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.76,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_wipe": {
+   "duration": 3.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_loufa": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.454,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 0.8,
+   "loop": true,
+   "speed": 1.1
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_mara": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.752,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_wipe": {
+   "duration": 3.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_milo": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.44,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 0.8,
+   "loop": true,
+   "speed": 1.1
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_priest": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.832,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.95
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_rowan": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.808,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_snaf": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.824,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_wipe": {
+   "duration": 3.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_tom": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_wipe": {
+   "duration": 3.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_watch": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.816,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "npc_will": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.0,
+   "duration": 2.8,
+   "fwd": 0.824,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ },
+ "orc": {
+  "attack": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "attack2": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.2
+  },
+  "taunt": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  }
+ },
+ "rat": {
+  "attack": {
+   "duration": 0.7333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "attack2": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.4,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.3333,
+   "loop": true,
+   "speed": 6.0
+  },
+  "trot": {
+   "duration": 0.4,
+   "loop": true,
+   "speed": 3.0
+  },
+  "walk": {
+   "duration": 0.5333,
+   "loop": true,
+   "speed": 1.2
+  }
+ },
+ "sheep": {
+  "death": {
+   "duration": 0.7333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.4,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.4667,
+   "loop": true,
+   "speed": 4.5
+  },
+  "walk": {
+   "duration": 0.8667,
+   "loop": true,
+   "speed": 0.9
+  }
+ },
+ "troll": {
+  "attack": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "attack2": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.8667,
+   "loop": true,
+   "speed": 4.6
+  },
+  "taunt": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 1.7
+  }
+ },
+ "wight": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cast": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.7333,
+   "loop": true,
+   "speed": 3.8
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.1
+  }
+ },
+ "wolf": {
+  "attack": {
+   "duration": 0.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "attack2": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "growl": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.4,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_sniff": {
+   "duration": 3.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.4,
+   "loop": true,
+   "speed": 6.8
+  },
+  "trot": {
+   "duration": 0.5333,
+   "loop": true,
+   "speed": 3.6
+  },
+  "walk": {
+   "duration": 0.7333,
+   "loop": true,
+   "speed": 1.6
+  }
+ },
+ "woman": {
+  "attack": {
+   "duration": 1.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "cheer": {
+   "duration": 1.0667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "chop": {
+   "duration": 1.4667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "death": {
+   "duration": 1.4667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "dice": {
+   "duration": 1.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "door_open": {
+   "duration": 1.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "fish": {
+   "duration": 3.3333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "gather": {
+   "duration": 1.8,
+   "loop": false,
+   "speed": 0.0
+  },
+  "getup": {
+   "drop": 0.36,
+   "duration": 2.8,
+   "fwd": 0.76,
+   "loop": false,
+   "speed": 0.0
+  },
+  "hammer": {
+   "duration": 0.9333,
+   "loop": true,
+   "speed": 0.0
+  },
+  "hit": {
+   "duration": 0.5333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "horn": {
+   "duration": 2.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "idle_arms": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_look": {
+   "duration": 5.0,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_scratch": {
+   "duration": 2.1333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_stretch": {
+   "duration": 3.6667,
+   "loop": false,
+   "speed": 0.0
+  },
+  "idle_wipe": {
+   "duration": 3.2,
+   "loop": false,
+   "speed": 0.0
+  },
+  "kneel_loot": {
+   "duration": 2.4,
+   "loop": true,
+   "speed": 0.0
+  },
+  "laugh": {
+   "duration": 1.6,
+   "loop": false,
+   "speed": 0.0
+  },
+  "lute": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "point": {
+   "duration": 1.3333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "pray": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "run": {
+   "duration": 0.6,
+   "loop": true,
+   "speed": 5.6
+  },
+  "shrug": {
+   "duration": 0.9333,
+   "loop": false,
+   "speed": 0.0
+  },
+  "sit": {
+   "duration": 5.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "sleep": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk": {
+   "duration": 4.0,
+   "loop": true,
+   "speed": 0.0
+  },
+  "talk2": {
+   "duration": 3.6667,
+   "loop": true,
+   "speed": 0.0
+  },
+  "walk": {
+   "duration": 1.0667,
+   "loop": true,
+   "speed": 1.35
+  },
+  "wave": {
+   "duration": 1.4,
+   "loop": false,
+   "speed": 0.0
+  }
+ }
+}

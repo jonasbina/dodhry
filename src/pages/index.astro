@@ -148,10 +148,10 @@ import { GAMES, MINUTE_CAP } from '../lib/games';
   .who { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: var(--r-md); background: var(--canvas); }
   .who-pts { font: 600 0.9375rem/1 var(--sans); }
   .stack { display: grid; gap: 10px; }
-  .login-games { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; padding-bottom: 40px; }
+  .login-games { display: grid; grid-template-columns: repeat(8, 1fr); gap: 16px; padding-bottom: 40px; }
   .mini { margin: 0; display: grid; gap: 12px; }
   .mini :global(.mini-cover) { aspect-ratio: 16 / 10; border-radius: var(--r-md); }
-  .mini figcaption { display: grid; gap: 2px; font-size: 0.9375rem; }
+  .mini figcaption { display: grid; gap: 2px; font-size: 0.875rem; }
 
   /* ---------- přehled ---------- */
   .home { display: grid; gap: 32px; padding-block: 24px 48px; }
@@ -173,7 +173,7 @@ import { GAMES, MINUTE_CAP } from '../lib/games';
 
   .section-head { display: flex; align-items: baseline; gap: 6px 16px; flex-wrap: wrap; margin-bottom: 16px; }
   .section-head .caption { margin: 0; }
-  .game-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+  .game-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
   .game { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
   .game-link { display: block; }
   .game :global(.game-cover) { aspect-ratio: 16 / 10; }
@@ -200,7 +200,7 @@ import { GAMES, MINUTE_CAP } from '../lib/games';
   @media (max-width: 520px) { .game-grid { grid-template-columns: 1fr; } }
   @media (max-width: 960px) {
     .login { grid-template-columns: 1fr; padding-block: 24px 32px; }
-    .login-games { grid-template-columns: repeat(3, 1fr); }
+    .login-games { grid-template-columns: repeat(4, 1fr); }
     .summary { grid-template-columns: auto minmax(0, 1fr); }
     .breakdown { grid-column: 1 / -1; }
     .how { grid-template-columns: 1fr; gap: 16px; }

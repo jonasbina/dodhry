@@ -54,6 +54,23 @@
       const pos = t === 'Výhra' ? 1 : t === 'Prohra' ? 2 : num(t);
       return pos ? { position: pos } : null;
     },
+    // Kaktus: Srdce pouště – canvas hra, stav je v globální proměnné `state` (úroveň v `li`)
+    () => {
+      if (!/^Kaktus/.test(document.title)) return null;
+      // eslint-disable-next-line no-undef
+      const st = state, lvl = typeof li === 'number' ? li + 1 : 0;
+      if (st === 'res') return { levelDone: lvl };
+      if (st === 'over') return { level: lvl };
+      return null;
+    },
+    // Holubí bombardování – splněný level (hvězdy) nebo vypršel čas
+    () => {
+      const win = $('levelWinModal'), fail = $('levelFailModal');
+      if (!win) return null;
+      if (visible(win)) return { levelDone: 1, stars: ($('winStarsRow')?.textContent.match(/⭐/g) || []).length };
+      if (visible(fail)) return { level: 0 };
+      return null;
+    },
     // Bílý Kopec – konec herního dne (v HUD se objeví „Den N · večer“)
     () => {
       const t = $('sDayK')?.textContent || '';
@@ -72,4 +89,25 @@
     if (!result) shown = false;
   };
   setInterval(check, 500);
+
+  // ---------- Lovec z Hůrecka: události místo koncové obrazovky ----------
+  // splněný úkol / zakázka / kapitola se ukáže jako oznámení, nová úroveň jako titulek „Úroveň N“
+  if (/^Lovec z Hůrecka/.test(document.title)) {
+    const watch = () => {
+      const box = $('toasts'), tc = $('tcTitle');
+      if (!box || !tc) return setTimeout(watch, 1000);
+      new MutationObserver((muts) => {
+        for (const m of muts) for (const n of m.addedNodes) {
+          const t = n.textContent || '';
+          if (/Úkol splněn|Zakázka splněna|Kapitola dokončena/.test(t)) send({ type: 'dodhry:end', result: { quest: 1 } });
+        }
+      }).observe(box, { childList: true });
+      let lastLvl = '';
+      new MutationObserver(() => {
+        const t = tc.textContent || '';
+        if (/^Úroveň \d+/.test(t) && t !== lastLvl) { lastLvl = t; send({ type: 'dodhry:end', result: { level: num(t) } }); }
+      }).observe(tc, { childList: true, characterData: true, subtree: true });
+    };
+    watch();
+  }
 })();

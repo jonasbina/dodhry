@@ -1,0 +1,23 @@
+{
+ "crypt": {
+  "loop": 40.0
+ },
+ "village": {
+  "loop": 60.0
+ },
+ "field": {
+  "loop": 72.0
+ },
+ "night": {
+  "loop": 64.0
+ },
+ "barrows": {
+  "loop": 57.6
+ },
+ "boss": {
+  "loop": 58.1818
+ },
+ "title": {
+  "loop": 82.2857
+ }
+}

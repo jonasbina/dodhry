@@ -1,7 +1,10 @@
 // Hry na portálu a pravidla bodování.
 // `points(result, prev)` dostane výsledek z public/bridge.js a vrátí body za konec hry.
 
-export type Result = { win?: boolean; stage?: number; wave?: number; score?: number; position?: number; kills?: number; dayEnd?: number };
+export type Result = {
+  win?: boolean; stage?: number; wave?: number; score?: number; position?: number; kills?: number;
+  dayEnd?: number; levelDone?: number; level?: number; quest?: number; stars?: number;
+};
 
 export type Game = {
   id: string;
@@ -25,8 +28,10 @@ export type Game = {
   cumulative?: boolean;
   /** kolikrát nejvýš může hráč v této hře dostat body za konec (např. 3 dny) */
   runCap?: number;
-  /** vlastní minimální doba hraní před koncem, v sekundách */
+  /** vlastní minimální doba hraní před koncem, v sekundách (0 = vždy) */
   minRunSeconds?: number;
+  /** nejvýš tolik bodů za výsledky v této hře (bez bodů za minuty) */
+  cap?: number;
 };
 
 // +1 bod za aktivní minutu, max MINUTE_CAP na hru a hráče
@@ -120,6 +125,58 @@ export const GAMES: Game[] = [
     points: () => 10,
     runCap: 3,
     minRunSeconds: 180,
+  },
+  {
+    id: 'kaktus',
+    title: 'Kaktus: Srdce pouště',
+    author: '',
+    group: '',
+    genre: 'Akce · plošinovka',
+    blurb: 'Kaktusový pistolník bojuje přes přístav, moře, bažinu, důl, step a pevnost, aby zachránil Srdce pouště.',
+    controls: 'Šipky nebo WASD · mezerník skok · J útok · K těžký útok · Q střelba',
+    path: '/games/kaktus/index.html',
+    maxPoints: 40,
+    rule: 'Dokonči úroveň. Každá dokončená úroveň přidá 10 bodů.',
+    finish: 'Body se připíšou na výsledkové obrazovce po úrovni, nebo když padneš.',
+    howTo: [['Dokončená úroveň', '10 b'], ['Padneš', '3 b'], ['Nejvíc celkem', '40 b']],
+    tone: 'var(--ochre)',
+    points: (r) => (r.levelDone ? 10 : 3),
+    cap: 40,
+  },
+  {
+    id: 'lovec-z-hurecka',
+    title: 'Lovec z Hůrecka',
+    author: '',
+    group: '',
+    genre: 'Hra na hrdiny · 3D',
+    blurb: 'Probudíš se ve stodole a nic neumíš. Ve vsi Hůrka sháníš práci, plníš úkoly, učíš se u mistrů a bojuješ s krysami i kňoury.',
+    controls: 'Klikni do hry, myš = pohled · WASD · F mluvit a sebrat · X tasit · I inventář · J deník',
+    path: '/games/lovec-z-hurecka/index.html',
+    maxPoints: 40,
+    rule: 'Plň úkoly ve vsi a sbírej zkušenosti.',
+    finish: 'Body se připíšou hned, když splníš úkol nebo zakázku, nebo postoupíš na další úroveň.',
+    howTo: [['Splněný úkol nebo zakázka', '10 b'], ['Nová úroveň', '5 b'], ['Nejvíc celkem', '40 b']],
+    tone: 'var(--forest)',
+    points: (r) => (r.quest ? 10 : 5),
+    cap: 40,
+    minRunSeconds: 0,
+  },
+  {
+    id: 'holubi-bombardovani',
+    title: 'Holubí bombardování',
+    author: 'Domixcz',
+    group: '',
+    genre: 'Arkáda',
+    blurb: 'Jsi holub nad městem a trefuješ chodce a cyklisty. Sto levelů v pěti světech, obchod s holuby a vylepšení.',
+    controls: 'A / D let · S nebo mezerník shodit · E schopnost',
+    path: '/games/holubi-bombardovani/index.html',
+    maxPoints: 40,
+    rule: 'Splň level v kampani. Čím víc hvězd, tím víc bodů.',
+    finish: 'Body se připíšou, když level splníš, nebo když ti vyprší čas.',
+    howTo: [['Level za 3 ⭐', '10 b'], ['Level za 2 ⭐', '7 b'], ['Level za 1 ⭐', '5 b'], ['Vypršel čas', '2 b'], ['Nejvíc celkem', '40 b']],
+    tone: 'var(--gold-soft)',
+    points: (r) => (r.levelDone ? [5, 5, 7, 10][Math.min(3, r.stars ?? 1)] : 2),
+    cap: 40,
   },
 ];
 

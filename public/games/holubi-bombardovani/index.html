@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HOLUBÍ BOMBARDOVÁNÍ - Battle Royale Deluxe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Inter:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=202611131532">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+    <div id="currencyTip" class="currency-tip hidden"></div>
+    <div id="perfStats" class="perf-stats" title="F3 = skrýt / zobrazit">FPS -- • PING --</div>
+
+    <!-- Ability Screen Pulse Glow Overlay -->
+    <div id="abilityPulseGlow" class="ability-pulse-glow"></div>
+
+    <!-- Headshot Comic Popup Overlay -->
+    <div id="headshotBanner" class="headshot-banner hidden">
+      <div class="headshot-inner">
+        <span class="headshot-icon">💥</span>
+        <span class="headshot-text">HEADSHOT!</span>
+        <span class="headshot-icon">💥</span>
+      </div>
+      <div class="headshot-sub" id="headshotSub">+50 MINCÍ • KRITICKÝ ZÁSAH!</div>
+    </div>
+
+    <!-- Cyclist Crash / Knockout Comic Banner -->
+    <div id="actionBanner" class="action-banner hidden">
+      <div class="action-inner" id="actionBannerText">🚴💥 CYKLISTA ROZSEKÁN!</div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="mouseToast" class="mouse-toast hidden">
+      <span id="mouseToastText">Řízení myší: ZAPNUTO</span>
+    </div>
+
+    <!-- Top In-Game HUD Bar -->
+    <div id="hud" class="hidden">
+      <div class="hud-group">
+        <div class="hud-item coins-item">
+          <span class="hud-icon">🪙</span>
+          <div class="hud-texts">
+            <span class="hud-label">MINCE</span>
+            <span class="hud-value" id="coinsVal">0</span>
+          </div>
+        </div>
+
+        <div class="hud-item">
+          <span class="hud-icon">🎯</span>
+          <div class="hud-texts">
+            <span class="hud-label" id="scoreLabel">SKÓRE</span>
+            <span class="hud-value" id="scoreVal">0</span>
+          </div>
+        </div>
+
+        <div class="hud-item headshots-item">
+          <span class="hud-icon">💀</span>
+          <div class="hud-texts">
+            <span class="hud-label">HEADSHOTY</span>
+            <span class="hud-value" id="headshotsVal">0</span>
+          </div>
+        </div>
+
+        <div class="hud-item combo-item">
+          <span class="hud-icon">🔥</span>
+          <div class="hud-texts">
+            <span class="hud-label">KOMBO</span>
+            <span class="hud-value" id="comboVal">1x</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Level Quest Objective (Visible in Level Mode) -->
+      <div id="levelHudBar" class="level-hud-bar hidden">
+        <div class="level-title-badge" id="levelNameBadge">LEVEL 1</div>
+        <div class="level-objective-box">
+          <span class="obj-label">CÍL MISE:</span>
+          <span class="obj-desc" id="levelGoalText">Tref 5 chodců (0/5)</span>
+        </div>
+        <div class="level-timer-box">
+          <span class="timer-icon">⏱️</span>
+          <span class="timer-num" id="levelTimerVal">45s</span>
+        </div>
+      </div>
+
+      <!-- Ammo Indicator -->
+      <div class="hud-item ammo-item">
+        <div class="ammo-header">
+          <span class="hud-label">BOBKY</span>
+          <span id="ammoCountText">5/5</span>
+        </div>
+        <div class="ammo-slots" id="ammoSlots">
+          <span class="ammo-poop ready">💩</span>
+          <span class="ammo-poop ready">💩</span>
+          <span class="ammo-poop ready">💩</span>
+          <span class="ammo-poop ready">💩</span>
+          <span class="ammo-poop ready">💩</span>
+        </div>
+      </div>
+
+      <!-- Character Super Ability [E] -->
+      <div class="hud-ability-wrap">
+        <button id="abilityBtn" class="btn-ability" title="Použít taktickou schopnost (Klávesa E)">
+          <div class="ability-cooldown-fill" id="abilityCooldownFill"></div>
+          <span class="ability-icon" id="abilityIcon">⚡</span>
+          <div class="ability-info">
+            <span class="ability-key">[E] SCHOPNOST</span>
+            <span class="ability-name" id="abilityName">Nitro</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Right HUD Controls -->
+      <div class="hud-controls">
+        <button id="mouseToggleBtn" class="btn-hud-tool active" title="Přepnout řízení myší (Klávesa Q)">
+          <span class="tool-icon">🖱️</span>
+          <span class="tool-sub" id="mouseToggleSub">MYŠ: ZAP</span>
+        </button>
+        <button id="inGameLobbyBtn" class="btn-hud-tool" title="Návrat do Lobby">
+          <span class="tool-icon">🏠</span>
+          <span class="tool-sub">LOBBY</span>
+        </button>
+        <button id="soundBtn" class="btn-hud-icon" title="Zvuk (M)">🔊</button>
+        <button id="pauseBtn" class="btn-hud-icon" title="Pauza (P)">⏸️</button>
+      </div>
+    </div>
+
+    <!-- Versus Score Bar (2 players) -->
+    <div id="versusBar" class="versus-bar hidden">
+      <div class="vs-side p1">
+        <span class="vs-label">P1</span>
+        <span class="vs-score" id="vsP1Score">0</span>
+      </div>
+      <div class="vs-timer" id="vsTimer">90</div>
+      <div class="vs-side p2">
+        <span class="vs-score" id="vsP2Score">0</span>
+        <span class="vs-label">P2</span>
+      </div>
+    </div>
+
+    <!-- Player 2 HUD -->
+    <div id="p2Hud" class="p2-hud hidden">
+      <div class="p2-hud-head">
+        <span class="p2-tag">P2</span>
+        <span class="p2-name" id="p2HudName">Modrý Pepík</span>
+      </div>
+      <div class="p2-stats">
+        <span>🎯 <b id="p2ScoreVal">0</b></span>
+        <span>💀 <b id="p2HeadshotsVal">0</b></span>
+        <span>🔥 <b id="p2ComboVal">1x</b></span>
+      </div>
+      <div class="ammo-slots" id="p2AmmoSlots">
+        <span class="ammo-poop ready">💩</span>
+        <span class="ammo-poop ready">💩</span>
+        <span class="ammo-poop ready">💩</span>
+        <span class="ammo-poop ready">💩</span>
+        <span class="ammo-poop ready">💩</span>
+      </div>
+      <div class="p2-ability" id="p2Ability">
+        <div class="p2-ability-fill" id="p2AbilityFill"></div>
+        <span id="p2AbilityIcon">⚡</span>
+        <span id="p2AbilityText">[↑] Nitro</span>
+      </div>
+    </div>
+
+    <!-- On-Screen Controls for Mobile / Touch -->
+    <div id="touchControls" class="touch-controls hidden">
+      <div class="touch-left-col">
+        <button id="touchAbilityBtn" class="touch-btn touch-ability-btn" aria-label="Schopnost">⚡ E</button>
+        <div class="touch-dpad">
+          <button id="btnLeft" class="touch-btn" aria-label="Doleva">◀</button>
+          <button id="btnRight" class="touch-btn" aria-label="Doprava">▶</button>
+        </div>
+      </div>
+      <button id="btnDrop" class="touch-btn touch-drop-btn" aria-label="Kadit">
+        <span class="drop-icon">💩</span>
+        <span class="drop-text">KADIT!</span>
+      </button>
+    </div>
+
+    <!-- ======================================================================
+         🏰 LOBBY (FORTNITE STYLE)
+         ====================================================================== -->
+    <div id="lobbyScreen" class="lobby-fn">
+      <header class="fn-topbar">
+        <div class="fn-brand">
+          <div class="fn-logo">🕊️</div>
+          <div class="fn-brand-text">
+            <div class="fn-title">HOLUBÍ BOMBARDOVÁNÍ</div>
+            <div class="fn-season">KAPITOLA 1 • SEZÓNA DELUXE</div>
+          </div>
+        </div>
+
+        <nav class="fn-tabs">
+          <button class="fn-tab active" id="tabLobby">LOBBY</button>
+          <button class="fn-tab" id="tabCampaign">KAMPAŇ</button>
+          <button class="fn-tab" id="lobbyShopBtn">OBCHOD</button>
+          <button class="fn-tab" id="tabUpgrades">VYLEPŠENÍ</button>
+          <button class="fn-tab fn-tab-pass" id="tabPass">PASS</button>
+          <button class="fn-tab" id="tabLeader">ŽEBŘÍČEK</button>
+          <button class="fn-tab" id="lobbyDeviceShareBtn">MOBIL</button>
+        </nav>
+
+        <div class="fn-currency">
+          <button type="button" class="fn-pill" data-currency="stars" title="Hvězdy – klikni pro popis"><span>⭐</span><b id="lobbyStarsVal">0/300</b></button>
+          <button type="button" class="fn-pill token" data-currency="tokens" title="Tokeny – klikni pro popis"><span>🎟️</span><b id="lobbyTokensVal">0</b></button>
+          <button type="button" class="fn-pill gold" data-currency="coins" title="Mince – klikni pro popis"><span>🪙</span><b id="lobbyCoinsVal">0</b></button>
+          <button id="lobbySoundBtn" class="fn-icon-btn" title="Zvuk">🔊</button>
+        </div>
+      </header>
+
+      <aside class="fn-left">
+        <div class="fn-profile">
+          <div class="fn-level-badge"><small>LVL</small><span id="lobbyLevelNum">1</span></div>
+          <div class="fn-profile-info">
+            <div class="fn-profile-row"><div class="fn-profile-name" id="profileName">HOST</div><button class="fn-profile-auth" id="profileAuthBtn">PŘIHLÁSIT SE</button></div>
+            <div class="fn-xp-bar"><div class="fn-xp-fill" id="lobbyXpFill"></div></div>
+            <div class="fn-xp-text" id="lobbyXpText">0 / 1000 XP</div>
+          </div>
+        </div>
+
+        <button class="fn-pass-mini" id="passMiniBtn">
+          <div class="fn-pass-mini-head"><span>🎫 HOLUBÍ PASS</span><b id="passMiniTier">ÚROVEŇ 0</b></div>
+          <div class="fn-xp-bar"><div class="fn-xp-fill pass" id="passMiniFill"></div></div>
+          <div class="fn-xp-text" id="passMiniText">0 / 1 300 XP do další úrovně</div>
+          <div class="fn-pass-mini-claim hidden" id="passMiniClaim">🎁 Máš odměny k vyzvednutí!</div>
+        </button>
+
+        <div class="fn-panel">
+          <div class="fn-panel-head">
+            <span>🎯 VÝZVY</span>
+            <small>Odměny v mincích</small>
+          </div>
+          <div id="challengeList" class="fn-challenges"></div>
+        </div>
+      </aside>
+
+      <!-- Chat / admin console -->
+      <div class="fn-console" id="adminConsole">
+        <div class="fn-console-panel hidden" id="adminPanel"></div>
+        <div class="fn-console-bar">
+          <button class="fn-console-btn" id="adminToggleBtn" title="Admin">🛠️<span>ADMIN</span></button>
+          <input id="adminInput" class="fn-console-input" type="password" placeholder="Zadej příkaz…" autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+
+      <!-- Player 2 squad slot -->
+      <div class="fn-p2-slot" id="p2Slot">
+        <button class="fn-invite" id="p2InviteBtn">
+          <span class="fn-plus">+</span>
+          <span class="fn-invite-text">PŘIDAT HRÁČE 2</span>
+          <small>Na stejné klávesnici</small>
+        </button>
+        <div class="fn-p2-card hidden" id="p2Card">
+          <div class="fn-p2-head">
+            <span class="p2-tag">P2</span>
+            <b id="p2SkinName">Modrý Pepík</b>
+            <button id="p2RemoveBtn" class="fn-x" title="Odebrat hráče 2">✖</button>
+          </div>
+          <div class="fn-p2-switch">
+            <button id="p2PrevBtn" class="fn-arrow">◀</button>
+            <span>Změnit holuba</span>
+            <button id="p2NextBtn" class="fn-arrow">▶</button>
+          </div>
+          <div class="fn-keys">
+            <div><b>P1</b> A / D • S nebo Mezerník • E</div>
+            <div><b class="c2">P2</b> ← / → • ↓ nebo Enter • ↑</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero nameplate -->
+      <div class="fn-hero-plate">
+        <div class="fn-hero-row">
+          <button id="heroPrevBtn" class="fn-arrow" title="Předchozí holub">◀</button>
+          <div class="fn-hero-id">
+            <span class="hero-rarity-badge" id="lobbyPigeonRarity">BĚŽNÝ</span>
+            <h2 class="fn-hero-name" id="lobbyPigeonName">Městský Pepík</h2>
+          </div>
+          <button id="heroNextBtn" class="fn-arrow" title="Další holub">▶</button>
+        </div>
+        <div class="fn-hero-ability" id="lobbyAbilityDesc"></div>
+        <div class="fn-hero-power" id="lobbyPowerRating">Bojová síla: 140 ⚡</div>
+        <button class="fn-skins-btn" id="heroEditBtn">✏️ EDIT HOLUBA <span id="heroEditState"></span></button>
+      </div>
+
+      <!-- Play area -->
+      <div class="fn-featured" id="featuredCard">
+        <div class="fn-feat-head"><span>🔥 DNEŠNÍ NABÍDKA</span><small id="featTimer"></small></div>
+        <div class="fn-feat-body">
+          <div class="fn-feat-pic"><canvas id="featCanvas" width="120" height="90"></canvas><span class="fn-feat-discount" id="featDiscount">-20 %</span></div>
+          <div class="fn-feat-info">
+            <span class="hero-rarity-badge" id="featRarity">VZÁCNÝ</span>
+            <b id="featName">Holub</b>
+            <div class="fn-feat-price"><s id="featOld"></s><span id="featPrice"></span></div>
+            <button class="fn-feat-buy" id="featBuyBtn">KOUPIT</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="fn-play-area">
+        <button class="fn-current-mode" id="currentModeBtn" title="Vybrat mód (nebo sjeď kolečkem dolů)">
+          <span class="fn-cm-icon" id="cmIcon">🗺️</span>
+          <span class="fn-cm-text"><small id="cmTag">SÓLO • 100 LEVELŮ</small><b id="cmName">KAMPAŇ</b></span>
+          <span class="fn-cm-change">ZMĚNIT ▾</span>
+        </button>
+        <button id="lobbyPlayBtn" class="fn-play-btn">
+          <span class="fn-play-main">HRÁT</span>
+          <span class="fn-play-sub" id="playModeSub">KAMPAŇ • LEVEL 1</span>
+        </button>
+      </div>
+
+      <button class="fn-scroll-hint" id="discoverHint">▼ SJEĎ DOLŮ PRO VÝBĚR MÓDU ▼</button>
+    </div>
+
+    <!-- ======================================================================
+         🎮 VÝBĚR MÓDU (sjede se dolů jako Discover ve Fortnite)
+         ====================================================================== -->
+    <div id="discoverScreen" class="discover hidden">
+      <div class="disc-head">
+        <button class="disc-back" id="discoverBack">▲ ZPĚT DO LOBBY</button>
+        <h2>🎮 VYBER SI MÓD</h2>
+        <small>Klikni na mód a pak dej HRÁT</small>
+      </div>
+      <div id="discoverRows"></div>
+    </div>
+
+    <!-- ======================================================================
+         ⬆️ UPGRADES MODAL
+         ====================================================================== -->
+    <div id="upgradesModal" class="overlay-screen hidden">
+      <div class="screen-card upgrades-modal-card">
+        <div class="shop-header">
+          <div>
+            <h2 class="shop-title">⬆️ VYLEPŠENÍ HOLUBA</h2>
+            <p class="shop-subtitle" id="upgradesForName">Trvalé bonusy pro vybranou postavu</p>
+          </div>
+          <div class="shop-balance">
+            <span class="balance-icon">🪙</span>
+            <span class="balance-num" id="upgradesCoinsVal">0</span>
+            <button id="closeUpgradesTopBtn" class="btn-hud-icon">✖</button>
+          </div>
+        </div>
+
+        <div class="upgrades-layout">
+          <div class="upgrades-preview">
+            <canvas id="lobbyPigeonCanvas" width="220" height="170"></canvas>
+          </div>
+          <div class="lobby-upgrades-card">
+            <div class="upgrade-row">
+              <div class="upgrade-info">
+                <span class="upgrade-name">⚡ Rychlost letu</span>
+                <span class="upgrade-lvl" id="speedLvlText">Lvl 1/5 (+0%)</span>
+              </div>
+              <div class="upgrade-meter"><div class="meter-fill" id="speedMeterFill" style="width: 20%;"></div></div>
+              <button class="btn-upgrade" id="btnUpgradeSpeed">⬆️ <span id="speedCostText">100 🪙</span></button>
+            </div>
+            <div class="upgrade-row">
+              <div class="upgrade-info">
+                <span class="upgrade-name">💩 Přebíjení bobků</span>
+                <span class="upgrade-lvl" id="reloadLvlText">Lvl 1/5 (+0%)</span>
+              </div>
+              <div class="upgrade-meter"><div class="meter-fill" id="reloadMeterFill" style="width: 20%;"></div></div>
+              <button class="btn-upgrade" id="btnUpgradeReload">⬆️ <span id="reloadCostText">100 🪙</span></button>
+            </div>
+            <div class="upgrade-row">
+              <div class="upgrade-info">
+                <span class="upgrade-name">🪙 Bonus mincí</span>
+                <span class="upgrade-lvl" id="coinLvlText">Lvl 1/5 (+0%)</span>
+              </div>
+              <div class="upgrade-meter"><div class="meter-fill" id="coinMeterFill" style="width: 20%;"></div></div>
+              <button class="btn-upgrade" id="btnUpgradeCoins">⬆️ <span id="coinCostText">100 🪙</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="shop-footer">
+          <button id="closeUpgradesBtn" class="btn-primary">✅ ZPĚT DO LOBBY</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         🗺️ SAGA LEVEL MAP MODAL (100 LEVELŮ)
+         ====================================================================== -->
+    <div id="levelMapScreen" class="overlay-screen hidden">
+      <div class="screen-card map-card">
+        <div class="map-header">
+          <div class="map-title-box">
+            <h2 class="map-title">🗺️ SAGA MAPA 100 LEVELŮ</h2>
+            <p class="map-subtitle">Dokončuj mise, sbírej hvězdy ⭐ a odemykej nové zóny!</p>
+          </div>
+          <div class="map-stats-bar">
+            <div class="map-stat-badge">
+              <span class="stat-star-icon">⭐</span>
+              <span id="mapStarsCount">0/300</span>
+            </div>
+            <div class="map-stat-badge gold-badge">
+              <span>🪙</span>
+              <span id="mapCoinsVal">0</span>
+            </div>
+            <button id="closeMapBtn" class="btn-hud-icon" title="Zavřít mapu">✖</button>
+          </div>
+        </div>
+
+        <div class="world-tabs">
+          <button class="world-tab active" data-world="1">🌳 1. Park (1–20)</button>
+          <button class="world-tab" data-world="2">🛍️ 2. Třída (21–40)</button>
+          <button class="world-tab" data-world="3">🏙️ 3. Centrum (41–60)</button>
+          <button class="world-tab" data-world="4">🌃 4. Noční (61–80)</button>
+          <button class="world-tab" data-world="5">🚀 5. Megapole (81–100)</button>
+        </div>
+
+        <div class="map-scroll-viewport" id="mapScrollViewport">
+          <div class="map-road-container" id="mapRoadContainer"></div>
+        </div>
+
+        <div class="map-footer">
+          <button id="playCurrentMapLevelBtn" class="btn-primary">
+            🚀 HRÁT LEVEL <span id="mapCurrentLvlNum">1</span>
+          </button>
+          <button id="backToLobbyFromMapBtn" class="btn-secondary">
+            🏠 NÁVRAT DO LOBBY
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         🛍️ SHOP MODAL (200 PIGEON CHARACTERS)
+         ====================================================================== -->
+    <div id="shopModal" class="overlay-screen hidden">
+      <div class="screen-card shop-card">
+        <div class="shop-header">
+          <div>
+            <h2 class="shop-title">🛍️ OBCHOD S POSTAVAMI (200 HOLUBŮ)</h2>
+            <p class="shop-subtitle">Odemkni legendární holuby a vylepšuj jejich schopnosti!</p>
+          </div>
+          <div class="shop-balance">
+            <span class="balance-icon">🪙</span>
+            <span class="balance-num" id="shopCoinsVal">0</span>
+            <button id="closeShopTopBtn" class="btn-hud-icon">✖</button>
+          </div>
+        </div>
+
+        <div class="shop-filter-bar">
+          <div class="rarity-tabs">
+            <button class="rarity-tab active" data-tier="all">VŠECHNY (200)</button>
+            <button class="rarity-tab" data-tier="common">BĚŽNÉ</button>
+            <button class="rarity-tab" data-tier="rare">VZÁCNÉ</button>
+            <button class="rarity-tab" data-tier="epic">EPICKÉ</button>
+            <button class="rarity-tab" data-tier="legendary">LEGENDÁRNÍ</button>
+            <button class="rarity-tab" data-tier="mythic">MÝTICKÉ</button>
+            <button class="rarity-tab" data-tier="cosmic">KOSMICKÉ</button>
+          </div>
+          <input type="text" id="shopSearchInput" class="shop-search-input" placeholder="🔍 Hledat holuba podle jména...">
+        </div>
+
+        <div class="skins-grid" id="skinsGrid"></div>
+
+        <div class="shop-footer">
+          <button id="closeShopBtn" class="btn-primary">✅ ZPĚT DO LOBBY</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         📱 MULTI-DEVICE & SHARE MODAL
+         ====================================================================== -->
+    <div id="deviceShareModal" class="overlay-screen hidden">
+      <div class="screen-card share-card">
+        <div class="share-icon">📱</div>
+        <h2 class="share-title">JAK HRÁT NA MOBILU NEBO JINÉM ZAŘÍZENÍ</h2>
+        <p class="share-sub">Hra funguje plně na mobilech i tabletech s dotykovým ovládáním!</p>
+
+        <div class="share-info-box">
+          <div class="share-link-row">
+            <span class="share-label">1. PRO TELEFONY NA STEJNÉ WI-FI (Doma / ve škole):</span>
+            <div class="share-url-copy-box">
+              <input type="text" readonly id="lanUrlInput" value="http://172.17.121.115:8080" class="share-input">
+              <button id="copyLanBtn" class="btn-copy">📋 KOPÍROVAT</button>
+            </div>
+            <p class="share-hint">Funguje jen když je hra spuštěná přes lokální server. Mobil musí být na stejné Wi-Fi.</p>
+          </div>
+
+          <div class="share-link-row">
+            <span class="share-label">2. MULTIPLAYER NA JEDNOM POČÍTAČI:</span>
+            <p class="share-hint">V lobby klikni na „+ PŘIDAT HRÁČE 2“ a vyber CO-OP DUO nebo SOUBOJ 1v1. Hráč 1 hraje na A/D/S/E, hráč 2 na šipkách a Enteru.</p>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button id="closeShareBtn" class="btn-primary">ROZUMÍM, ZPĚT DO LOBBY</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         🌐 ONLINE 1v1 (KÓD MÍSTNOSTI)
+         ====================================================================== -->
+    <div id="onlineModal" class="overlay-screen hidden">
+      <div class="screen-card online-card">
+        <div class="share-icon">🌐</div>
+        <h2 class="share-title">ONLINE SOUBOJ 1v1</h2>
+        <p class="share-sub">Hraj proti kamarádovi na jiném počítači přes internet.</p>
+
+        <div class="online-grid">
+          <div class="online-box">
+            <div class="online-step">1</div>
+            <h3>ZALOŽIT HRU</h3>
+            <p>Vytvoř kód a pošli ho kamarádovi.</p>
+            <button id="onlineCreateBtn" class="btn-primary">🎲 VYTVOŘIT KÓD</button>
+            <div id="onlineCodeBox" class="online-code hidden">
+              <span id="onlineCode">-----</span>
+              <button id="onlineCopyBtn" class="btn-copy" title="Kopírovat kód">📋</button>
+            </div>
+          </div>
+          <div class="online-box">
+            <div class="online-step">2</div>
+            <h3>PŘIPOJIT SE</h3>
+            <p>Napiš kód, který ti poslal kamarád.</p>
+            <input id="onlineJoinInput" class="share-input online-input" maxlength="5" placeholder="KÓD" autocomplete="off" spellcheck="false">
+            <button id="onlineJoinBtn" class="btn-gold">🔗 PŘIPOJIT</button>
+          </div>
+        </div>
+
+        <div id="onlineStatus" class="online-status">Jeden hráč klikne na VYTVOŘIT KÓD, druhý ten kód zadá a klikne na PŘIPOJIT.</div>
+        <p class="share-hint">Ovládání online: ← → nebo A / D pohyb • Mezerník kadit • E schopnost. Hra trvá 90 sekund.</p>
+
+        <div class="btn-row">
+          <button id="onlineCloseBtn" class="btn-secondary">✖ ZRUŠIT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         ✏️ EDIT HOLUBA (úpravy vzhledu za tokeny)
+         ====================================================================== -->
+    <div id="editModal" class="overlay-screen hidden">
+      <div class="screen-card edit-card">
+        <div class="shop-header">
+          <div>
+            <h2 class="shop-title">✏️ EDIT: <span id="editForName">Městský Pepík</span></h2>
+            <p class="shop-subtitle">Uprav barvu peří, krku, zobáku, očí, vzor a záři. Platí se tokeny 🎟️.</p>
+          </div>
+          <div class="shop-balance">
+            <span class="balance-icon">🎟️</span>
+            <span class="balance-num" id="editTokensVal">0</span>
+            <button id="closeEditTopBtn" class="btn-hud-icon">✖</button>
+          </div>
+        </div>
+        <div class="edit-layout">
+          <div class="edit-preview"><canvas id="editCanvas" width="300" height="230"></canvas></div>
+          <div class="edit-parts" id="editParts"></div>
+        </div>
+        <p class="edit-cost" id="editCostInfo"></p>
+        <div class="btn-row">
+          <button id="editSaveBtn" class="btn-primary">💾 ULOŽIT</button>
+          <button id="editResetBtn" class="btn-secondary">↺ VRÁTIT PŮVODNÍ</button>
+          <button id="closeEditBtn" class="btn-gold">✅ HOTOVO</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         🎫 HOLUBÍ PASS (jako v Brawl Stars)
+         ====================================================================== -->
+    <div id="passModal" class="overlay-screen hidden">
+      <div class="screen-card pass-card">
+        <div class="shop-header">
+          <div>
+            <h2 class="shop-title">🎫 HOLUBÍ PASS</h2>
+            <p class="shop-subtitle" id="passSub">Sbírej XP hraním a odemykej odměny. 50 úrovní.</p>
+          </div>
+          <div class="shop-balance">
+            <span class="balance-icon">🪙</span>
+            <span class="balance-num" id="passCoinsVal">0</span>
+            <button id="closePassTopBtn" class="btn-hud-icon">✖</button>
+          </div>
+        </div>
+        <div class="pass-top">
+          <div class="pass-progress">
+            <div class="pass-tier-badge"><small>ÚROVEŇ</small><span id="passTierNum">0</span></div>
+            <div class="pass-progress-info">
+              <div class="fn-xp-bar big"><div class="fn-xp-fill pass" id="passFill"></div></div>
+              <div class="fn-xp-text" id="passText">0 / 1 300 XP</div>
+            </div>
+          </div>
+          <div class="pass-actions">
+            <button id="passClaimAllBtn" class="btn-gold">🎁 VYZVEDNOUT VŠE</button>
+            <button id="passPremiumBtn" class="btn-primary">👑 PRÉMIOVÝ PASS</button>
+          </div>
+        </div>
+        <div class="pass-track-labels"><span>ZDARMA</span><span class="prem">👑 PRÉMIUM</span></div>
+        <div class="pass-track" id="passTrack"></div>
+        <div class="shop-footer">
+          <button id="closePassBtn" class="btn-primary">✅ ZPĚT DO LOBBY</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         🏆 ŽEBŘÍČEK
+         ====================================================================== -->
+    <div id="leaderModal" class="overlay-screen hidden">
+      <div class="screen-card leader-card">
+        <div class="shop-header">
+          <div>
+            <h2 class="shop-title">🏆 ŽEBŘÍČEK HRÁČŮ <span class="leader-status" id="leaderStatus"></span></h2>
+            <p class="shop-subtitle">Nejlepší skóre v jedné hře</p>
+          </div>
+          <button id="closeLeaderTopBtn" class="btn-hud-icon">✖</button>
+        </div>
+        <div class="leader-head"><span>#</span><span>HRÁČ</span><span>LEVEL</span><span>HOLUBI</span><span>SKÓRE</span></div>
+        <div class="leader-list" id="leaderList"></div>
+        <p class="leader-foot" id="leaderFoot"></p>
+        <div class="shop-footer"><button id="closeLeaderBtn" class="btn-primary">✅ ZPĚT DO LOBBY</button></div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         🔐 REGISTRACE / PŘIHLÁŠENÍ
+         ====================================================================== -->
+    <div id="authModal" class="overlay-screen auth-screen hidden">
+      <div class="screen-card auth-card">
+        <div class="auth-logo">🕊️</div>
+        <h2 class="auth-title">HOLUBÍ BOMBARDOVÁNÍ</h2>
+        <p class="auth-sub">Vytvoř si účet s vlastním jménem a objev se v žebříčku!</p>
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab active" data-auth="register">REGISTRACE</button>
+          <button type="button" class="auth-tab" data-auth="login">PŘIHLÁŠENÍ</button>
+        </div>
+
+        <form id="authRegisterForm" class="auth-form" autocomplete="on">
+          <div class="auth-method">
+            <button type="button" class="auth-mbtn active" data-method="email">📧 E-MAIL</button>
+            <button type="button" class="auth-mbtn" data-method="phone">📱 TELEFON</button>
+          </div>
+          <label class="auth-field"><span id="authContactLabel">E-mail</span><input id="regContact" type="email" placeholder="tvuj@email.cz" autocomplete="email"></label>
+          <label class="auth-field"><span>Herní jméno <small id="regNameCheck"></small></span><input id="regName" maxlength="16" placeholder="např. HolubKing" autocomplete="username" spellcheck="false"></label>
+          <label class="auth-field"><span>Heslo</span><input id="regPass" type="password" placeholder="aspoň 6 znaků" autocomplete="new-password"></label>
+          <label class="auth-field"><span>Heslo znovu</span><input id="regPass2" type="password" autocomplete="new-password"></label>
+          <label class="auth-check"><input type="checkbox" id="regRemember" checked><span>Zapamatovat si mě</span></label>
+          <button type="submit" class="btn-primary auth-submit">✅ ZAREGISTROVAT</button>
+        </form>
+
+        <form id="authLoginForm" class="auth-form hidden" autocomplete="on">
+          <label class="auth-field"><span>E-mail, telefon nebo herní jméno</span><input id="loginId" autocomplete="username" spellcheck="false"></label>
+          <label class="auth-field"><span>Heslo</span><input id="loginPass" type="password" autocomplete="current-password"></label>
+          <label class="auth-check"><input type="checkbox" id="loginRemember" checked><span>Zapamatovat si mě</span></label>
+          <button type="submit" class="btn-primary auth-submit">🔓 PŘIHLÁSIT SE</button>
+        </form>
+
+        <div id="authMsg" class="online-status" style="display:none"></div>
+        <button type="button" id="authGuestBtn" class="auth-guest">Hrát jako host →</button>
+        <p class="auth-note">Tvoje věci (mince, holubi, skiny, levely) zůstanou uložené u účtu a po přihlášení je najdeš tam, kde jsi skončil. Účet je uložený v tomto počítači, do online žebříčku se posílá jen jméno a skóre.</p>
+      </div>
+    </div>
+
+    <!-- Level Complete / Victory Modal -->
+    <div id="levelWinModal" class="overlay-screen hidden">
+      <div class="screen-card victory-card">
+        <div class="victory-icon">🏆</div>
+        <h2 class="victory-title">LEVEL SPLNĚN!</h2>
+        <div class="win-stars-row" id="winStarsRow"></div>
+        <p class="victory-sub" id="winLevelDesc">Vynikající bombardování!</p>
+
+        <div class="win-rewards-box">
+          <div class="win-reward-item">
+            <span class="reward-label">ODMĚNA ZA LEVEL:</span>
+            <span class="reward-num" id="winCoinsBonus">+150 🪙</span>
+          </div>
+          <div class="win-reward-item">
+            <span class="reward-label">TOKENY:</span>
+            <span class="reward-num-token" id="winTokenInfo">🎟️ 0/5</span>
+          </div>
+          <div class="win-reward-item">
+            <span class="reward-label">CELKEM MINCÍ:</span>
+            <span class="reward-num-gold" id="winTotalCoins">0 🪙</span>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button id="nextLevelBtn" class="btn-primary">DALŠÍ LEVEL ⏩</button>
+          <button id="replayLevelBtn" class="btn-secondary">HRÁT ZNOVU 🔁</button>
+          <button id="openMapFromWinBtn" class="btn-gold">🗺️ MAPA</button>
+          <button id="lobbyFromWinBtn" class="btn-secondary">🏠 LOBBY</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level Failed / Game Over Modal -->
+    <div id="levelFailModal" class="overlay-screen hidden">
+      <div class="screen-card fail-card">
+        <div class="fail-icon">⏰</div>
+        <h2 class="fail-title">ČAS VYPRŠEL!</h2>
+        <p class="fail-sub" id="failReasonText">Nestihl jsi splnit cíl levelu v časovém limitu.</p>
+        <p class="fail-tip">💡 Tip: Vylepši si v Lobby rychlost a přebíjení svého holuba!</p>
+
+        <div class="btn-row">
+          <button id="retryFailBtn" class="btn-primary">🔁 ZKUSIT ZNOVU</button>
+          <button id="openMapFromFailBtn" class="btn-secondary">🗺️ MAPA LEVELŮ</button>
+          <button id="lobbyFromFailBtn" class="btn-gold">🏠 LOBBY & UPGRADY</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Versus Result Modal -->
+    <div id="versusResultModal" class="overlay-screen hidden">
+      <div class="screen-card versus-card">
+        <div class="victory-icon">🏆</div>
+        <h2 class="victory-title" id="vsResultTitle">HRÁČ 1 VYHRÁVÁ!</h2>
+        <p class="victory-sub" id="vsResultSub">Souboj skončil.</p>
+        <div class="vs-result-row">
+          <div class="vs-result-player" id="vsResP1">
+            <canvas id="vsResP1Canvas" width="140" height="110"></canvas>
+            <span class="p1-tag">P1</span>
+            <b id="vsResP1Score">0</b>
+          </div>
+          <div class="vs-result-vs">VS</div>
+          <div class="vs-result-player" id="vsResP2">
+            <canvas id="vsResP2Canvas" width="140" height="110"></canvas>
+            <span class="p2-tag">P2</span>
+            <b id="vsResP2Score">0</b>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button id="vsRematchBtn" class="btn-primary">🔁 ODVETA</button>
+          <button id="vsLobbyBtn" class="btn-secondary">🏠 LOBBY</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pause Screen Overlay -->
+    <div id="pauseScreen" class="overlay-screen hidden">
+      <div class="screen-card pause-card">
+        <h2 class="pause-title">⏸️ HRA JE POZASTAVENA</h2>
+        <p class="pause-desc">Holub si dává pauzu na svačinu z rohlíků.</p>
+        <div class="btn-row">
+          <button id="resumeBtn" class="btn-primary">▶ POKRAČOVAT</button>
+          <button id="mapFromPauseBtn" class="btn-secondary">🗺️ MAPA</button>
+          <button id="lobbyFromPauseBtn" class="btn-gold">🏠 NÁVRAT DO LOBBY</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="online-config.js?v=202611131532"></script>
+  <script src="audio.js?v=202611131532"></script>
+  <script src="game.js?v=202611131532"></script>
+<script src="../../bridge.js"></script><!-- DOD hry portál -->
+</body>
+</html>

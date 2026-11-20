@@ -82,6 +82,71 @@ if (game === 'horde-survivor') {
       ))}
     </svg>
   )}
+  {game === 'kaktus' && (
+    <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+      <rect width="400" height="300" fill="#ddaa61" />
+      <circle cx="200" cy="150" r="70" fill="#f0c97c" />
+      <path d="M-10 196 h70 v-40 h60 v40 h40 L170 196 L-10 196Z M250 196 v-58 h44 v-22 h50 v80Z" fill="#a0573f" />
+      <rect x="-10" y="196" width="420" height="110" fill="#bc924c" />
+      <path d="M-10 230 Q 100 220 200 236 Q 300 252 410 232 L410 300 L-10 300Z" fill="#af751b" />
+      <g transform="translate(200 232)">
+        <rect x="-16" y="-110" width="32" height="112" rx="16" fill="#5c6f5d" />
+        <path d="M-16 -50 h-22 a10 10 0 0 1 -10 -10 v-30 a10 10 0 0 1 20 0 v20 h12" fill="#5c6f5d" />
+        <path d="M16 -70 h22 a10 10 0 0 0 10 -10 v-24 a10 10 0 0 0 -20 0 v14 h-12" fill="#5c6f5d" />
+        <path d="M-34 -110 h68 l-8 -6 h-12 l-6 -18 h-16 l-6 18 h-12z" fill="#39221e" />
+        <circle cx="-6" cy="-92" r="3" fill="#1c1b1a" /><circle cx="7" cy="-92" r="3" fill="#1c1b1a" />
+        <path d="M-8 -82 q8 5 16 0" stroke="#1c1b1a" stroke-width="2.5" fill="none" stroke-linecap="round" />
+        {[-70, -40, -10].map((y) => <path d={`M-16 ${y} l-6 -3 M16 ${y + 12} l6 -3`} stroke="#ced4b8" stroke-width="2" />)}
+      </g>
+    </svg>
+  )}
+  {game === 'lovec-z-hurecka' && (
+    <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+      <rect width="400" height="300" fill="#7b886d" />
+      <rect y="0" width="400" height="150" fill="#a9b39a" />
+      {[[-20, 150, 70], [40, 150, 90], [300, 150, 80], [360, 150, 100], [150, 150, 60]].map(([x, y, h]) => (
+        <path d={`M${x} ${y} L${x + 30} ${y - h} L${x + 60} ${y}Z`} fill="#5c6f5d" opacity=".7" />
+      ))}
+      <rect y="150" width="400" height="150" fill="#5c6f5d" />
+      <g fill="#39221e">
+        {Array.from({ length: 26 }, (_, i) => <path d={`M${i * 16} 214 v-34 l7 -9 l7 9 v34z`} />)}
+      </g>
+      <path d="M140 150 h70 v40 h-70z" fill="#6b443d" /><path d="M130 152 L175 118 L220 152Z" fill="#4a4741" />
+      <rect x="168" y="168" width="14" height="22" fill="#ddaa61" />
+      <path d="M232 160 h52 v32 h-52z" fill="#6b443d" /><path d="M224 162 L258 136 L292 162Z" fill="#4a4741" />
+      <rect x="250" y="172" width="10" height="10" fill="#ddaa61" />
+      <path d="M0 236 Q 200 220 400 240 L400 300 L0 300Z" fill="#4a5a45" />
+      <rect y="120" width="400" height="60" fill="#f7f1e8" opacity=".18" />
+      <path d="M90 250 l10 -40 l4 0 l-6 40z" fill="#1c1b1a" /><circle cx="103" cy="204" r="6" fill="#1c1b1a" />
+    </svg>
+  )}
+  {game === 'holubi-bombardovani' && (
+    <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+      <rect width="400" height="300" fill="#ddbe78" />
+      <circle cx="330" cy="62" r="26" fill="#f7f1e8" />
+      {[[10, 120, 60], [76, 90, 48], [130, 140, 56], [192, 70, 64], [262, 110, 52], [320, 130, 90]].map(([x, h, w]) => (
+        <rect x={x} y={300 - 80 - h} width={w} height={h + 80} fill="#bc924c" />
+      ))}
+      {[[24, 130], [40, 150], [90, 116], [206, 98], [224, 128], [276, 140], [336, 150], [356, 176]].map(([x, y]) => (
+        <rect x={x} y={y} width="8" height="12" fill="#f7f1e8" opacity=".55" />
+      ))}
+      <rect y="250" width="400" height="50" fill="#4a4741" />
+      <path d="M0 258 h400" stroke="#ddbe78" stroke-width="2" stroke-dasharray="18 14" />
+      <g transform="translate(150 70)">
+        <ellipse cx="0" cy="0" rx="30" ry="16" fill="#849671" />
+        <path d="M-8 -4 L-36 -30 L10 -8Z" fill="#5c6f5d" />
+        <circle cx="26" cy="-8" r="11" fill="#5c6f5d" /><circle cx="29" cy="-10" r="2.5" fill="#1c1b1a" />
+        <path d="M36 -7 l9 3 l-9 2z" fill="#af751b" />
+        <path d="M-30 2 l-16 6 l16 4z" fill="#5c6f5d" />
+      </g>
+      {[[140, 112], [143, 146], [146, 184]].map(([x, y]) => <ellipse cx={x} cy={y} rx="5" ry="6" fill="#f7f1e8" />)}
+      <g transform="translate(150 250)">
+        <circle cx="0" cy="-44" r="9" fill="#39221e" /><rect x="-8" y="-36" width="16" height="26" rx="5" fill="#6b443d" />
+        <path d="M-5 -10 l-4 10 M5 -10 l4 10" stroke="#39221e" stroke-width="5" stroke-linecap="round" />
+        <ellipse cx="2" cy="-52" rx="6" ry="4" fill="#f7f1e8" />
+      </g>
+    </svg>
+  )}
   {game === 'halovy-kros' && (
     <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
       <rect width="400" height="300" fill="#bc924c" />
