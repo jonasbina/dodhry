@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stadium Defense - Sportovní Tower Defense</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="game-container">
+    <!-- Top Scoreboard & Controls HUD -->
+    <header class="scoreboard-header">
+        <div class="scoreboard-top-row">
+            <div class="brand-section">
+                <h1 class="brand-title">🏆 Stadium <span>Defense</span></h1>
+            </div>
+
+            <div class="stats-bar">
+                <!-- Tickets (Currency) -->
+                <div class="stat-item" title="Vstupenky (Rozpočet na nákup a vylepšování sportovců)">
+                    <span class="stat-icon">🎟️</span>
+                    <div class="stat-content">
+                        <span class="stat-label">Vstupenky</span>
+                        <span class="stat-val gold" id="hud-tickets">350</span>
+                    </div>
+                </div>
+
+                <!-- Trophy Health (Lives) -->
+                <div class="stat-item" title="Zdraví trofeje / Životy">
+                    <span class="stat-icon">🛡️</span>
+                    <div class="stat-content">
+                        <span class="stat-label">Trofej HP</span>
+                        <span class="stat-val red" id="hud-lives">20</span>
+                    </div>
+                </div>
+
+                <!-- Wave Counter & Title -->
+                <div class="stat-item" title="Aktuální vlna">
+                    <span class="stat-icon">🚩</span>
+                    <div class="stat-content">
+                        <span class="stat-label" id="hud-wave-title">Vlna 1: Zahřívací kolo</span>
+                        <span class="stat-val blue" id="hud-wave">1 / 15</span>
+                    </div>
+                </div>
+
+                <!-- Score -->
+                <div class="stat-item" title="Celkové skóre">
+                    <span class="stat-icon">⭐</span>
+                    <div class="stat-content">
+                        <span class="stat-label">Skóre</span>
+                        <span class="stat-val" id="hud-score">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-bar">
+            <button id="btn-next-wave" class="btn-primary-wave" title="Spustit další vlnu (Klávesa N)">
+                ▶ Další Vlna [N]
+            </button>
+            <button id="btn-speed" class="btn-action" title="Přepnout rychlost 1x / 2x">
+                1x Rychlost
+            </button>
+            <button id="btn-pause" class="btn-action" title="Pozastavit / Spustit hru (Mezerník)">
+                ⏸ Pauza
+            </button>
+            <button id="btn-mute" class="btn-action" title="Zapnout / Vypnout zvuk">
+                🔊 Zvuk Zapnut
+            </button>
+            <label class="autoplay-toggle" title="Po dokončení vlny automaticky odstartovat další">
+                <input type="checkbox" id="chk-autoplay"> Autoplay
+            </label>
+        </div>
+    </header>
+
+    <!-- Canvas Playground Area -->
+    <main class="canvas-wrapper">
+        <canvas id="game-canvas" width="960" height="600"></canvas>
+
+        <!-- Selected Tower Inspector Panel -->
+        <div id="tower-inspector" class="tower-inspector hidden">
+            <div class="insp-info">
+                <div class="insp-header">
+                    <span class="insp-title" id="insp-name">-</span>
+                    <span class="insp-level-badge" id="insp-level">-</span>
+                </div>
+                <div class="insp-stats">
+                    <span>Poškození: <strong id="insp-damage">-</strong></span>
+                    <span>Dosah: <strong id="insp-range">-</strong></span>
+                    <span>Kadence: <strong id="insp-rate">-</strong></span>
+                    <span>Cíl: <strong id="insp-target">-</strong></span>
+                </div>
+            </div>
+
+            <div class="insp-actions">
+                <button id="btn-target-mode" class="btn-insp target" title="Změnit prioritu zaměřování">
+                    🎯 Změnit cíl
+                </button>
+                <button id="btn-upgrade" class="btn-insp upgrade" title="Vylepšit sportovce (Klávesa U)">
+                    Vylepšit
+                </button>
+                <button id="btn-sell" class="btn-insp sell" title="Prodat sportovce za 70% ceny (Klávesa S)">
+                    Prodat
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Over Overlay -->
+        <div id="modal-gameover" class="modal-overlay hidden">
+            <div class="modal-box gameover">
+                <div class="modal-icon">🟥</div>
+                <h2 class="modal-title">Červená Karta!</h2>
+                <p class="modal-desc">Dav fanoušků prolomil obranu a ukradl Zlatý pohár ze Síně slávy!</p>
+                <button id="btn-restart" class="btn-restart">Hrát znovu 🔄</button>
+            </div>
+        </div>
+
+        <!-- Victory Overlay -->
+        <div id="modal-victory" class="modal-overlay hidden">
+            <div class="modal-box victory">
+                <div class="modal-icon">🏆</div>
+                <h2 class="modal-title">Šampioni Stadionu!</h2>
+                <p class="modal-desc">Gratulujeme! Všech 15 vln útočníků a kotelníků bylo úspěšně odraženo a Zlatý pohár zůstává v bezpečí!</p>
+                <button id="btn-restart-victory" class="btn-restart">Nová hra 🏅</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Tower Shop Dock -->
+    <nav class="tower-shop">
+        <!-- 1. Tenista -->
+        <div class="tower-card" data-tower="TENNIS">
+            <span class="card-hotkey">1</span>
+            <div class="card-icon">🎾</div>
+            <div class="card-name">Tenista</div>
+            <div class="card-desc">Rychlá kadence tenisáků. Spolehlivý na rychlé běžce.</div>
+            <div class="card-cost">100 🎟️</div>
+        </div>
+
+        <!-- 2. Hokejista -->
+        <div class="tower-card" data-tower="HOCKEY">
+            <span class="card-hotkey">2</span>
+            <div class="card-icon">🏒</div>
+            <div class="card-name">Hokejista</div>
+            <div class="card-desc">Ledové puky zpomalují útočníky o 55%.</div>
+            <div class="card-cost">140 🎟️</div>
+        </div>
+
+        <!-- 3. Basketbalista -->
+        <div class="tower-card" data-tower="BASKETBALL">
+            <span class="card-hotkey">3</span>
+            <div class="card-icon">🏀</div>
+            <div class="card-name">Basketbalista</div>
+            <div class="card-desc">Obloukový slam dunk s plošným zásahem (Splash AoE).</div>
+            <div class="card-cost">175 🎟️</div>
+        </div>
+
+        <!-- 4. Fotbalista -->
+        <div class="tower-card" data-tower="SOCCER">
+            <span class="card-hotkey">4</span>
+            <div class="card-icon">⚽</div>
+            <div class="card-name">Fotbalista</div>
+            <div class="card-desc">Dělovka kopačkou, která prostřelí až 3 cíle v řadě.</div>
+            <div class="card-cost">195 🎟️</div>
+        </div>
+
+        <!-- 5. Oštěpař -->
+        <div class="tower-card" data-tower="JAVELIN">
+            <span class="card-hotkey">5</span>
+            <div class="card-icon">🎯</div>
+            <div class="card-name">Oštěpař</div>
+            <div class="card-desc">Dálkový olympijský snajpr. Proráží brnění kotelníků!</div>
+            <div class="card-cost">225 🎟️</div>
+        </div>
+    </nav>
+
+    <!-- Controls & Hotkey Hints -->
+    <footer class="game-instructions">
+        Ovládání: <kbd>1 - 5</kbd> Výběr sportovce | <kbd>Klik myší</kbd> Postavit / Zvolit věž | <kbd>U</kbd> Vylepšit | <kbd>S</kbd> Prodat | <kbd>N</kbd> Další vlna | <kbd>Mezerník</kbd> Pauza | <kbd>Esc</kbd> Zrušit výběr
+    </footer>
+</div>
+
+<!-- Scripts -->
+<script src="js/audio.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/map.js"></script>
+<script src="js/enemies.js"></script>
+<script src="js/towers.js"></script>
+<script src="js/main.js"></script>
+<script src="../../bridge.js"></script><!-- DOD Hry portál -->
+</body>
+</html>

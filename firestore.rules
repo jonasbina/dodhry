@@ -1,0 +1,9 @@
+rules_version = '2';
+// Záměrně otevřené (bez hesel, jen přezdívky) – jde o školní akci, ne o citlivá data.
+service cloud.firestore {
+  match /databases/{db}/documents {
+    match /players/{id} { allow read, write: if true; }
+    match /events/{id}  { allow read, create: if true; allow delete: if true; }
+    match /settings/{id} { allow read, write: if true; }
+  }
+}
