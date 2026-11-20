@@ -115,6 +115,8 @@ import Base from '../layouts/Base.astro';
   import { $, esc, fmt, toast } from '../lib/ui';
 
   let settings: Settings | null = null, players: Player[] = [], watching = false;
+  // potvrzení mazání musí přežít překreslení tabulky (body se mění živě)
+  let armedKey: string | null = null, armedTimer: number | undefined;
   const KEY = 'dodhry:admin';
   const unlocked = () => { try { return sessionStorage.getItem(KEY) === '1'; } catch { return false; } };
 
@@ -184,7 +186,7 @@ import Base from '../layouts/Base.astro';
           <input class="num" type="number" value="10" min="1" aria-label="Kolik bodů pro ${esc(p.name)}">
           <button class="btn btn-outline btn-sm" data-a="add" type="button">Přidat</button>
           <button class="btn btn-outline btn-sm" data-a="sub" type="button">Odebrat</button>
-          <button class="btn btn-outline btn-sm del" data-a="del" type="button">Smazat</button>
+          <button class="btn btn-outline btn-sm del" data-a="del" type="button" ${armedKey === p.key ? 'data-armed="1"' : ''}>${armedKey === p.key ? 'Opravdu smazat?' : 'Smazat'}</button>
         </div></td>
       </tr>`).join('') || '<tr><td colspan="5" class="caption">Žádní hráči.</td></tr>';
   }
@@ -198,7 +200,12 @@ import Base from '../layouts/Base.astro';
     if (b.dataset.a === 'sub' && n) { await adjust(p, -n); toast(`Odebráno ${n} hráči ${esc(p.name)}`); }
     if (b.dataset.a === 'del') {
       // dvoukrokové potvrzení v rozhraní
-      if (!b.dataset.armed) { b.dataset.armed = '1'; b.textContent = 'Opravdu smazat?'; setTimeout(() => { delete b.dataset.armed; b.textContent = 'Smazat'; }, 4000); return; }
+      if (armedKey !== p.key) {
+        armedKey = p.key; clearTimeout(armedTimer);
+        armedTimer = window.setTimeout(() => { armedKey = null; render(); }, 5000);
+        render(); return;
+      }
+      armedKey = null; clearTimeout(armedTimer);
       await removePlayer(p.key);
       toast(`Hráč ${esc(p.name)} smazán`);
     }

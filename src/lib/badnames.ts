@@ -6,10 +6,10 @@
 const ANYWHERE = [
   'negr', 'niger', 'nigr', 'niga', 'cigos', 'cikan', 'buzn', 'buzer', 'teplous', 'kurv', 'zmrd', 'kokot', 'curak',
   'mrdk', 'mrdat', 'jebat', 'jebn', 'sracka', 'hovno', 'prdel', 'hajzl', 'svine', 'devka', 'sukat', 'kunda',
-  'picus', 'hitler', 'fuck', 'shit', 'bitch', 'cunt', 'whore', 'slut', 'retard', 'fagot', 'porn', 'penis', 'vagin',
+  'picus', 'hitler', 'adolf', 'rakouskymalir', 'austrianpainter', 'nayg', 'neyg', 'naig', 'nword', 'fuck', 'shit', 'bitch', 'cunt', 'whore', 'slut', 'retard', 'fagot', 'porn', 'penis', 'vagin',
 ];
 // jen jako samostatné slovo (jinak by blokovalo nevinná jména)
-const WHOLE_WORD = ['pica', 'pico', 'pici', 'debil', 'kreten', 'nazi', 'fag', 'dick', 'sex', 'anal', 'coura', 'cum', 'jeb', 'mrd', 'nig'];
+const WHOLE_WORD = ['niba', 'egr', 'ngr', 'nga', 'heil', 'hajl', 'sieg', 'pica', 'pico', 'pici', 'debil', 'kreten', 'nazi', 'fag', 'dick', 'sex', 'anal', 'coura', 'cum', 'jeb', 'mrd', 'nig'];
 
 const LEET: Record<string, string> = { '0': 'o', '1': 'i', '3': 'e', '4': 'a', '5': 's', '7': 't', '@': 'a', '$': 's', '!': 'i' };
 
