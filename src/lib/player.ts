@@ -91,8 +91,12 @@ export function initPlayer({ standalone = false } = {}) {
       // kumulativní skóre: nová jízda (skóre kleslo) začíná od nuly
       const base = game.cumulative && prev && (r.score ?? 0) >= (prev.score ?? 0) ? prev : null;
       const pts = Math.max(0, Math.round(game.points(r, base)));
-      if (!r.win && !game.cumulative && secs < MIN_RUN_SECONDS) {
-        toast(`Hra byla moc krátká. Body se počítají od ${MIN_RUN_SECONDS} sekund hraní.`);
+      const minSecs = game.minRunSeconds ?? MIN_RUN_SECONDS;
+      const runs = me.games?.[game.id]?.runs || 0;
+      if (game.runCap && runs >= game.runCap) {
+        toast(`V téhle hře už máš maximum bodů za ${game.runCap}× dohrání. Body za minuty běží dál.`);
+      } else if (!r.win && !game.cumulative && secs < minSecs) {
+        toast(`Hra byla moc krátká. Body se počítají od ${minSecs >= 120 ? `${Math.round(minSecs / 60)} minut` : `${minSecs} sekund`} hraní.`);
       } else {
         give(pts, r.win ? 'win' : 'run');
       }

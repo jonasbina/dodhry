@@ -54,6 +54,11 @@
       const pos = t === 'Výhra' ? 1 : t === 'Prohra' ? 2 : num(t);
       return pos ? { position: pos } : null;
     },
+    // Bílý Kopec – konec herního dne (v HUD se objeví „Den N · večer“)
+    () => {
+      const t = $('sDayK')?.textContent || '';
+      return /večer/.test(t) ? { dayEnd: num(t.split('·')[0]) } : null;
+    },
   ];
 
   let shown = false;

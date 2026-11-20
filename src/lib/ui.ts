@@ -30,8 +30,10 @@ export function toast(html: string, ms = 3600) {
     box.id = 'toasts';
     box.className = 'toasts';
     box.setAttribute('aria-live', 'polite');
-    document.body.appendChild(box);
   }
+  // na celé obrazovce je vidět jen prvek v režimu celé obrazovky (přehrávač)
+  const host = document.fullscreenElement ?? document.body;
+  if (box.parentElement !== host) host.appendChild(box);
   const t = document.createElement('div');
   t.className = 'toast';
   t.innerHTML = html;

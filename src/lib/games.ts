@@ -1,7 +1,7 @@
 // Hry na portálu a pravidla bodování.
 // `points(result, prev)` dostane výsledek z public/bridge.js a vrátí body za konec hry.
 
-export type Result = { win?: boolean; stage?: number; wave?: number; score?: number; position?: number; kills?: number };
+export type Result = { win?: boolean; stage?: number; wave?: number; score?: number; position?: number; kills?: number; dayEnd?: number };
 
 export type Game = {
   id: string;
@@ -23,6 +23,10 @@ export type Game = {
   points: (r: Result, prev: Result | null) => number;
   /** skóre se v rámci jedné jízdy sčítá – počítá se jen přírůstek */
   cumulative?: boolean;
+  /** kolikrát nejvýš může hráč v této hře dostat body za konec (např. 3 dny) */
+  runCap?: number;
+  /** vlastní minimální doba hraní před koncem, v sekundách */
+  minRunSeconds?: number;
 };
 
 // +1 bod za aktivní minutu, max MINUTE_CAP na hru a hráče
@@ -98,6 +102,24 @@ export const GAMES: Game[] = [
     tone: 'var(--ochre)',
     points: (r, prev) => Math.max(0, krosPts(r.score) - (prev ? krosPts(prev.score) : 0)),
     cumulative: true,
+  },
+  {
+    id: 'bily-kopec',
+    title: 'Bílý Kopec',
+    author: 'Ondra Pivokonský',
+    group: '',
+    genre: 'Simulace',
+    blurb: 'Staráš se o lyžařské středisko v Tyrolsku. Upravuješ sjezdovky, pouštíš lanovky, platíš zaměstnance a vybíráš pokladny.',
+    controls: 'Klikni do hry, myš = pohled · WASD chůze · F akce · E kniha · H mapa',
+    path: '/games/bily-kopec/index.html',
+    maxPoints: 30,
+    rule: 'Veď středisko celý den. Když v 16:30 lanovky končí, dostaneš body.',
+    finish: 'Den se počítá, když u něj hraješ aspoň 3 minuty. Body nejvýš za 3 dny.',
+    howTo: [['Odehraný den (do 16:30)', '10 b'], ['Nejvíc za 3 dny', '30 b']],
+    tone: 'var(--sage)',
+    points: () => 10,
+    runCap: 3,
+    minRunSeconds: 180,
   },
 ];
 
